@@ -1,66 +1,36 @@
 # Фаззинг nginx 1.30.5
 
-Интеграция собирает текущий checkout nginx в отдельном Docker-образе и не
-изменяет production `Dockerfile`, исходники nginx или каталог `tests`.
-Обязательная первая цель `NGX-OSS-HTTP` адаптирована из закреплённой ревизии
-OSS-Fuzz. Она использует libFuzzer, ASan, UBSan, libprotobuf-mutator и
-protobuf text-format корпус из пар `request`/`reply`. Это формат по умолчанию
-для закреплённого `DEFINE_PROTO_FUZZER`; бинарные protobuf-файлы этой целью не
-принимаются.
+Интеграция собирает текущий checkout nginx в отдельный Docker-образ. Исходники
+nginx, production `Dockerfile` и каталог `tests` остаются без изменений.
 
-Узкие raw-input цели дополняют широкий adapter: `NGX-IF06` —
-PROXY protocol v1/v2, `NGX-IF07` — DNS response parser, `NGX-IF08` — TLV в
-PROXY protocol v2, включая вложенные SSL TLV, `NGX-IF09` — lexer и
-command-line parser конфигурации nginx, `NGX-IF10` — HPACK Huffman/integer
-decoders, `NGX-IF11` — incremental HTTP/2 frame-header parser и dispatch,
-`NGX-IF12` — реальные обработчики SETTINGS, PING, GOAWAY и WINDOW_UPDATE,
-а `NGX-IF13` — обработчик HTTP/2 RST_STREAM с одним synthetic live stream;
-`NGX-IF14` проверяет DATA padding и приём payload через preread и
-`request_body`, включая bounded `ngx_http_v2_filter_request_body` path и тело,
-разделённое между последовательными DATA frames, плюс проверку совпадающего,
-завышенного и заниженного `Content-Length` на `END_STREAM`. Корректные
-`PADDED DATA` также проходят ограниченный request-body filter путь после
-удаления padding под четырьмя схемами фрагментации сетевых чтений; отдельный
-профиль сохраняет общий body buffer для последовательности padded DATA frames.
-`NGX-IF15` декодирует HPACK header blocks с настоящей динамической таблицей и
-валидными HEADERS/CONTINUATION payload splits, но не создаёт HTTP request и не
-проверяет семантику псевдозаголовков.
-`NGX-IF16` проверяет реальные парсеры `:method`, `:scheme` и `:path` на
-синтетическом request/stream, включая дубликаты и неизвестные pseudo-header;
-HPACK декодирование уже отдельно покрывают IF10 и IF15.
-`NGX-IF17` связывает настоящий HPACK decoder с обработкой заголовков живого
-synthetic stream и проверяет `:authority` на минимальном виртуальном сервере
-`fuzz.test`; обработка останавливается до запуска request lifecycle.
-`NGX-IF18` получает ограниченную последовательность HEADERS/CONTINUATION и
-проходит через реальный frame dispatch, проверку metadata и continuation
-sequencing, создание stream/request и HPACK parser; request lifecycle не запускается.
-`NGX-IF19` отдельно подаёт trailer-shaped HEADERS с повторным stream ID и
-проверяет фактическую границу nginx: соединение отклоняется до разбора второго
-HPACK block, поэтому семантика trailer fields здесь не заявляется.
-`NGX-IF20` проходит по исходящим `headers_out.trailers` через настоящий
-`ngx_http_v2_send_chain`, HPACK serializer и builder финального HEADERS frame.
-`NGX-IF21` покрывает отдельный upstream receive path: реальный parser принимает
-HPACK trailer block в HEADERS и, по mode bit, в CONTINUATION; псевдозаголовки
-и отсутствие END_STREAM проходят через штатные validation exits. Цель начинает
-с синтетического состояния уже принятого response header/body и не моделирует
-сетевое соединение или предшествующий жизненный цикл upstream.
-Проверяются output queue и штатные DATA/HEADERS handlers через socket-free
-sink, а также stream/connection flow-control exits, частичная отправка и
-несколько DATA frames. Реальный socket output не запускается. Компактные mode
-4/7 seeds пересекают размер кадра и создают CONTINUATION и несколько DATA frames.
-Mode 9 проверяет очередь при неготовом write event, а mode 10 — output error
-path через sink без реального сокета. Mode 11 повторно дренирует сохранённую
-очередь после readiness event; control-mode state assertions подключены к
-libFuzzer как crash conditions. Modes 12/13 cover pre-existing connection error
-and the nginx send-timer insert/remove path without opening a socket. Modes
-14/15 inject `ngx_handle_write_event` and `ngx_tcp_push` failures through
-one-shot linker wrappers; mode 16 injects successful `tcp_push`, mode 17 keeps
-a partially-sent frame queued, and mode 18 verifies event posting and cleanup
-on the output-error path.
-Mode 19 starts with the parent write event already posted to cover nginx's
-already-posted event branch, then checks that no stack event remains queued.
-Modes 20/21 force and exercise `ngx_tcp_nodelay` after successful `tcp_push`,
-covering its normal continuation and error exit with a one-shot wrapper.
+Цель `NGX-OSS-HTTP` адаптирована из закреплённой ревизии OSS-Fuzz. Она использует
+libFuzzer, ASan, UBSan и libprotobuf-mutator; входы представлены protobuf
+text-format сообщениями с парами `request`/`reply`.
+
+## Текущая область применения
+
+| Цель | Проверяемая функциональность |
+| --- | --- |
+| `NGX-OSS-HTTP` | Обработка HTTP-запросов и ответов через интеграцию OSS-Fuzz. |
+| `NGX-IF06` | Разбор PROXY protocol v1 и v2. |
+| `NGX-IF07` | Разбор DNS-ответов и записей A, SRV и PTR. |
+| `NGX-IF08` | Разбор TLV PROXY protocol v2, включая вложенные SSL TLV. |
+| `NGX-IF09` | Лексический и командно-строчный разбор конфигурации nginx. |
+| `NGX-IF10` | Декодирование целых чисел и Huffman-кодов HPACK. |
+| `NGX-IF11` | Разбор заголовков кадров HTTP/2 и dispatch кадров. |
+| `NGX-IF12` | Обработчики HTTP/2 SETTINGS, PING, GOAWAY и WINDOW_UPDATE. |
+| `NGX-IF13` | Обработка HTTP/2 RST_STREAM. |
+| `NGX-IF14` | HTTP/2 DATA, padding, приём и накопление тела запроса, фрагментация кадров и проверка `Content-Length`. |
+| `NGX-IF15` | Декодирование HPACK-блоков заголовков с динамической таблицей и разбиением HEADERS/CONTINUATION. |
+| `NGX-IF16` | Разбор HTTP/2 pseudo-заголовков `:method`, `:scheme` и `:path`, включая дубликаты. |
+| `NGX-IF17` | Обработка HPACK-заголовков живого потока и проверка `:authority`. |
+| `NGX-IF18` | Последовательности HEADERS/CONTINUATION, создание HTTP/2 stream и разбор HPACK. |
+| `NGX-IF19` | Повторные HEADERS с тем же stream ID и обработка границы trailer-последовательности. |
+| `NGX-IF20` | Формирование исходящих HTTP/2 trailers, сериализация HPACK и очередь DATA/HEADERS кадров, включая flow control и события записи. |
+| `NGX-IF21` | Приём upstream HTTP/2 trailers в HEADERS/CONTINUATION и обработка предшествующих DATA-кадров. |
+
+Дополнительные сведения о предпосылках и профилях каждой цели приведены в
+`targets/<имя>/README.md` и `targets/<имя>/target.json`.
 
 Все команды выполняются из корня репозитория. Обязательный профиль —
 `linux/amd64`; на Apple Silicon он запускается через эмуляцию OrbStack.
@@ -290,9 +260,6 @@ control frames вынесены в `NGX-IF10`/`NGX-IF11`/`NGX-IF12`/`NGX-IF13`/`
   полный stream/request lifecycle и построение request из HEADERS/CONTINUATION
   не моделируются.
 
-LLVM 14 выбран как закреплённый toolchain доступного Debian 12. Это осознанное
-отличие от предпочтительного LLVM 21: пакеты LLVM 21 отсутствуют в базовом
-репозитории выбранной Debian-среды.
 
 ## Матрица сценариев
 
