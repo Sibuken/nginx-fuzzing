@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "title": "Nginx fuzzing defect register",
+  "title": "Реестр дефектов, выявленных фаззингом nginx",
   "source_campaigns": [
     "fuzz/runs/NGX-OSS-HTTP/20261006T095528Z-campaign-6-c77d96c9",
     "fuzz/runs/NGX-IF07/20261007T212722Z-campaign-1-ed50cba0"
   ],
-  "grouping": "Crash artifacts are grouped by root cause; slow findings are excluded because repeated delays of 61, 84, and 73 ms did not establish a persistent hang.",
+  "grouping": "Артефакты сбоев сгруппированы по первопричинам. Медленные срабатывания исключены: повторные задержки 61, 84 и 73 мс не подтвердили устойчивое зависание.",
   "common_launch_parameters": {
     "platform": "linux/amd64",
     "engine": "libFuzzer",
@@ -27,23 +27,23 @@
       "artifact_count": 227,
       "fuzz_target": "NGX-OSS-HTTP",
       "campaign_id": "20261006T095528Z-campaign-6-c77d96c9",
-      "module": "nginx core I/O (ngx_write_file) and HTTP request-body temp-file path",
+      "module": "Подсистема ввода-вывода ядра nginx (ngx_write_file) и путь записи тела HTTP-запроса во временный файл",
       "source_files": ["src/os/unix/ngx_files.c:208"],
-      "sanitizer_type": "UBSan: applying zero offset to null pointer (null pointer arithmetic); no ASan report in this finding group",
+      "sanitizer_type": "UBSan: применение нулевого смещения к нулевому указателю (арифметика указателей); сообщений ASan в этой группе нет",
       "methodology_type": "Некорректная обработка длин буферов с данными",
       "weakness_mapping": {
         "system": "CWE",
         "id": "CWE-758",
-        "name": "Reliance on Undefined, Unspecified, or Implementation-Defined Behavior",
+        "name": "Использование неопределённого, неуточнённого или зависящего от реализации поведения",
         "url": "https://cwe.mitre.org/data/definitions/758.html",
-        "rationale": "The source evaluates buf + written when buf is NULL and written is zero; this is undefined behavior in the instrumented C build."
+        "rationale": "В исходном коде вычисляется buf + written при buf == NULL и written == 0; в инструментированной сборке C это неопределённое поведение."
       },
       "input_vector": {
-        "format": "protobuf text-format HttpProto request/reply",
+        "format": "Сообщение HttpProto в текстовом формате protobuf с полями request/reply",
         "representative_artifact": "fuzz/runs/NGX-OSS-HTTP/20261006T095528Z-campaign-6-c77d96c9/artifacts/crash-05c4e04764588025aa72160480ef569df33843b4",
         "sha256": "360ae2a203ccf37fba5189038445cd6dde62c7225d62d70d02508741422be3ee",
         "size_bytes": 30513,
-        "trigger": "Chunked request-body processing reaches a zero-size temp-file write; the code still forms buf + written with a NULL buffer."
+        "trigger": "Обработка chunked-тела запроса доходит до записи во временный файл с нулевым размером; код при этом вычисляет buf + written при нулевом буфере."
       },
       "launch_parameters": {
         "inherited": "common_launch_parameters",
@@ -65,32 +65,32 @@
         "artifact_count_reproducing_under_sanitizer": 227,
         "without_sanitizers_replay_exit_code": 0,
         "production_crash_reproduced": false,
-        "optimized_representative_replay": "-O2 with _FORTIFY_SOURCE=2, no ASan/UBSan; exit 0, 28 ms"
+        "optimized_representative_replay": "-O2 и _FORTIFY_SOURCE=2, без ASan/UBSan; код завершения 0, время 28 мс"
       },
-      "comment": "A zero-size write is accompanied by undefined pointer arithmetic. Available logs show no read or write through the pointer, buffer overflow, or memory corruption. This is a genuine correctness/UB finding, but exploitability is not demonstrated.",
+      "comment": "При записи нулевого размера выполняется неопределённая арифметика указателя. В имеющихся логах нет чтения или записи через этот указатель, переполнения буфера или повреждения памяти. Это реальное нарушение корректности/UB, но его эксплуатация не подтверждена.",
       "classification": {
         "label": "истинный дефект",
         "false_positive": false,
         "security_exploitability_confirmed": false,
-        "basis": "UBSan reliably detects the source-level undefined behavior; the absence of a crash without sanitizers does not make the finding false-positive."
+        "basis": "UBSan стабильно обнаруживает неопределённое поведение в исходном коде; отсутствие сбоя без санитайзеров не делает срабатывание ложноположительным."
       },
       "remediation": {
-        "status": "no_source_change_required_for_tested_production_configuration",
+        "status": "исправление_не_требуется_для_проверенной_конфигурации_production",
         "accepted_measures": [
-          "Grouped and triaged 227 artifacts by root cause; reviewed source location and sanitizer stacks.",
-          "Replayed findings with and without sanitizers; checked a representative in an optimized -O2/_FORTIFY_SOURCE=2 production profile.",
-          "Preserved representative input, sanitizer logs, and replay logs for regression review."
+          "Сгруппированы и проанализированы 227 артефактов по первопричине; проверены участок кода и стеки санитайзера.",
+          "Срабатывания повторно проверены с санитайзерами и без них; представитель проверен в оптимизированном production-профиле -O2/_FORTIFY_SOURCE=2.",
+          "Сохранены представительский вход, журналы санитайзера и повторных прогонов для регрессионной проверки."
         ],
-        "decision_rationale": "The finding is a real source-level UB diagnostic, but it was not reproduced as a crash in the tested production configuration; no memory corruption or security impact was demonstrated, so no source patch or compensating measure was assigned.",
-        "recommended_action_if_configuration_changes": "Repeat the representative production replay after compiler, platform, or production build-profile changes.",
+        "decision_rationale": "Срабатывание указывает на реальное UB в исходном коде, однако сбой в проверенной production-конфигурации не воспроизведён; повреждение памяти или влияние на безопасность не подтверждено, поэтому патч и компенсирующие меры не назначались.",
+        "recommended_action_if_configuration_changes": "Повторить production-проверку представительского входа при изменении компилятора, платформы или параметров production-сборки.",
         "source_modified": false
       },
       "post_triage_retest": {
         "performed": true,
-        "test_build": "Production configuration without sanitizers; representative also checked with -O2 and _FORTIFY_SOURCE=2.",
-        "result": "No crash; replay exited 0. The optimized representative completed in 28 ms.",
+        "test_build": "Production-конфигурация без санитайзеров; представитель также проверен с -O2 и _FORTIFY_SOURCE=2.",
+        "result": "Сбой не возник; код завершения 0. Оптимизированная проверка представителя заняла 28 мс.",
         "fixed_code_retest_applicable": false,
-        "fixed_code_retest_note": "No code change was selected after production validation; this is a production non-reproduction check, not a patch regression test."
+        "fixed_code_retest_note": "После production-проверки решено не менять исходники; это проверка невоспроизводимости в production, а не регрессионный тест патча."
       }
     },
     {
@@ -98,24 +98,24 @@
       "artifact_count": 45,
       "fuzz_target": "NGX-OSS-HTTP",
       "campaign_id": "20261006T095528Z-campaign-6-c77d96c9",
-      "module": "nginx HTTP proxy module (ngx_http_proxy_create_request)",
+      "module": "Модуль HTTP-проксирования nginx (ngx_http_proxy_create_request)",
       "source_files": ["src/http/modules/ngx_http_proxy_module.c:1367"],
-      "sanitizer_type": "UBSan: nonnull-attribute violation (NULL passed to a nonnull copy argument); no ASan report in this finding group",
+      "sanitizer_type": "UBSan: нарушение атрибута nonnull (NULL передан в аргумент копирования, который не должен быть NULL); сообщений ASan в этой группе нет",
       "methodology_type": "Использование потенциально опасных программных интерфейсов",
       "weakness_mapping": {
         "system": "CWE",
         "id": "CWE-628",
-        "name": "Function Call with Incorrectly Specified Arguments",
+        "name": "Вызов функции с некорректно заданными аргументами",
         "url": "https://cwe.mitre.org/data/definitions/628.html",
-        "rationale": "A NULL source is passed to the URI-copy operation for a zero-length path, contrary to the nonnull argument contract. No actual NULL dereference was observed, so CWE-476 is not claimed."
+        "rationale": "При копировании URI с пустым путём в качестве источника передаётся NULL, что нарушает контракт аргумента nonnull. Фактического разыменования NULL не наблюдалось, поэтому CWE-476 не присваивается."
       },
       "input_vector": {
-        "format": "protobuf text-format HttpProto request/reply",
+        "format": "Сообщение HttpProto в текстовом формате protobuf с полями request/reply",
         "regression_fixture": "fuzz/regressions/NGX-OSS-HTTP/nonnull-zero-length.textproto",
         "representative_artifact": "fuzz/runs/NGX-OSS-HTTP/20261006T095528Z-campaign-6-c77d96c9/artifacts/crash-04ecb9c498c51a7067cba67df8db637a2a9fa5e1",
         "sha256": "cfa074f9aa1423e56427ac03656054790743954975307e7ffcd7ddce5e8dbf88",
         "size_bytes": 567,
-        "trigger": "Absolute-form URI with an empty path and query delimiter produces a zero-length copy with a NULL source."
+        "trigger": "URI в absolute-form с пустым путём и разделителем query приводит к копированию нулевой длины с источником NULL."
       },
       "launch_parameters": {
         "inherited": "common_launch_parameters",
@@ -137,32 +137,32 @@
         "artifact_count_reproducing_under_sanitizer": 45,
         "without_sanitizers_replay_exit_code": 0,
         "production_crash_reproduced": false,
-        "optimized_representative_replay": "-O2 with _FORTIFY_SOURCE=2, no ASan/UBSan; exit 0, 28 ms"
+        "optimized_representative_replay": "-O2 и _FORTIFY_SOURCE=2, без ASan/UBSan; код завершения 0, время 28 мс"
       },
-      "comment": "The input creates a valid empty-path case that supplies NULL to a nonnull copy argument. UBSan reports the contract violation before any nonzero-size copy; the logs show no memory corruption.",
+      "comment": "Вход создаёт допустимый случай пустого пути, при котором в обязательный ненулевой аргумент функции копирования передаётся NULL. UBSan сообщает о нарушении контракта до копирования ненулевого объёма; логи не показывают повреждения памяти.",
       "classification": {
         "label": "истинный дефект",
         "false_positive": false,
         "security_exploitability_confirmed": false,
-        "basis": "The sanitizer repeatedly reports an invalid API argument; normal/optimized execution did not crash, but that does not invalidate the source-level contract violation."
+        "basis": "Санитайзер повторно сообщает о недопустимом аргументе API; в обычном и оптимизированном исполнении сбой не возник, но это не отменяет нарушения контракта в исходном коде."
       },
       "remediation": {
-        "status": "no_source_change_required_for_tested_production_configuration",
+        "status": "исправление_не_требуется_для_проверенной_конфигурации_production",
         "accepted_measures": [
-          "Grouped and triaged 45 artifacts by root cause; reviewed the source location and sanitizer diagnostics.",
-          "Replayed findings without sanitizers and checked a representative in an optimized -O2/_FORTIFY_SOURCE=2 production profile.",
-          "Retained the minimized empty-URI regression input and replay logs."
+          "Сгруппированы и проанализированы 45 артефактов по первопричине; проверены участок кода и диагностики санитайзера.",
+          "Срабатывания повторно проверены без санитайзеров; представитель проверен в оптимизированном production-профиле -O2/_FORTIFY_SOURCE=2.",
+          "Сохранены минимизированный regression-вход с пустым URI и журналы повторных прогонов."
         ],
-        "decision_rationale": "UBSan confirms an invalid argument in the instrumented build, but the input did not crash the tested production configuration and no memory corruption was demonstrated; no patch or compensating measure was assigned.",
-        "recommended_action_if_configuration_changes": "Repeat the empty-URI production replay after compiler, platform, or production build-profile changes.",
+        "decision_rationale": "UBSan подтверждает недопустимый аргумент в инструментированной сборке, но вход не вызвал сбоя в проверенной production-конфигурации, повреждение памяти не подтверждено; патч и компенсирующие меры не назначались.",
+        "recommended_action_if_configuration_changes": "Повторить production-проверку пустого URI при изменении компилятора, платформы или параметров production-сборки.",
         "source_modified": false
       },
       "post_triage_retest": {
         "performed": true,
-        "test_build": "Production configuration without sanitizers; representative also checked with -O2 and _FORTIFY_SOURCE=2.",
-        "result": "No crash; replay exited 0. The optimized representative completed in 28 ms.",
+        "test_build": "Production-конфигурация без санитайзеров; представитель также проверен с -O2 и _FORTIFY_SOURCE=2.",
+        "result": "Сбой не возник; код завершения 0. Оптимизированная проверка представителя заняла 28 мс.",
         "fixed_code_retest_applicable": false,
-        "fixed_code_retest_note": "No code change was selected after production validation; this is a production non-reproduction check, not a patch regression test."
+        "fixed_code_retest_note": "После production-проверки решено не менять исходники; это проверка невоспроизводимости в production, а не регрессионный тест патча."
       }
     },
     {
@@ -170,28 +170,28 @@
       "artifact_count": 11059,
       "fuzz_target": "NGX-IF07",
       "campaign_id": "20261007T212722Z-campaign-1-ed50cba0",
-      "module": "nginx core DNS resolver (A, SRV and PTR answer processing)",
+      "module": "Ядро nginx, DNS-резолвер (обработка ответов A, SRV и PTR)",
       "source_files": [
         "src/core/ngx_resolver.c:2197",
         "src/core/ngx_resolver.c:2359",
         "src/core/ngx_resolver.c:2739",
         "src/core/ngx_resolver.c:3304"
       ],
-      "sanitizer_type": "UBSan: signed left shift whose result cannot be represented in int (shift/signed integer overflow); no ASan report in this finding group",
+      "sanitizer_type": "UBSan: знаковый сдвиг влево, результат которого не представим типом int (shift/переполнение знакового целого); сообщений ASan в этой группе нет",
       "methodology_type": "Целочисленные переполнения",
       "weakness_mapping": {
         "system": "CWE",
         "id": "CWE-190",
-        "name": "Integer Overflow or Wraparound",
+        "name": "Переполнение или циклический переход целого числа",
         "url": "https://cwe.mitre.org/data/definitions/190.html",
-        "rationale": "The signed shift result exceeds the range representable by int; the C operation therefore has undefined behavior."
+        "rationale": "Результат знакового сдвига выходит за диапазон типа int, поэтому операция в C имеет неопределённое поведение."
       },
       "input_vector": {
-        "format": "raw DNS wire response preceded by the IF07 mode byte",
+        "format": "DNS-ответ в wire-формате с управляющим байтом режима IF07 в начале",
         "representative_artifact": "fuzz/runs/NGX-IF07/20261007T212722Z-campaign-1-ed50cba0/artifacts/crash-0087f19cf6d17a3ec526e1ce70199fc774f6cf38",
         "sha256": "c35111578e84115845a69a7d83da8385fe19d5bf9458a0b25a209869aee6214f",
         "size_bytes": 82,
-        "trigger": "The DNS answer TTL starts with 0xff; equivalent record paths also expose shifts while assembling an IPv4 address when its first octet is at least 0x80.",
+        "trigger": "Первый байт TTL DNS-ответа равен 0xff; аналогичные пути обработки записей вызывают сдвиг при сборке IPv4-адреса, если первый октет не меньше 0x80.",
         "minimized_regressions": [
           "fuzz/regressions/NGX-IF07/ttl-left-shift.hex",
           "fuzz/regressions/NGX-IF07/a-address-left-shift.hex"
@@ -219,30 +219,30 @@
         "without_sanitizers_replay_exit_code": 0,
         "production_crash_reproduced": false
       },
-      "comment": "Input bytes are promoted to signed int before shifting. Values whose high byte is at least 0x80 exceed the signed range. Negative TTL values are clamped to zero; for address assembly the calculation uses the same unsafe signed-shift pattern. No out-of-bounds access or memory corruption was reported.",
+      "comment": "Байты входа перед сдвигом преобразуются в signed int. Значения со старшим байтом не меньше 0x80 выходят за диапазон знакового типа. Отрицательные значения TTL нормализуются до нуля; при сборке адреса используется тот же небезопасный знаковый сдвиг. Выхода за границы или повреждения памяти не зарегистрировано.",
       "classification": {
         "label": "истинный дефект",
         "false_positive": false,
         "security_exploitability_confirmed": false,
-        "basis": "All 11,059 group artifacts reproduce the UBSan finding; plain replays exit normally. Undefined signed arithmetic is a real code defect even without a reproduced production crash."
+        "basis": "Все 11 059 артефактов группы воспроизводят срабатывание UBSan; повторы без санитайзеров завершаются штатно. Неопределённая знаковая арифметика является реальным дефектом кода, даже если сбой в production не воспроизведён."
       },
       "remediation": {
-        "status": "no_source_change_required_for_tested_production_configuration",
+        "status": "исправление_не_требуется_для_проверенной_конфигурации_production",
         "accepted_measures": [
-          "Grouped and triaged 11,059 artifacts across the signed-shift sites; reviewed TTL normalization and address assembly.",
-          "Replayed all finding inputs without sanitizers and checked the minimized TTL/address regression vectors.",
-          "Preserved both minimized regression vectors and their descriptions for revalidation."
+          "Сгруппированы и проанализированы 11 059 артефактов для участков со знаковым сдвигом; проверены нормализация TTL и сборка адреса.",
+          "Все входы срабатываний повторно проверены без санитайзеров; проверены минимизированные TTL- и address-регрессии.",
+          "Оба минимизированных regression-входа и их описания сохранены для повторной проверки."
         ],
-        "decision_rationale": "The signed-shift UB is detected by UBSan, but the grouped inputs did not reproduce a crash in the tested production configuration; no out-of-bounds access or memory corruption was observed, so no patch or compensating measure was assigned.",
-        "recommended_action_if_configuration_changes": "Repeat the TTL and address regression replays after compiler, platform, or production build-profile changes.",
+        "decision_rationale": "UB со знаковым сдвигом обнаруживается UBSan, но сгруппированные входы не вызвали сбоя в проверенной production-конфигурации; выхода за границы или повреждения памяти не наблюдалось, поэтому патч и компенсирующие меры не назначались.",
+        "recommended_action_if_configuration_changes": "Повторить TTL- и address-регрессии при изменении компилятора, платформы или параметров production-сборки.",
         "source_modified": false
       },
       "post_triage_retest": {
         "performed": true,
-        "test_build": "Production configuration without sanitizers; minimized regression vectors also replayed in the non-sanitized verification build.",
-        "result": "All 11,059 finding replays exited 0; the two minimized regression vectors completed without an abnormal exit.",
+        "test_build": "Production-конфигурация без санитайзеров; минимизированные регрессии также проверены в контрольной сборке без санитайзеров.",
+        "result": "Все 11 059 повторов завершились с кодом 0; два минимизированных regression-входа также завершились штатно.",
         "fixed_code_retest_applicable": false,
-        "fixed_code_retest_note": "No code change was selected after production validation; these are production/non-sanitized replay results, not a patch regression test."
+        "fixed_code_retest_note": "После production-проверки решено не менять исходники; это результаты повторов в production/сборке без санитайзеров, а не регрессионный тест патча."
       }
     },
     {
@@ -250,23 +250,23 @@
       "artifact_count": 141,
       "fuzz_target": "NGX-IF07",
       "campaign_id": "20261007T212722Z-campaign-1-ed50cba0",
-      "module": "nginx core DNS resolver (PTR response processing)",
+      "module": "Ядро nginx, DNS-резолвер (обработка PTR-ответов)",
       "source_files": ["src/core/ngx_resolver.c:3357"],
-      "sanitizer_type": "UBSan: nonnull-attribute violation (NULL passed to an argument declared non-NULL); no ASan report in this finding group",
+      "sanitizer_type": "UBSan: нарушение атрибута nonnull (NULL передан в аргумент, объявленный ненулевым); сообщений ASan в этой группе нет",
       "methodology_type": "Использование потенциально опасных программных интерфейсов",
       "weakness_mapping": {
         "system": "CWE",
         "id": "CWE-628",
-        "name": "Function Call with Incorrectly Specified Arguments",
+        "name": "Вызов функции с некорректно заданными аргументами",
         "url": "https://cwe.mitre.org/data/definitions/628.html",
-        "rationale": "NULL is passed to ngx_strncmp/strncmp despite the nonnull argument contract. With zero length, no memory access is shown; CWE-476 is therefore not claimed."
+        "rationale": "В ngx_strncmp/strncmp передаётся NULL вопреки контракту nonnull. При нулевой длине доступа к памяти не зафиксировано, поэтому CWE-476 не присваивается."
       },
       "input_vector": {
-        "format": "raw DNS wire response preceded by the IF07 mode byte",
+        "format": "DNS-ответ в wire-формате с управляющим байтом режима IF07 в начале",
         "representative_artifact": "fuzz/runs/NGX-IF07/20261007T212722Z-campaign-1-ed50cba0/artifacts/crash-ff07e9ff26023ade74d839d086f0f7607763dc8c",
         "sha256": "377eb22a4326c37ba41d60150a0682a6774fe62e187a36b893ca9be19f330965",
         "size_bytes": 67,
-        "trigger": "A PTR response yields an empty decompressed name (name.len == 0 and name.data == NULL) while the harness has a matching pending PTR query."
+        "trigger": "PTR-ответ декодируется в пустое имя (name.len == 0 и name.data == NULL), при этом harness содержит соответствующий ожидающий PTR-запрос."
       },
       "launch_parameters": {
         "inherited": "common_launch_parameters",
@@ -289,30 +289,30 @@
         "without_sanitizers_replay_exit_code": 0,
         "production_crash_reproduced": false
       },
-      "comment": "The zero-length string is represented by a NULL data pointer and is passed to ngx_strncmp. UBSan enforces the function's nonnull contract; the recorded call compares zero bytes and the logs contain no NULL read/write or memory-corruption report.",
+      "comment": "Строка нулевой длины представлена указателем NULL и передаётся в ngx_strncmp. UBSan проверяет контракт nonnull; зафиксированный вызов сравнивает ноль байт, а в логах нет чтения/записи по NULL или повреждения памяти.",
       "classification": {
         "label": "истинный дефект",
         "false_positive": false,
         "security_exploitability_confirmed": false,
-        "basis": "The invalid argument is reproducibly detected by UBSan; absence of a plain-build crash does not make the contract violation a false positive."
+        "basis": "Недопустимый аргумент воспроизводимо обнаруживается UBSan; отсутствие сбоя в обычной сборке не делает нарушение контракта ложноположительным."
       },
       "remediation": {
-        "status": "no_source_change_required_for_tested_production_configuration",
+        "status": "исправление_не_требуется_для_проверенной_конфигурации_production",
         "accepted_measures": [
-          "Grouped and triaged all 141 artifacts; reviewed the zero-length comparison path and UBSan stack.",
-          "Replayed the finding inputs without sanitizers and retained a representative input plus its logs.",
-          "Recorded the production non-reproduction as the disposition for the tested build configuration."
+          "Сгруппированы и проанализированы все 141 артефакт; проверены путь сравнения нулевой длины и стек UBSan.",
+          "Входы срабатываний повторно проверены без санитайзеров; сохранены представительский вход и его журналы.",
+          "Отсутствие воспроизведения в production зафиксировано как решение для проверенной конфигурации сборки."
         ],
-        "decision_rationale": "The invalid nonnull argument is diagnosed by UBSan, but no crash or memory access was reproduced in the tested production configuration; therefore no patch or compensating measure was assigned.",
-        "recommended_action_if_configuration_changes": "Repeat the empty-PTR regression replay after compiler, platform, or production build-profile changes.",
+        "decision_rationale": "UBSan обнаруживает недопустимый аргумент nonnull, однако сбой или доступ к памяти в проверенной production-конфигурации не воспроизведены; патч и компенсирующие меры не назначались.",
+        "recommended_action_if_configuration_changes": "Повторить регрессию пустого PTR-имени при изменении компилятора, платформы или параметров production-сборки.",
         "source_modified": false
       },
       "post_triage_retest": {
         "performed": true,
-        "test_build": "Production configuration without sanitizers.",
-        "result": "All 141 finding replays exited 0 without an abnormal termination.",
+        "test_build": "Production-конфигурация без санитайзеров.",
+        "result": "Все 141 повтор завершились с кодом 0 без аварийного завершения.",
         "fixed_code_retest_applicable": false,
-        "fixed_code_retest_note": "No code change was selected after production validation; this is a production non-reproduction check, not a patch regression test."
+        "fixed_code_retest_note": "После production-проверки решено не менять исходники; это проверка невоспроизводимости в production, а не регрессионный тест патча."
       }
     }
   ]
