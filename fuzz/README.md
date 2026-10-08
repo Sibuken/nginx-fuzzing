@@ -1,7 +1,5 @@
 # Фаззинг nginx 1.30.5
 
-Интеграция собирает текущий checkout nginx в отдельный Docker-образ. Исходники
-nginx, production `Dockerfile` и каталог `tests` остаются без изменений.
 
 Цель `NGX-OSS-HTTP` адаптирована из закреплённой ревизии OSS-Fuzz. Она использует
 libFuzzer, ASan, UBSan и libprotobuf-mutator; входы представлены protobuf
@@ -33,9 +31,7 @@ text-format сообщениями с парами `request`/`reply`.
 `targets/<имя>/README.md` и `targets/<имя>/target.json`.
 
 Все команды выполняются из корня репозитория. Обязательный профиль —
-`linux/amd64`; на Apple Silicon он запускается через эмуляцию OrbStack.
-Образ основан на закреплённом Debian 12 slim: это явно зафиксированная замена
-недоступного внутреннего Astra registry, а не production-образ nginx.
+`linux/amd64`.
 
 ## Сборка
 
@@ -272,8 +268,6 @@ control frames вынесены в `NGX-IF10`/`NGX-IF11`/`NGX-IF12`/`NGX-IF13`/`
 | DNS response parser | Да: A, AAAA, CNAME, SRV, IPv4 PTR и malformed wire responses в `NGX-IF07`; сетевые timeout/retry не проверяются |
 | TLS | Нет: OpenSSL не подключён, handshake отсутствует |
 | HTTP/2 | Частично: HPACK Huffman/integer в `NGX-IF10`, frame header/type dispatch в `NGX-IF11`, реальные SETTINGS/PING/GOAWAY/WINDOW_UPDATE в `NGX-IF12`, RST_STREAM в `NGX-IF13`, DATA/preread и request-body filter в `NGX-IF14`, HPACK block/dynamic table и valid CONTINUATION payloads в `NGX-IF15`, method/scheme/path в `NGX-IF16`, HPACK-to-live-request headers и authority virtual-host match в `NGX-IF17`, raw HEADERS/CONTINUATION → stream/request в `NGX-IF18`, повторный HEADERS на существующем stream и его раннее отклонение в `NGX-IF19`, исходящие trailers в `NGX-IF20`, upstream response trailers в `NGX-IF21`; полный request pipeline остаётся вне охвата |
-| HTTP/3/QUIC | Нет |
-| Статические файлы | Нет: профиль направляет запрос в synthetic upstream |
 | Routing/rewrite | Только фиксированные `server`/`location`/`map` embedded-профиля |
 | Config parser | Частично: lexer, quotes/escapes/variables/comments и `ngx_conf_param` в `NGX-IF09`; module directive semantics и `include` не проверяются |
 
