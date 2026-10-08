@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "title": "Nginx fuzzing defect register",
+  "source_campaigns": [
+    "fuzz/runs/NGX-OSS-HTTP/20261006T095528Z-campaign-6-c77d96c9",
+    "fuzz/runs/NGX-IF07/20261007T212722Z-campaign-1-ed50cba0"
+  ],
+  "grouping": "Crash artifacts are grouped by root cause; slow findings are excluded because repeated delays of 61, 84, and 73 ms did not establish a persistent hang.",
+  "common_launch_parameters": {
+    "platform": "linux/amd64",
+    "engine": "libFuzzer",
+    "fork": true,
+    "ignore_crashes": true,
+    "max_len_bytes": 65536,
+    "timeout_seconds": 10,
+    "rss_limit_mb": 2048,
+    "seed": 1,
+    "worker_batch_seconds": 300,
+    "coverage_check_interval_seconds": 300,
+    "coverage_plateau_seconds": 7200,
+    "fuzz_compile_flags": "-O1 -gline-tables-only -fno-omit-frame-pointer -fsanitize=fuzzer-no-link,address,undefined -fno-sanitize=alignment -fno-sanitize-recover=undefined",
+    "fuzz_link_flags": "-fsanitize=fuzzer,address,undefined -fno-sanitize=alignment -fno-sanitize-recover=undefined"
+  },
+  "defects": [
+    {
+      "defect_id": "NGX-OSS-HTTP-UB-01",
+      "artifact_count": 227,
+      "fuzz_target": "NGX-OSS-HTTP",
+      "campaign_id": "20261006T095528Z-campaign-6-c77d96c9",
+      "module": "nginx core I/O (ngx_write_file) and HTTP request-body temp-file path",
+      "source_files": ["src/os/unix/ngx_files.c:208"],
+      "sanitizer_type": "UBSan: applying zero offset to null pointer (null pointer arithmetic); no ASan report in this finding group",
+      "methodology_type": "Некорректная обработка длин буферов с данными",
+      "weakness_mapping": {
+        "system": "CWE",
+        "id": "CWE-758",
+        "name": "Reliance on Undefined, Unspecified, or Implementation-Defined Behavior",
+        "url": "https://cwe.mitre.org/data/definitions/758.html",
+        "rationale": "The source evaluates buf + written when buf is NULL and written is zero; this is undefined behavior in the instrumented C build."
+      },
+      "input_vector": {
+        "format": "protobuf text-format HttpProto request/reply",
+        "representative_artifact": "fuzz/runs/NGX-OSS-HTTP/20261006T095528Z-campaign-6-c77d96c9/artifacts/crash-05c4e04764588025aa72160480ef569df33843b4",
+        "sha256": "360ae2a203ccf37fba5189038445cd6dde62c7225d62d70d02508741422be3ee",
+        "size_bytes": 30513,
+        "trigger": "Chunked request-body processing reaches a zero-size temp-file write; the code still forms buf + written with a NULL buffer."
+      },
+      "launch_parameters": {
+        "inherited": "common_launch_parameters",
+        "binary": "/opt/fuzz/bin/fuzz/http_request_fuzzer",
+        "campaign_batch_argument": "-max_total_time=300",
+        "campaign_started_at_utc": "2026-10-06T09:55:28Z",
+        "campaign_duration_seconds": 14533.504,
+        "campaign_stop_reason": "coverage_plateau"
+      },
+      "logs": {
+        "campaign": "fuzz/runs/NGX-OSS-HTTP/20261006T095528Z-campaign-6-c77d96c9/logs/campaign.log",
+        "sanitizer": "fuzz/runs/NGX-OSS-HTTP/20261006T095528Z-campaign-6-c77d96c9/defects/crash-05c4e04764588025aa72160480ef569df33843b4.sanitizer.log",
+        "without_sanitizers": "fuzz/runs/NGX-OSS-HTTP/20261006T095528Z-campaign-6-c77d96c9/defects/crash-05c4e04764588025aa72160480ef569df33843b4.without_sanitizers.log",
+        "manifest": "fuzz/runs/NGX-OSS-HTTP/20261006T095528Z-campaign-6-c77d96c9/manifest.json"
+      },
+      "reproducibility": {
+        "sanitizer_diagnostic_stable": true,
+        "sanitizer_replay_exit_code": 77,
+        "artifact_count_reproducing_under_sanitizer": 227,
+        "without_sanitizers_replay_exit_code": 0,
+        "production_crash_reproduced": false,
+        "optimized_representative_replay": "-O2 with _FORTIFY_SOURCE=2, no ASan/UBSan; exit 0, 28 ms"
+      },
+      "comment": "A zero-size write is accompanied by undefined pointer arithmetic. Available logs show no read or write through the pointer, buffer overflow, or memory corruption. This is a genuine correctness/UB finding, but exploitability is not demonstrated.",
+      "classification": {
+        "label": "истинный дефект",
+        "false_positive": false,
+        "security_exploitability_confirmed": false,
+        "basis": "UBSan reliably detects the source-level undefined behavior; the absence of a crash without sanitizers does not make the finding false-positive."
+      },
+      "remediation": {
+        "status": "not_applied",
+        "accepted_measures": [],
+        "recommended_action": "Avoid forming a pointer for a zero-length write, or ensure a valid buffer before pointer arithmetic and the write call.",
+        "source_modified": false
+      },
+      "fixed_code_retest": {
+        "performed": false,
+        "result": "Not applicable: neither a source fix nor a compensating measure has been applied. Existing non-sanitized and optimized replays use the unfixed code."
+      }
+    },
+    {
+      "defect_id": "NGX-OSS-HTTP-UB-02",
+      "artifact_count": 45,
+      "fuzz_target": "NGX-OSS-HTTP",
+      "campaign_id": "20261006T095528Z-campaign-6-c77d96c9",
+      "module": "nginx HTTP proxy module (ngx_http_proxy_create_request)",
+      "source_files": ["src/http/modules/ngx_http_proxy_module.c:1367"],
+      "sanitizer_type": "UBSan: nonnull-attribute violation (NULL passed to a nonnull copy argument); no ASan report in this finding group",
+      "methodology_type": "Использование потенциально опасных программных интерфейсов",
+      "weakness_mapping": {
+        "system": "CWE",
+        "id": "CWE-628",
+        "name": "Function Call with Incorrectly Specified Arguments",
+        "url": "https://cwe.mitre.org/data/definitions/628.html",
+        "rationale": "A NULL source is passed to the URI-copy operation for a zero-length path, contrary to the nonnull argument contract. No actual NULL dereference was observed, so CWE-476 is not claimed."
+      },
+      "input_vector": {
+        "format": "protobuf text-format HttpProto request/reply",
+        "regression_fixture": "fuzz/regressions/NGX-OSS-HTTP/nonnull-zero-length.textproto",
+        "representative_artifact": "fuzz/runs/NGX-OSS-HTTP/20261006T095528Z-campaign-6-c77d96c9/artifacts/crash-04ecb9c498c51a7067cba67df8db637a2a9fa5e1",
+        "sha256": "cfa074f9aa1423e56427ac03656054790743954975307e7ffcd7ddce5e8dbf88",
+        "size_bytes": 567,
+        "trigger": "Absolute-form URI with an empty path and query delimiter produces a zero-length copy with a NULL source."
+      },
+      "launch_parameters": {
+        "inherited": "common_launch_parameters",
+        "binary": "/opt/fuzz/bin/fuzz/http_request_fuzzer",
+        "campaign_batch_argument": "-max_total_time=300",
+        "campaign_started_at_utc": "2026-10-06T09:55:28Z",
+        "campaign_duration_seconds": 14533.504,
+        "campaign_stop_reason": "coverage_plateau"
+      },
+      "logs": {
+        "campaign": "fuzz/runs/NGX-OSS-HTTP/20261006T095528Z-campaign-6-c77d96c9/logs/campaign.log",
+        "sanitizer": "fuzz/runs/NGX-OSS-HTTP/20261006T095528Z-campaign-6-c77d96c9/defects/crash-04ecb9c498c51a7067cba67df8db637a2a9fa5e1.sanitizer.log",
+        "without_sanitizers": "fuzz/runs/NGX-OSS-HTTP/20261006T095528Z-campaign-6-c77d96c9/defects/crash-04ecb9c498c51a7067cba67df8db637a2a9fa5e1.without_sanitizers.log",
+        "manifest": "fuzz/runs/NGX-OSS-HTTP/20261006T095528Z-campaign-6-c77d96c9/manifest.json"
+      },
+      "reproducibility": {
+        "sanitizer_diagnostic_stable": true,
+        "sanitizer_replay_exit_code": 77,
+        "artifact_count_reproducing_under_sanitizer": 45,
+        "without_sanitizers_replay_exit_code": 0,
+        "production_crash_reproduced": false,
+        "optimized_representative_replay": "-O2 with _FORTIFY_SOURCE=2, no ASan/UBSan; exit 0, 28 ms"
+      },
+      "comment": "The input creates a valid empty-path case that supplies NULL to a nonnull copy argument. UBSan reports the contract violation before any nonzero-size copy; the logs show no memory corruption.",
+      "classification": {
+        "label": "истинный дефект",
+        "false_positive": false,
+        "security_exploitability_confirmed": false,
+        "basis": "The sanitizer repeatedly reports an invalid API argument; normal/optimized execution did not crash, but that does not invalidate the source-level contract violation."
+      },
+      "remediation": {
+        "status": "not_applied",
+        "accepted_measures": [],
+        "recommended_action": "Skip the copy for zero length or provide a valid non-NULL source for the empty URI case.",
+        "source_modified": false
+      },
+      "fixed_code_retest": {
+        "performed": false,
+        "result": "Not applicable: neither a source fix nor a compensating measure has been applied. Existing non-sanitized and optimized replays use the unfixed code."
+      }
+    },
+    {
+      "defect_id": "NGX-IF07-UB-01",
+      "artifact_count": 11059,
+      "fuzz_target": "NGX-IF07",
+      "campaign_id": "20261007T212722Z-campaign-1-ed50cba0",
+      "module": "nginx core DNS resolver (A, SRV and PTR answer processing)",
+      "source_files": [
+        "src/core/ngx_resolver.c:2197",
+        "src/core/ngx_resolver.c:2359",
+        "src/core/ngx_resolver.c:2739",
+        "src/core/ngx_resolver.c:3304"
+      ],
+      "sanitizer_type": "UBSan: signed left shift whose result cannot be represented in int (shift/signed integer overflow); no ASan report in this finding group",
+      "methodology_type": "Целочисленные переполнения",
+      "weakness_mapping": {
+        "system": "CWE",
+        "id": "CWE-190",
+        "name": "Integer Overflow or Wraparound",
+        "url": "https://cwe.mitre.org/data/definitions/190.html",
+        "rationale": "The signed shift result exceeds the range representable by int; the C operation therefore has undefined behavior."
+      },
+      "input_vector": {
+        "format": "raw DNS wire response preceded by the IF07 mode byte",
+        "representative_artifact": "fuzz/runs/NGX-IF07/20261007T212722Z-campaign-1-ed50cba0/artifacts/crash-0087f19cf6d17a3ec526e1ce70199fc774f6cf38",
+        "sha256": "c35111578e84115845a69a7d83da8385fe19d5bf9458a0b25a209869aee6214f",
+        "size_bytes": 82,
+        "trigger": "The DNS answer TTL starts with 0xff; equivalent record paths also expose shifts while assembling an IPv4 address when its first octet is at least 0x80.",
+        "minimized_regressions": [
+          "fuzz/regressions/NGX-IF07/ttl-left-shift.hex",
+          "fuzz/regressions/NGX-IF07/a-address-left-shift.hex"
+        ]
+      },
+      "launch_parameters": {
+        "inherited": "common_launch_parameters",
+        "binary": "/opt/fuzz/bin/fuzz/dns_response_fuzzer",
+        "campaign_batch_argument": "-max_total_time=300",
+        "campaign_started_at_utc": "2026-10-07T21:27:22Z",
+        "campaign_duration_seconds": 9615.18,
+        "campaign_stop_reason": "coverage_plateau"
+      },
+      "logs": {
+        "campaign": "fuzz/runs/NGX-IF07/20261007T212722Z-campaign-1-ed50cba0/logs/campaign.log",
+        "sanitizer": "fuzz/runs/NGX-IF07/20261007T212722Z-campaign-1-ed50cba0/defects/crash-0087f19cf6d17a3ec526e1ce70199fc774f6cf38.sanitizer.log",
+        "without_sanitizers": "fuzz/runs/NGX-IF07/20261007T212722Z-campaign-1-ed50cba0/defects/crash-0087f19cf6d17a3ec526e1ce70199fc774f6cf38.without_sanitizers.log",
+        "regression_description": "fuzz/regressions/NGX-IF07/README.md",
+        "manifest": "fuzz/runs/NGX-IF07/20261007T212722Z-campaign-1-ed50cba0/manifest.json"
+      },
+      "reproducibility": {
+        "sanitizer_diagnostic_stable": true,
+        "sanitizer_replay_exit_code": 77,
+        "artifact_count_reproducing_under_sanitizer": 11059,
+        "without_sanitizers_replay_exit_code": 0,
+        "production_crash_reproduced": false
+      },
+      "comment": "Input bytes are promoted to signed int before shifting. Values whose high byte is at least 0x80 exceed the signed range. Negative TTL values are clamped to zero; for address assembly the calculation uses the same unsafe signed-shift pattern. No out-of-bounds access or memory corruption was reported.",
+      "classification": {
+        "label": "истинный дефект",
+        "false_positive": false,
+        "security_exploitability_confirmed": false,
+        "basis": "All 11,059 group artifacts reproduce the UBSan finding; plain replays exit normally. Undefined signed arithmetic is a real code defect even without a reproduced production crash."
+      },
+      "remediation": {
+        "status": "not_applied",
+        "accepted_measures": [],
+        "recommended_action": "Assemble wire-format values in an unsigned fixed-width type, with explicit conversions and tests for high-bit-set octets; preserve the intended TTL normalization semantics.",
+        "source_modified": false
+      },
+      "fixed_code_retest": {
+        "performed": false,
+        "result": "Not applicable: neither a source fix nor a compensating measure has been applied. Existing plain replays use the unfixed code."
+      }
+    },
+    {
+      "defect_id": "NGX-IF07-UB-02",
+      "artifact_count": 141,
+      "fuzz_target": "NGX-IF07",
+      "campaign_id": "20261007T212722Z-campaign-1-ed50cba0",
+      "module": "nginx core DNS resolver (PTR response processing)",
+      "source_files": ["src/core/ngx_resolver.c:3357"],
+      "sanitizer_type": "UBSan: nonnull-attribute violation (NULL passed to an argument declared non-NULL); no ASan report in this finding group",
+      "methodology_type": "Использование потенциально опасных программных интерфейсов",
+      "weakness_mapping": {
+        "system": "CWE",
+        "id": "CWE-628",
+        "name": "Function Call with Incorrectly Specified Arguments",
+        "url": "https://cwe.mitre.org/data/definitions/628.html",
+        "rationale": "NULL is passed to ngx_strncmp/strncmp despite the nonnull argument contract. With zero length, no memory access is shown; CWE-476 is therefore not claimed."
+      },
+      "input_vector": {
+        "format": "raw DNS wire response preceded by the IF07 mode byte",
+        "representative_artifact": "fuzz/runs/NGX-IF07/20261007T212722Z-campaign-1-ed50cba0/artifacts/crash-ff07e9ff26023ade74d839d086f0f7607763dc8c",
+        "sha256": "377eb22a4326c37ba41d60150a0682a6774fe62e187a36b893ca9be19f330965",
+        "size_bytes": 67,
+        "trigger": "A PTR response yields an empty decompressed name (name.len == 0 and name.data == NULL) while the harness has a matching pending PTR query."
+      },
+      "launch_parameters": {
+        "inherited": "common_launch_parameters",
+        "binary": "/opt/fuzz/bin/fuzz/dns_response_fuzzer",
+        "campaign_batch_argument": "-max_total_time=300",
+        "campaign_started_at_utc": "2026-10-07T21:27:22Z",
+        "campaign_duration_seconds": 9615.18,
+        "campaign_stop_reason": "coverage_plateau"
+      },
+      "logs": {
+        "campaign": "fuzz/runs/NGX-IF07/20261007T212722Z-campaign-1-ed50cba0/logs/campaign.log",
+        "sanitizer": "fuzz/runs/NGX-IF07/20261007T212722Z-campaign-1-ed50cba0/defects/crash-ff07e9ff26023ade74d839d086f0f7607763dc8c.sanitizer.log",
+        "without_sanitizers": "fuzz/runs/NGX-IF07/20261007T212722Z-campaign-1-ed50cba0/defects/crash-ff07e9ff26023ade74d839d086f0f7607763dc8c.without_sanitizers.log",
+        "manifest": "fuzz/runs/NGX-IF07/20261007T212722Z-campaign-1-ed50cba0/manifest.json"
+      },
+      "reproducibility": {
+        "sanitizer_diagnostic_stable": true,
+        "sanitizer_replay_exit_code": 77,
+        "artifact_count_reproducing_under_sanitizer": 141,
+        "without_sanitizers_replay_exit_code": 0,
+        "production_crash_reproduced": false
+      },
+      "comment": "The zero-length string is represented by a NULL data pointer and is passed to ngx_strncmp. UBSan enforces the function's nonnull contract; the recorded call compares zero bytes and the logs contain no NULL read/write or memory-corruption report.",
+      "classification": {
+        "label": "истинный дефект",
+        "false_positive": false,
+        "security_exploitability_confirmed": false,
+        "basis": "The invalid argument is reproducibly detected by UBSan; absence of a plain-build crash does not make the contract violation a false positive."
+      },
+      "remediation": {
+        "status": "not_applied",
+        "accepted_measures": [],
+        "recommended_action": "Skip the comparison when name.len is zero or ensure empty names use a valid non-NULL sentinel before calling ngx_strncmp.",
+        "source_modified": false
+      },
+      "fixed_code_retest": {
+        "performed": false,
+        "result": "Not applicable: neither a source fix nor a compensating measure has been applied. Existing plain replays use the unfixed code."
+      }
+    }
+  ]
+}
