@@ -1,0 +1,72 @@
+INFO: found LLVMFuzzerCustomMutator (0x5555558b2940). Disabling -len_control by default.
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 436352983
+INFO: Loaded 1 modules   (39906 inline 8-bit counters): 39906 [0x555555ef3ae0, 0x555555efd6c2), 
+INFO: Loaded 1 PC tables (39906 PCs): 39906 [0x555555efd6c8,0x555555f994e8), 
+/opt/fuzz/bin/fuzz/http_request_fuzzer: Running 1 inputs 1 time(s) each.
+Running: /runs/NGX-OSS-HTTP/20261006T095528Z-campaign-6-c77d96c9/artifacts/crash-750a0365aec136aae5d862ca88a1b20cb296c8c0
+src/http/modules/ngx_http_proxy_module.c:1367:23: runtime error: null pointer passed as argument 2, which is declared to never be null
+/usr/include/string.h:44:28: note: nonnull attribute specified here
+    #0 0x555555c84f53 in ngx_http_proxy_create_request /work/nginx-fuzz/src/http/modules/ngx_http_proxy_module.c:1367:23
+    #1 0x555555b843fb in ngx_http_upstream_init_request /work/nginx-fuzz/src/http/ngx_http_upstream.c:663:9
+    #2 0x555555b8252b in ngx_http_upstream_init /work/nginx-fuzz/src/http/ngx_http_upstream.c
+    #3 0x555555b5bdb3 in ngx_http_read_client_request_body /work/nginx-fuzz/src/http/ngx_http_request_body.c
+    #4 0x555555c7fe6f in ngx_http_proxy_handler /work/nginx-fuzz/src/http/modules/ngx_http_proxy_module.c:960:10
+    #5 0x555555b1400e in ngx_http_core_content_phase /work/nginx-fuzz/src/http/ngx_http_core_module.c:1282:38
+    #6 0x555555b1028e in ngx_http_core_run_phases /work/nginx-fuzz/src/http/ngx_http_core_module.c:896:14
+    #7 0x555555b0ff8f in ngx_http_handler /work/nginx-fuzz/src/http/ngx_http_core_module.c:879:5
+    #8 0x555555b373f9 in ngx_http_process_request /work/nginx-fuzz/src/http/ngx_http_request.c:2185:5
+    #9 0x555555b3fb10 in ngx_http_process_request_headers /work/nginx-fuzz/src/http/ngx_http_request.c:1566:13
+    #10 0x555555b3d646 in ngx_http_process_request_line /work/nginx-fuzz/src/http/ngx_http_request.c:1224:13
+    #11 0x555555b33c34 in ngx_http_wait_request_handler /work/nginx-fuzz/src/http/ngx_http_request.c:528:5
+    #12 0x555555b324e6 in ngx_http_init_connection /work/nginx-fuzz/src/http/ngx_http_request.c:354:9
+    #13 0x5555558b3bea in TestOneProtoInput(HttpProto const&) /work/nginx-fuzz/src/fuzz/http_request_fuzzer.cc:346:3
+    #14 0x5555558b2eb3 in LLVMFuzzerTestOneInput /work/nginx-fuzz/src/fuzz/http_request_fuzzer.cc:263:1
+    #15 0x5555557d81d3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) (/opt/fuzz/bin/fuzz/http_request_fuzzer+0x2841d3) (BuildId: 9b269c781e5d6bb46f00eb4e9c35e040578156a9)
+    #16 0x5555557c21df in fuzzer::RunOneTest(fuzzer::Fuzzer*, char const*, unsigned long) (/opt/fuzz/bin/fuzz/http_request_fuzzer+0x26e1df) (BuildId: 9b269c781e5d6bb46f00eb4e9c35e040578156a9)
+    #17 0x5555557c7f16 in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) (/opt/fuzz/bin/fuzz/http_request_fuzzer+0x273f16) (BuildId: 9b269c781e5d6bb46f00eb4e9c35e040578156a9)
+    #18 0x5555557f1d52 in main (/opt/fuzz/bin/fuzz/http_request_fuzzer+0x29dd52) (BuildId: 9b269c781e5d6bb46f00eb4e9c35e040578156a9)
+    #19 0x7fffff1f9249  (/lib/x86_64-linux-gnu/libc.so.6+0x27249) (BuildId: 93ac61ec5a8eb1396f9fbd350e3169a558528a40)
+    #20 0x7fffff1f9304 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x27304) (BuildId: 93ac61ec5a8eb1396f9fbd350e3169a558528a40)
+    #21 0x5555557bc870 in _start (/opt/fuzz/bin/fuzz/http_request_fuzzer+0x268870) (BuildId: 9b269c781e5d6bb46f00eb4e9c35e040578156a9)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior src/http/modules/ngx_http_proxy_module.c:1367:23 in 
+==11895== ERROR: libFuzzer: deadly signal
+    #0 0x55555587ebc1 in __sanitizer_print_stack_trace (/opt/fuzz/bin/fuzz/http_request_fuzzer+0x32abc1) (BuildId: 9b269c781e5d6bb46f00eb4e9c35e040578156a9)
+    #1 0x5555557f1518 in fuzzer::PrintStackTrace() (/opt/fuzz/bin/fuzz/http_request_fuzzer+0x29d518) (BuildId: 9b269c781e5d6bb46f00eb4e9c35e040578156a9)
+    #2 0x5555557d6de3 in fuzzer::Fuzzer::CrashCallback() (/opt/fuzz/bin/fuzz/http_request_fuzzer+0x282de3) (BuildId: 9b269c781e5d6bb46f00eb4e9c35e040578156a9)
+    #3 0x7fffff20e04f  (/lib/x86_64-linux-gnu/libc.so.6+0x3c04f) (BuildId: 93ac61ec5a8eb1396f9fbd350e3169a558528a40)
+    #4 0x7fffff25ceeb  (/lib/x86_64-linux-gnu/libc.so.6+0x8aeeb) (BuildId: 93ac61ec5a8eb1396f9fbd350e3169a558528a40)
+    #5 0x7fffff20dfb1 in raise (/lib/x86_64-linux-gnu/libc.so.6+0x3bfb1) (BuildId: 93ac61ec5a8eb1396f9fbd350e3169a558528a40)
+    #6 0x7fffff1f8471 in abort (/lib/x86_64-linux-gnu/libc.so.6+0x26471) (BuildId: 93ac61ec5a8eb1396f9fbd350e3169a558528a40)
+    #7 0x555555898e36 in __sanitizer::Abort() (/opt/fuzz/bin/fuzz/http_request_fuzzer+0x344e36) (BuildId: 9b269c781e5d6bb46f00eb4e9c35e040578156a9)
+    #8 0x555555896cd0 in __sanitizer::Die() (/opt/fuzz/bin/fuzz/http_request_fuzzer+0x342cd0) (BuildId: 9b269c781e5d6bb46f00eb4e9c35e040578156a9)
+    #9 0x5555558aa9fb in __ubsan::ScopedReport::~ScopedReport() (/opt/fuzz/bin/fuzz/http_request_fuzzer+0x3569fb) (BuildId: 9b269c781e5d6bb46f00eb4e9c35e040578156a9)
+    #10 0x5555558ae6c7 in handleNonNullArg(__ubsan::NonNullArgData*, __ubsan::ReportOptions, bool) ubsan_handlers.cpp.o
+    #11 0x5555558ae742 in __ubsan_handle_nonnull_arg_abort (/opt/fuzz/bin/fuzz/http_request_fuzzer+0x35a742) (BuildId: 9b269c781e5d6bb46f00eb4e9c35e040578156a9)
+    #12 0x555555c84f53 in ngx_http_proxy_create_request /work/nginx-fuzz/src/http/modules/ngx_http_proxy_module.c:1367:23
+    #13 0x555555b843fb in ngx_http_upstream_init_request /work/nginx-fuzz/src/http/ngx_http_upstream.c:663:9
+    #14 0x555555b8252b in ngx_http_upstream_init /work/nginx-fuzz/src/http/ngx_http_upstream.c
+    #15 0x555555b5bdb3 in ngx_http_read_client_request_body /work/nginx-fuzz/src/http/ngx_http_request_body.c
+    #16 0x555555c7fe6f in ngx_http_proxy_handler /work/nginx-fuzz/src/http/modules/ngx_http_proxy_module.c:960:10
+    #17 0x555555b1400e in ngx_http_core_content_phase /work/nginx-fuzz/src/http/ngx_http_core_module.c:1282:38
+    #18 0x555555b1028e in ngx_http_core_run_phases /work/nginx-fuzz/src/http/ngx_http_core_module.c:896:14
+    #19 0x555555b0ff8f in ngx_http_handler /work/nginx-fuzz/src/http/ngx_http_core_module.c:879:5
+    #20 0x555555b373f9 in ngx_http_process_request /work/nginx-fuzz/src/http/ngx_http_request.c:2185:5
+    #21 0x555555b3fb10 in ngx_http_process_request_headers /work/nginx-fuzz/src/http/ngx_http_request.c:1566:13
+    #22 0x555555b3d646 in ngx_http_process_request_line /work/nginx-fuzz/src/http/ngx_http_request.c:1224:13
+    #23 0x555555b33c34 in ngx_http_wait_request_handler /work/nginx-fuzz/src/http/ngx_http_request.c:528:5
+    #24 0x555555b324e6 in ngx_http_init_connection /work/nginx-fuzz/src/http/ngx_http_request.c:354:9
+    #25 0x5555558b3bea in TestOneProtoInput(HttpProto const&) /work/nginx-fuzz/src/fuzz/http_request_fuzzer.cc:346:3
+    #26 0x5555558b2eb3 in LLVMFuzzerTestOneInput /work/nginx-fuzz/src/fuzz/http_request_fuzzer.cc:263:1
+    #27 0x5555557d81d3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) (/opt/fuzz/bin/fuzz/http_request_fuzzer+0x2841d3) (BuildId: 9b269c781e5d6bb46f00eb4e9c35e040578156a9)
+    #28 0x5555557c21df in fuzzer::RunOneTest(fuzzer::Fuzzer*, char const*, unsigned long) (/opt/fuzz/bin/fuzz/http_request_fuzzer+0x26e1df) (BuildId: 9b269c781e5d6bb46f00eb4e9c35e040578156a9)
+    #29 0x5555557c7f16 in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) (/opt/fuzz/bin/fuzz/http_request_fuzzer+0x273f16) (BuildId: 9b269c781e5d6bb46f00eb4e9c35e040578156a9)
+    #30 0x5555557f1d52 in main (/opt/fuzz/bin/fuzz/http_request_fuzzer+0x29dd52) (BuildId: 9b269c781e5d6bb46f00eb4e9c35e040578156a9)
+    #31 0x7fffff1f9249  (/lib/x86_64-linux-gnu/libc.so.6+0x27249) (BuildId: 93ac61ec5a8eb1396f9fbd350e3169a558528a40)
+    #32 0x7fffff1f9304 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x27304) (BuildId: 93ac61ec5a8eb1396f9fbd350e3169a558528a40)
+    #33 0x5555557bc870 in _start (/opt/fuzz/bin/fuzz/http_request_fuzzer+0x268870) (BuildId: 9b269c781e5d6bb46f00eb4e9c35e040578156a9)
+
+NOTE: libFuzzer has rudimentary signal handlers.
+      Combine libFuzzer with AddressSanitizer or similar for better crash reports.
+SUMMARY: libFuzzer: deadly signal

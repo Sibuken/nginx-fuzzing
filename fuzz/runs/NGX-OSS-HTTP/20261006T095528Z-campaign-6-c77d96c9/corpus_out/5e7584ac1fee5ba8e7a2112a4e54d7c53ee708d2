@@ -1,0 +1,2 @@
+request: "GET /a/../b/%2e%2e/cing-Allow-Originggggggggggggggggggggggggggggggg[gggggggggge.url.com\r\nX_Test: value\r\n\r\n"
+reply: "HTTP/2.0 404 N Fou]nd\r\nnd\r\nContent-Length\n]\n"

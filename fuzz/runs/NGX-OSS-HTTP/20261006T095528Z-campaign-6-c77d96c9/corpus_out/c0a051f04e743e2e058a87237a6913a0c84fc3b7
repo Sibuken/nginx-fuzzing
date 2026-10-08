@@ -1,0 +1,2 @@
+request: "GET /a/../b/%2e%2e/c//a/../b/%2e%2e/c//d?q=%00 HTTP/1.1\r\nHost: edge.url.ctm\r\nXst: vd?q=%00 HTTP/1.1\r\nHost: edge.url.ctm\r\nXst: value\r\n\r\n"
+reply: "POND Access-Control-Expose-Headers\nCo0\r\n\r\n"

@@ -1,0 +1,2 @@
+request: "GET /a/./..,........\337.............+........................................\r\n"
+reply: "HTTP/1.1 200 E-Transport-STransport-Secu2ity\nTransfer-Encoding: chunked\r\necu2ity\nTransfer-Encoding: chunked\r\n\r\n0;z=q\r\nX\r\nupstre0\r\n\n\r\n"

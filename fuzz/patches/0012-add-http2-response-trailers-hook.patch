@@ -1,0 +1,714 @@
+--- a/src/http/v2/ngx_http_v2_filter_module.c
++++ b/src/http/v2/ngx_http_v2_filter_module.c
+@@ -1769,1 +1769,711 @@ ngx_http_v2_filter_init(ngx_conf_t *cf)
+ }
++static ngx_uint_t ngx_http_v2_fuzz_output_calls;
++static ngx_uint_t ngx_http_v2_fuzz_output_frames;
++static ngx_uint_t ngx_http_v2_fuzz_output_data;
++static ngx_uint_t ngx_http_v2_fuzz_output_headers;
++static ngx_uint_t ngx_http_v2_fuzz_output_continuations;
++static ngx_uint_t ngx_http_v2_fuzz_output_error;
++static ngx_uint_t ngx_http_v2_fuzz_output_drop_ready;
++static ngx_uint_t ngx_http_v2_fuzz_fail_write_event;
++static ngx_uint_t ngx_http_v2_fuzz_fail_tcp_push;
++static ngx_uint_t ngx_http_v2_fuzz_success_tcp_push;
++static ngx_uint_t ngx_http_v2_fuzz_tcp_nodelay_result;
++static ngx_uint_t ngx_http_v2_fuzz_write_event_failures;
++static ngx_uint_t ngx_http_v2_fuzz_tcp_push_failures;
++static ngx_uint_t ngx_http_v2_fuzz_tcp_push_successes;
++static ngx_uint_t ngx_http_v2_fuzz_tcp_nodelay_calls;
++static ngx_uint_t ngx_http_v2_fuzz_partial_output;
++static ngx_chain_t *ngx_http_v2_fuzz_output(ngx_connection_t *c,
++    ngx_chain_t *in, off_t limit);
++ngx_int_t __real_ngx_handle_write_event(ngx_event_t *wev, size_t lowat);
++ngx_int_t
++__wrap_ngx_handle_write_event(ngx_event_t *wev, size_t lowat)
++{
++    if (ngx_http_v2_fuzz_fail_write_event) {
++        ngx_http_v2_fuzz_fail_write_event = 0;
++        ngx_http_v2_fuzz_write_event_failures++;
++        return NGX_ERROR;
++    }
++
++    return __real_ngx_handle_write_event(wev, lowat);
++}
++
++int __real_ngx_tcp_push(ngx_socket_t s);
++int
++__wrap_ngx_tcp_push(ngx_socket_t s)
++{
++    if (ngx_http_v2_fuzz_fail_tcp_push) {
++        ngx_http_v2_fuzz_fail_tcp_push = 0;
++        ngx_http_v2_fuzz_tcp_push_failures++;
++        errno = EIO;
++        return -1;
++    }
++
++    if (ngx_http_v2_fuzz_success_tcp_push) {
++        ngx_http_v2_fuzz_success_tcp_push = 0;
++        ngx_http_v2_fuzz_tcp_push_successes++;
++        return 0;
++    }
++
++    return __real_ngx_tcp_push(s);
++}
++
++ngx_int_t __real_ngx_tcp_nodelay(ngx_connection_t *c);
++ngx_int_t
++__wrap_ngx_tcp_nodelay(ngx_connection_t *c)
++{
++    if (ngx_http_v2_fuzz_tcp_nodelay_result != 0) {
++        ngx_uint_t result = ngx_http_v2_fuzz_tcp_nodelay_result;
++
++        ngx_http_v2_fuzz_tcp_nodelay_result = 0;
++        ngx_http_v2_fuzz_tcp_nodelay_calls++;
++        return result == 1 ? NGX_OK : NGX_ERROR;
++    }
++
++    return __real_ngx_tcp_nodelay(c);
++}
++/* Build a real outgoing trailers HEADERS frame from bounded fuzz fields. */
++ngx_int_t
++ngx_http_v2_fuzz_send_chain(u_char *data, size_t len)
++{
++    ngx_uint_t                 i, count, mode;
++    size_t                     key_len, value_len, available, body_len;
++    size_t                     large_trailer_size;
++    u_char                    *key, *value, *body_data, dummy;
++    ngx_log_t                  log;
++    ngx_pool_t                *pool;
++    ngx_event_t                connection_write, stream_write;
++    ngx_connection_t           connection, stream_connection;
++    ngx_http_request_t         r;
++    ngx_http_v2_node_t         node;
++    ngx_http_v2_stream_t       stream;
++    ngx_http_v2_connection_t   h2c;
++    ngx_http_v2_loc_conf_t     h2lcf;
++    ngx_http_connection_t      http_connection;
++    ngx_http_conf_ctx_t        conf_ctx;
++    ngx_http_core_loc_conf_t   core_loc_conf;
++    ngx_table_elt_t           *header;
++    ngx_buf_t                  body;
++    ngx_chain_t                body_chain;
++    void                     **loc_conf;
++    ngx_uint_t                  flow_controlled, generated_body;
++    ngx_uint_t                  expected_reject, large_trailers, has_trailers;
++    ngx_uint_t                  output_error;
++    ngx_uint_t                  drop_ready;
++    ngx_uint_t                  fail_write_event, fail_tcp_push;
++    ngx_uint_t                  success_tcp_push, partial_output;
++    ngx_uint_t                  nodelay_result, saved_tcp_nodelay;
++    ngx_uint_t                  posted;
++    ngx_int_t                   retry_rc;
++    ngx_chain_t                *remaining;
++
++    if (len == 0 || len > 65536) {
++        return NGX_DECLINED;
++    }
++
++    ngx_memzero(&log, sizeof(ngx_log_t));
++    ngx_memzero(&connection_write, sizeof(ngx_event_t));
++    ngx_memzero(&stream_write, sizeof(ngx_event_t));
++    ngx_memzero(&connection, sizeof(ngx_connection_t));
++    ngx_memzero(&stream_connection, sizeof(ngx_connection_t));
++    ngx_memzero(&r, sizeof(ngx_http_request_t));
++    ngx_memzero(&node, sizeof(ngx_http_v2_node_t));
++    ngx_memzero(&stream, sizeof(ngx_http_v2_stream_t));
++    ngx_memzero(&h2c, sizeof(ngx_http_v2_connection_t));
++    ngx_memzero(&http_connection, sizeof(ngx_http_connection_t));
++    ngx_memzero(&conf_ctx, sizeof(ngx_http_conf_ctx_t));
++    ngx_memzero(&core_loc_conf, sizeof(ngx_http_core_loc_conf_t));
++
++    log.log_level = NGX_LOG_EMERG;
++    pool = ngx_create_pool(16384, &log);
++    if (pool == NULL) {
++        return NGX_ERROR;
++    }
++
++    loc_conf = ngx_pcalloc(pool, sizeof(void *) * ngx_max_module);
++    if (loc_conf == NULL) {
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++
++    h2lcf.chunk_size = NGX_HTTP_V2_DEFAULT_FRAME_SIZE;
++    loc_conf[ngx_http_v2_module.ctx_index] = &h2lcf;
++    loc_conf[ngx_http_core_module.ctx_index] = &core_loc_conf;
++    conf_ctx.loc_conf = loc_conf;
++    http_connection.conf_ctx = &conf_ctx;
++
++    connection.log = &log;
++    connection.write = &connection_write;
++    connection.send_chain = ngx_http_v2_fuzz_output;
++    connection.tcp_nopush = NGX_TCP_NOPUSH_UNSET;
++    connection_write.data = &connection;
++    connection_write.log = &log;
++    connection_write.ready = 1;
++    stream_connection.log = &log;
++    stream_connection.write = &stream_write;
++    stream_connection.data = &r;
++    r.connection = &stream_connection;
++    r.pool = pool;
++    r.loc_conf = loc_conf;
++    r.stream = &stream;
++    stream.request = &r;
++    stream.connection = &h2c;
++    stream.node = &node;
++    stream.send_window = 65535;
++    node.id = 1;
++    node.rank = 1;
++    h2c.frame_size = NGX_HTTP_V2_DEFAULT_FRAME_SIZE;
++    h2c.send_window = 65535;
++    h2c.connection = &connection;
++    h2c.http_connection = &http_connection;
++    ngx_queue_init(&h2c.waiting);
++    body_data = NULL;
++    body_len = 0;
++    flow_controlled = 0;
++    generated_body = 0;
++    expected_reject = 0;
++    large_trailers = 0;
++    large_trailer_size = 0;
++    has_trailers = 0;
++    output_error = 0;
++    drop_ready = 0;
++    fail_write_event = 0;
++    fail_tcp_push = 0;
++    success_tcp_push = 0;
++    nodelay_result = 0;
++    partial_output = 0;
++
++    if (ngx_list_init(&r.headers_out.trailers, pool, 4,
++                      sizeof(ngx_table_elt_t)) != NGX_OK)
++    {
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++
++    count = *data++;
++    len--;
++
++    for (i = 0; i < count && len >= 3; i++) {
++        mode = data[0];
++        key_len = data[1];
++        value_len = data[2];
++        data += 3;
++        len -= 3;
++
++        header = ngx_list_push(&r.headers_out.trailers);
++        if (header == NULL) {
++            ngx_destroy_pool(pool);
++            return NGX_ERROR;
++        }
++
++        ngx_memzero(header, sizeof(ngx_table_elt_t));
++        header->hash = (mode == 0 || mode >= 5) ? 0 : 1;
++        if (mode > 0 && mode < 5) {
++            has_trailers = 1;
++        }
++
++        if (count == 1 && mode == 5) {
++            stream.send_window = 0;
++            flow_controlled = 1;
++            continue;
++        }
++
++        if (count == 1 && mode == 6) {
++            h2c.send_window = 0;
++            flow_controlled = 1;
++            continue;
++        }
++
++        if (count == 1 && mode == 7) {
++            body_len = ((size_t) key_len << 8) | value_len;
++            body_data = ngx_pnalloc(pool, body_len ? body_len : 1);
++            if (body_data == NULL) {
++                ngx_destroy_pool(pool);
++                return NGX_ERROR;
++            }
++            ngx_memset(body_data, 'x', body_len);
++            generated_body = 1;
++            continue;
++        }
++
++        if (count == 1 && mode == 8) {
++            stream.send_window = 8;
++            flow_controlled = 2;
++            continue;
++        }
++
++        if (count == 1 && mode == 9) {
++            connection_write.ready = 0;
++            flow_controlled = 3;
++            continue;
++        }
++
++        if (count == 1 && mode == 10) {
++            output_error = 1;
++            h2c.blocked = 1;
++            flow_controlled = 4;
++            continue;
++        }
++
++        if (count == 1 && mode == 11) {
++            connection_write.ready = 0;
++            flow_controlled = 5;
++            continue;
++        }
++
++        if (count == 1 && mode == 12) {
++            connection.error = 1;
++            h2c.blocked = 1;
++            flow_controlled = 6;
++            continue;
++        }
++
++        if (count == 1 && mode == 13) {
++            drop_ready = 1;
++            flow_controlled = 7;
++            continue;
++        }
++
++        if (count == 1 && mode == 14) {
++            fail_write_event = 1;
++            h2c.blocked = 1;
++            flow_controlled = 8;
++            continue;
++        }
++
++        if (count == 1 && mode == 15) {
++            fail_tcp_push = 1;
++            connection.tcp_nopush = NGX_TCP_NOPUSH_SET;
++            h2c.blocked = 1;
++            flow_controlled = 9;
++            continue;
++        }
++
++        if (count == 1 && mode == 16) {
++            success_tcp_push = 1;
++            connection.tcp_nopush = NGX_TCP_NOPUSH_SET;
++            h2c.blocked = 1;
++            flow_controlled = 10;
++            continue;
++        }
++
++        if (count == 1 && mode == 17 && key_len == 0 && value_len == 0
++            && len == 1 && data[0] == 'A')
++        {
++            partial_output = 1;
++            h2c.blocked = 1;
++            flow_controlled = 11;
++            continue;
++        }
++
++        if (count == 1 && mode == 18) {
++            output_error = 1;
++            flow_controlled = 12;
++            continue;
++        }
++
++        if (count == 1 && mode == 19) {
++            output_error = 1;
++            connection_write.posted = 1;
++            ngx_queue_insert_tail(&ngx_posted_events,
++                                  &connection_write.queue);
++            flow_controlled = 13;
++            continue;
++        }
++
++        if (count == 1 && (mode == 20 || mode == 21)) {
++            success_tcp_push = 1;
++            nodelay_result = mode == 20 ? 1 : 2;
++            connection.tcp_nopush = NGX_TCP_NOPUSH_SET;
++            core_loc_conf.tcp_nodelay = 1;
++            h2c.blocked = 1;
++            flow_controlled = mode == 20 ? 14 : 15;
++            continue;
++        }
++
++        if (mode == 4) {
++            large_trailers = 1;
++            large_trailer_size += 1 + 2 * NGX_HTTP_V2_INT_OCTETS + 510;
++            key = ngx_pnalloc(pool, 255);
++            value = ngx_pnalloc(pool, 255);
++            if (key == NULL || value == NULL) {
++                ngx_destroy_pool(pool);
++                return NGX_ERROR;
++            }
++            ngx_memset(key, 0xff, 255);
++            ngx_memset(value, 0xff, 255);
++            header->key.data = key;
++            header->key.len = 255;
++            header->value.data = value;
++            header->value.len = 255;
++            continue;
++        }
++
++        available = ngx_min(key_len, len);
++        key = ngx_pnalloc(pool, available ? available : 1);
++        if (key == NULL) {
++            ngx_destroy_pool(pool);
++            return NGX_ERROR;
++        }
++        if (available) {
++            ngx_memcpy(key, data, available);
++        }
++        header->key.data = key;
++        header->key.len = available;
++        data += available;
++        len -= available;
++
++        available = ngx_min(value_len, len);
++        value = ngx_pnalloc(pool, available ? available : 1);
++        if (value == NULL) {
++            ngx_destroy_pool(pool);
++            return NGX_ERROR;
++        }
++        if (available) {
++            ngx_memcpy(value, data, available);
++        }
++        header->value.data = value;
++        header->value.len = available;
++        data += available;
++        len -= available;
++
++        if (mode == 2) {
++            header->key.data = &dummy;
++            header->key.len = NGX_HTTP_V2_MAX_FIELD + 1;
++            expected_reject = 1;
++        } else if (mode == 3) {
++            header->value.data = &dummy;
++            header->value.len = NGX_HTTP_V2_MAX_FIELD + 1;
++            expected_reject = 1;
++        }
++    }
++
++    if (body_data == NULL) {
++        body_data = data;
++        body_len = len;
++    }
++
++    ngx_memzero(&body, sizeof(ngx_buf_t));
++    body.start = body_data;
++    body.pos = body_data;
++    body.last = body_data + body_len;
++    body.end = body_data + body_len;
++    body.memory = 1;
++    body.last_buf = 1;
++    body_chain.buf = &body;
++    body_chain.next = NULL;
++    ngx_http_v2_fuzz_output_calls = 0;
++    ngx_http_v2_fuzz_output_frames = 0;
++    ngx_http_v2_fuzz_output_data = 0;
++    ngx_http_v2_fuzz_output_headers = 0;
++    ngx_http_v2_fuzz_output_continuations = 0;
++    ngx_http_v2_fuzz_output_error = output_error;
++    ngx_http_v2_fuzz_output_drop_ready = drop_ready;
++    ngx_http_v2_fuzz_partial_output = partial_output;
++    ngx_http_v2_fuzz_fail_write_event = fail_write_event;
++    ngx_http_v2_fuzz_fail_tcp_push = fail_tcp_push;
++    ngx_http_v2_fuzz_success_tcp_push = success_tcp_push;
++    ngx_http_v2_fuzz_tcp_nodelay_calls = 0;
++    ngx_http_v2_fuzz_tcp_nodelay_result = nodelay_result;
++    saved_tcp_nodelay = ngx_tcp_nodelay_and_tcp_nopush;
++    if (nodelay_result != 0) {
++        ngx_tcp_nodelay_and_tcp_nopush = 1;
++    }
++    ngx_http_v2_fuzz_write_event_failures = 0;
++    ngx_http_v2_fuzz_tcp_push_failures = 0;
++    ngx_http_v2_fuzz_tcp_push_successes = 0;
++
++    remaining = ngx_http_v2_send_chain(&stream_connection, &body_chain, 0);
++    ngx_http_v2_fuzz_fail_write_event = 0;
++    ngx_http_v2_fuzz_fail_tcp_push = 0;
++    ngx_http_v2_fuzz_success_tcp_push = 0;
++    ngx_http_v2_fuzz_partial_output = 0;
++    ngx_tcp_nodelay_and_tcp_nopush = saved_tcp_nodelay;
++    ngx_http_v2_fuzz_tcp_nodelay_result = 0;
++    if (remaining == NGX_CHAIN_ERROR) {
++        if (flow_controlled == 12) {
++            posted = connection_write.posted;
++            if (posted) {
++                ngx_delete_posted_event(&connection_write);
++            }
++
++            if (connection.error && ngx_http_v2_fuzz_output_calls == 1
++                && posted && !connection_write.posted
++                && ngx_queue_empty(&ngx_posted_events))
++            {
++                ngx_destroy_pool(pool);
++                return NGX_OK;
++            }
++
++            ngx_destroy_pool(pool);
++            return NGX_ERROR;
++        }
++        if (flow_controlled == 13) {
++            posted = connection_write.posted;
++            if (posted) {
++                ngx_delete_posted_event(&connection_write);
++            }
++
++            if (connection.error && ngx_http_v2_fuzz_output_calls == 1
++                && posted && !connection_write.posted
++                && ngx_queue_empty(&ngx_posted_events))
++            {
++                ngx_destroy_pool(pool);
++                return NGX_OK;
++            }
++
++            ngx_destroy_pool(pool);
++            return NGX_ERROR;
++        }
++        if (flow_controlled == 15 && connection.error
++            && ngx_http_v2_fuzz_output_calls == 1
++            && ngx_http_v2_fuzz_tcp_push_successes == 1
++            && ngx_http_v2_fuzz_tcp_nodelay_calls == 1)
++        {
++            ngx_destroy_pool(pool);
++            return NGX_OK;
++        }
++        if (flow_controlled == 6 && connection.error
++            && ngx_http_v2_fuzz_output_calls == 0)
++        {
++            ngx_destroy_pool(pool);
++            return NGX_OK;
++        }
++        if (flow_controlled == 8 && connection.error
++            && ngx_http_v2_fuzz_output_calls == 1
++            && ngx_http_v2_fuzz_write_event_failures == 1
++            && ngx_http_v2_fuzz_tcp_push_failures == 0)
++        {
++            ngx_destroy_pool(pool);
++            return NGX_OK;
++        }
++        if (flow_controlled == 9 && connection.error
++            && ngx_http_v2_fuzz_output_calls == 1
++            && ngx_http_v2_fuzz_write_event_failures == 0
++            && ngx_http_v2_fuzz_tcp_push_failures == 1)
++        {
++            ngx_destroy_pool(pool);
++            return NGX_OK;
++        }
++        if (flow_controlled == 4 && connection.error
++            && ngx_http_v2_fuzz_output_calls == 1)
++        {
++            ngx_destroy_pool(pool);
++            return NGX_OK;
++        }
++        ngx_destroy_pool(pool);
++        return expected_reject ? NGX_OK : NGX_ERROR;
++    }
++
++    if (flow_controlled == 8 || flow_controlled == 9 || flow_controlled == 12
++        || flow_controlled == 13 || flow_controlled == 15)
++    {
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++
++    if (flow_controlled == 10
++        && (ngx_http_v2_fuzz_output_calls != 1
++            || ngx_http_v2_fuzz_tcp_push_successes != 1
++            || ngx_http_v2_fuzz_tcp_push_failures != 0
++            || connection.tcp_nopush != NGX_TCP_NOPUSH_UNSET
++            || stream.queued != 0 || h2c.last_out != NULL
++            || !stream.out_closed || remaining != NULL))
++    {
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++
++    if (flow_controlled == 14
++        && (ngx_http_v2_fuzz_output_calls != 1
++            || ngx_http_v2_fuzz_tcp_push_successes != 1
++            || ngx_http_v2_fuzz_tcp_nodelay_calls != 1
++            || connection.tcp_nopush != NGX_TCP_NOPUSH_UNSET
++            || stream.queued != 0 || h2c.last_out != NULL
++            || !stream.out_closed || remaining != NULL))
++    {
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++
++    if (flow_controlled == 11
++        && (ngx_http_v2_fuzz_output_calls != 1 || stream.queued == 0
++            || h2c.last_out == NULL || !h2c.last_out->blocked))
++    {
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++
++    if (expected_reject
++        && (ngx_http_v2_fuzz_output_calls != 0 || stream.queued != 0))
++    {
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++
++    if (flow_controlled == 0 && !expected_reject
++        && (ngx_http_v2_fuzz_output_calls != 1
++            || ngx_http_v2_fuzz_output_frames == 0
++            || stream.queued != 0 || h2c.last_out != NULL
++            || !stream.out_closed || remaining != NULL))
++    {
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++
++    if (generated_body && body_len > NGX_HTTP_V2_DEFAULT_FRAME_SIZE
++        && ngx_http_v2_fuzz_output_data < 2)
++    {
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++
++    if (large_trailer_size > h2c.frame_size
++        && ngx_http_v2_fuzz_output_continuations == 0)
++    {
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++
++    if (has_trailers && !expected_reject
++        && ngx_http_v2_fuzz_output_headers == 0)
++    {
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++
++    if (flow_controlled == 1 && body_len != 0
++        && (ngx_http_v2_fuzz_output_calls != 0 || stream.queued != 0
++            || remaining != &body_chain))
++    {
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++
++    if (flow_controlled == 2 && body_len != 0
++        && (ngx_http_v2_fuzz_output_calls != 1
++            || ngx_http_v2_fuzz_output_data != 1 || stream.queued != 0
++            || stream.send_window
++               != (body_len < 8 ? 8 - body_len : 0)))
++    {
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++
++    if (flow_controlled == 3
++        && (ngx_http_v2_fuzz_output_calls != 0 || stream.queued == 0
++            || h2c.last_out == NULL || connection_write.ready
++            || remaining != NULL))
++    {
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++
++    if (flow_controlled == 5) {
++        if (ngx_http_v2_fuzz_output_calls != 0 || stream.queued == 0
++            || h2c.last_out == NULL || connection_write.ready
++            || remaining != NULL)
++        {
++            ngx_destroy_pool(pool);
++            return NGX_ERROR;
++        }
++
++        stream.blocked = 1;
++        connection_write.ready = 1;
++        retry_rc = ngx_http_v2_send_output_queue(&h2c);
++        stream.blocked = 0;
++
++        if (retry_rc != NGX_OK || ngx_http_v2_fuzz_output_calls != 1
++            || stream.queued != 0 || h2c.last_out != NULL
++            || !stream.out_closed)
++        {
++            ngx_destroy_pool(pool);
++            return NGX_ERROR;
++        }
++    }
++
++    if (flow_controlled == 7) {
++        if (ngx_http_v2_fuzz_output_calls != 1 || stream.queued != 0
++            || h2c.last_out != NULL || !stream.out_closed
++            || connection_write.ready || !connection_write.timer_set)
++        {
++            if (connection_write.timer_set) {
++                ngx_del_timer(&connection_write);
++            }
++            ngx_destroy_pool(pool);
++            return NGX_ERROR;
++        }
++
++        connection_write.ready = 1;
++        retry_rc = ngx_http_v2_send_output_queue(&h2c);
++
++        if (retry_rc != NGX_OK || ngx_http_v2_fuzz_output_calls != 2
++            || connection_write.timer_set)
++        {
++            if (connection_write.timer_set) {
++                ngx_del_timer(&connection_write);
++            }
++            ngx_destroy_pool(pool);
++            return NGX_ERROR;
++        }
++    }
++
++    ngx_destroy_pool(pool);
++    return NGX_OK;
++}
++
++static ngx_chain_t *
++ngx_http_v2_fuzz_output(ngx_connection_t *c, ngx_chain_t *in, off_t limit)
++{
++    ngx_chain_t  *cl;
++    ngx_buf_t    *b;
++    u_char        type;
++
++    ngx_http_v2_fuzz_output_calls++;
++
++    if (ngx_http_v2_fuzz_output_error) {
++        return NGX_CHAIN_ERROR;
++    }
++
++    for (cl = in; cl != NULL; cl = cl->next) {
++        b = cl->buf;
++
++        if (b->tag == (ngx_buf_tag_t) &ngx_http_v2_module
++            && ngx_buf_in_memory(b)
++            && (size_t) (b->last - b->pos) >= NGX_HTTP_V2_FRAME_HEADER_SIZE)
++        {
++            type = b->pos[3];
++            ngx_http_v2_fuzz_output_frames++;
++            if (type == NGX_HTTP_V2_DATA_FRAME) {
++                ngx_http_v2_fuzz_output_data++;
++            } else if (type == NGX_HTTP_V2_HEADERS_FRAME) {
++                ngx_http_v2_fuzz_output_headers++;
++            } else if (type == NGX_HTTP_V2_CONTINUATION_FRAME) {
++                ngx_http_v2_fuzz_output_continuations++;
++            }
++        }
++
++        if (ngx_buf_in_memory(b)) {
++            if (ngx_http_v2_fuzz_partial_output && b->pos < b->last) {
++                b->pos++;
++                ngx_http_v2_fuzz_partial_output = 0;
++            } else {
++                b->pos = b->last;
++            }
++        }
++
++        if (b->in_file) {
++            b->file_pos = b->file_last;
++        }
++    }
++
++    if (ngx_http_v2_fuzz_output_drop_ready) {
++        c->write->ready = 0;
++        ngx_http_v2_fuzz_output_drop_ready = 0;
++    }
++
++    (void) c;
++    (void) limit;
++    return NULL;
++}
++

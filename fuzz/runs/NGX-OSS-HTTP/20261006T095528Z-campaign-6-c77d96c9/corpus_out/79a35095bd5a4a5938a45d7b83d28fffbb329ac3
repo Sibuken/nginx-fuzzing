@@ -1,0 +1,2 @@
+request: "GET /a/../0 HTTP/1.1\r\nHost: edge%url.ctm\r\nX_Test: value\r\n\r\n"
+reply: ""

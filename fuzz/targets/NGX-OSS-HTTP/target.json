@@ -1,0 +1,36 @@
+{
+  "id": "NGX-OSS-HTTP",
+  "origin": "adapted",
+  "binary": "http_request_fuzzer",
+  "upstream_target": "http_request_fuzzer",
+  "upstream_revision": "2cc3fa481cbf724c0091fd3c75fdd4142e698409",
+  "input_format": "protobuf text format, proto2 HttpProto with required string fields request and reply",
+  "mutator": "libprotobuf-mutator DEFINE_PROTO_FUZZER",
+  "configuration_profile": "upstream embedded HTTP reverse proxy configuration",
+  "allocator_mode": "NGX_DEBUG_PALLOC=1",
+  "limits": {
+    "max_len": 65536,
+    "per_input_timeout_seconds": 10,
+    "rss_limit_mb": 2048
+  },
+  "scopes": [
+    {
+      "id": "NGX-IF06",
+      "file": "src/core/ngx_proxy_protocol.c",
+      "functions": ["ngx_proxy_protocol_read"],
+      "callers": ["ngx_event_recvmsg", "ngx_http_wait_request_handler", "ngx_stream_proxy_protocol_handler"],
+      "contract": "Consumes one complete PROXY v1/v2 header and returns the first byte after it, or NULL on rejection; stores parsed metadata in c->proxy_protocol.",
+      "preconditions": "Connection log and pool are valid; buf..last is one contiguous candidate header (not a streaming contract).",
+      "testcase_fields": [],
+      "variants": ["v1 TCP4/TCP6/UNKNOWN", "v2 IPv4/IPv6", "ports", "lengths", "TLVs"],
+      "reachability": "The embedded upstream listener has no proxy_protocol parameter, so this function requires a measured follow-up target if coverage remains zero."
+    }
+  ],
+  "expected_results": ["normal completion for accepted and rejected HTTP messages", "ASan/UBSan diagnostic is a finding"],
+  "state": "The nginx cycle is initialized once; request connections and pools are created and finalized for every input.",
+  "known_limitations": [
+    "Input is delivered by the upstream recv adapters, not a real TCP stack.",
+    "The embedded listener does not enable PROXY protocol, TLS, HTTP/2 or HTTP/3.",
+    "The upstream send/event/syscall wrappers intentionally model only the behavior needed by this target."
+  ]
+}

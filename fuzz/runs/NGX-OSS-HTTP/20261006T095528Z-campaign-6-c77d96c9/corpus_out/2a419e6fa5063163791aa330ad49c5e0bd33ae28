@@ -1,0 +1,2 @@
+request: "GET /a/../b\r\n"
+reply: "HTTP/1.1uM027  lti-Status\r\nConttne-Lengt\\ld-Hostgs"

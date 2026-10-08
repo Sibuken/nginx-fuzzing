@@ -1,0 +1,2 @@
+request: "PROPFIND /collection/%41/%7euser HTTP/1.1\r\nHost: dav.url.com\r\nDeAccess-Control-Allow-Headerspth: infinity\r\nContent-Length: 5\r\n\r\n"
+reply: ""

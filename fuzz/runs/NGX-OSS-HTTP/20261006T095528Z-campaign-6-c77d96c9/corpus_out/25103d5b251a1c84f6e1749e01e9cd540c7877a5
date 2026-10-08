@@ -1,0 +1,2 @@
+request: "GET /a/../b/%2e%\1772e/c//d?q=%0Warning1.1\r\nHost: edge%url.ctm\r\nX_Test: value\r\n\r\n"
+reply: ""

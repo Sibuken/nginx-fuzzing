@@ -1,0 +1,2 @@
+request: "GET /a.1\r\nHode"
+reply: "HTTP/1.1 207 Muulti\nCache-Control\r\nX-Wap-Profile-StatusMulti-Status\r\nCo\356tent-LenContent-MD5Cache-Controti\nCache-Control\r\nX-Wap-Profile-StatusMulti-Status\r\nCo\356tent-Lengt-Status\r\nCache-Control\r\nCo\356l\r\nCoent-Lengt-Status\r\nCache-Controti\nCache-Control\r\nX-Wap-Profile-StatusMulti-Status\r\nCo\356tent-Lengt-Status\r\nCache-Control\r\nCo\356l\r\nCo\356tent-Lelti-StatusMulti-Status\r\nCo\356tent-Leng\356tent-Lelti-StatusMulti-Status\r\nCo\356tent-Lengt\r\nCo\356tent-Length: 0\r\n\r\n"

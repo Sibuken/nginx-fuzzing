@@ -1,0 +1,83 @@
+{
+  "duration_seconds": 9.129,
+  "inputs": 48,
+  "label": "final",
+  "nginx_source": {
+    "branches": {
+      "covered": 47,
+      "percent": 0.14,
+      "total": 34040
+    },
+    "lines": {
+      "covered": 145,
+      "percent": 0.19,
+      "total": 77583
+    }
+  },
+  "scopes": [
+    {
+      "branches": {
+        "covered": 14,
+        "percent": 100.0,
+        "total": 14
+      },
+      "file": "src/http/ngx_http_huff_decode.c",
+      "functions": [
+        "ngx_http_huff_decode",
+        "ngx_http_huff_decode_bits"
+      ],
+      "id": "NGX-IF10-huffman",
+      "lines": {
+        "covered": 48,
+        "percent": 100.0,
+        "total": 48
+      }
+    },
+    {
+      "branches": {
+        "covered": 15,
+        "percent": 93.75,
+        "total": 16
+      },
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": [
+        "ngx_http_v2_parse_int"
+      ],
+      "id": "NGX-IF10-integer",
+      "lines": {
+        "covered": 36,
+        "percent": 97.3,
+        "total": 37
+      }
+    }
+  ],
+  "whole_instrumented_build": {
+    "branches": {
+      "count": 33834,
+      "covered": 47,
+      "notcovered": 33787,
+      "percent": 0.1389135189454395
+    },
+    "functions": {
+      "count": 1697,
+      "covered": 6,
+      "percent": 0.3535651149086624
+    },
+    "instantiations": {
+      "count": 3807,
+      "covered": 6,
+      "percent": 0.15760441292356187
+    },
+    "lines": {
+      "count": 76686,
+      "covered": 140,
+      "percent": 0.1825626581123021
+    },
+    "regions": {
+      "count": 60404,
+      "covered": 93,
+      "notcovered": 60311,
+      "percent": 0.15396331368783525
+    }
+  }
+}

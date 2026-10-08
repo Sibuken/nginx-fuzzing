@@ -1,0 +1,27 @@
+{
+  "id": "NGX-IF18",
+  "origin": "custom",
+  "binary": "http2_headers_state_fuzzer",
+  "input_format": "bounded raw HTTP/2 HEADERS frame followed by optional CONTINUATION frames",
+  "mutator": "libFuzzer byte mutator",
+  "configuration_profile": "real HTTP/2 frame dispatch, HEADERS state, stream/request creation, HPACK request-header processing and minimal fuzz.test virtual host",
+  "allocator_mode": "fresh HTTP/2, stream and request pools per input",
+  "justification": "NGX-IF17 starts after HEADERS framing and supplies an already-live synthetic stream. This target exercises the real frame-header dispatch, HEADERS metadata parsing and ngx_http_v2_create_stream before decoding request headers.",
+  "state": "A bounded frame sequence enters ngx_http_v2_state_head. The real HEADERS handler validates metadata, allocates a stream/request, and the HPACK state machine consumes required CONTINUATION frames, checking frame type, matching stream ID and END_HEADERS. Request execution remains disabled in the isolated fuzz build.",
+  "known_limitations": [
+    "The first frame must be HEADERS; input is capped at 8192 bytes and nginx receives a contiguous writable copy, so socket read fragmentation is covered by NGX-IF15.",
+    "Malformed header errors are captured before request finalization and posted-event processing.",
+    "The request stops before ngx_http_v2_run_request, routing, body handling, and application phases."
+  ],
+  "limits": {"max_len": 8192, "per_input_timeout_seconds": 10, "rss_limit_mb": 2048},
+  "scopes": [{
+    "id": "NGX-IF18-live-headers-request",
+    "file": "src/http/v2/ngx_http_v2.c",
+    "functions": ["ngx_http_v2_state_head", "ngx_http_v2_state_headers", "ngx_http_v2_create_stream", "ngx_http_v2_state_header_block", "ngx_http_v2_state_process_header", "ngx_http_v2_validate_header", "ngx_http_v2_pseudo_header", "ngx_http_v2_parse_method", "ngx_http_v2_parse_scheme", "ngx_http_v2_parse_path", "ngx_http_v2_parse_authority"],
+    "callers": ["ngx_http_v2_read_handler", "ngx_http_v2_state_preface_end", "ngx_http_v2_state_complete"],
+    "contract": "Parse bounded HEADERS/CONTINUATION sequences, validate frame metadata and sequencing, create a live request stream and decode/process HPACK fields, including authority virtual-host selection.",
+    "preconditions": "One contiguous input buffer, first frame HEADERS, bounded to 8192 bytes, fresh pools, initialized nginx modules, and minimal core/v2 configuration.",
+    "testcase_fields": ["24-bit frame length", "HEADERS flags", "31-bit stream ID", "priority dependency/weight", "padding", "HPACK representation bytes", "header ordering", "authority value"],
+    "variants": ["valid and invalid stream IDs", "END_STREAM/END_HEADERS", "valid CONTINUATION", "mismatched continuation stream ID", "unexpected frame during header block", "truncated continuation header", "PADDED plus CONTINUATION", "PRIORITY plus CONTINUATION", "combined PADDED and PRIORITY", "padding length beyond HEADERS payload", "truncated priority metadata before CONTINUATION", "valid/invalid pseudo-headers", "virtual-host match and miss", "truncated frame payload"]
+  }]
+}

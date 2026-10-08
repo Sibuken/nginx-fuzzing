@@ -1,0 +1,39 @@
+{
+  "id": "NGX-IF08",
+  "origin": "custom",
+  "binary": "proxy_protocol_tlv_fuzzer",
+  "input_format": "raw: one byte selecting a numeric TLV type, followed by one contiguous PROXY protocol candidate header",
+  "mutator": "libFuzzer byte mutator",
+  "configuration_profile": "standalone PROXY v2 parser followed by public named, SSL-nested and numeric TLV lookups",
+  "allocator_mode": "NGX_DEBUG_PALLOC=1 with a fresh nginx pool per input",
+  "justification": "NGX-IF06 stores v2 TLV bytes but does not call ngx_proxy_protocol_get_tlv, leaving lookup framing and nested SSL TLVs uncovered.",
+  "state": "A fresh connection and pool are created per input; every public TLV name and one input-selected numeric type are queried after a successful parse.",
+  "known_limitations": [
+    "The target uses one contiguous complete PROXY header, matching the core parser contract.",
+    "It checks parser and accessor memory safety, not nginx variable integration.",
+    "Queries are fixed public names plus one arbitrary one-byte numeric type; arbitrary textual names are not useful beyond the explicit unknown-name case."
+  ],
+  "limits": {"max_len": 65536, "per_input_timeout_seconds": 10, "rss_limit_mb": 2048},
+  "scopes": [
+    {
+      "id": "NGX-IF08-get-tlv",
+      "file": "src/core/ngx_proxy_protocol.c",
+      "functions": ["ngx_proxy_protocol_get_tlv"],
+      "callers": ["ngx_http_proxy_protocol_variable", "ngx_stream_proxy_protocol_variable"],
+      "contract": "Maps a public or numeric TLV name, validates SSL metadata and returns a bounded value, decline, or error.",
+      "preconditions": "The connection is initialized; proxy metadata is absent or was produced by ngx_proxy_protocol_read.",
+      "testcase_fields": ["numeric TLV selector", "PROXY v2 header", "top-level TLVs", "SSL nested TLVs"],
+      "variants": ["named TLVs", "numeric TLVs", "ssl_verify", "nested SSL names", "unknown names", "short SSL payloads"]
+    },
+    {
+      "id": "NGX-IF08-lookup",
+      "file": "src/core/ngx_proxy_protocol.c",
+      "functions": ["ngx_proxy_protocol_lookup_tlv"],
+      "callers": ["ngx_proxy_protocol_get_tlv"],
+      "contract": "Walks length-prefixed TLVs without reading past their enclosing buffer.",
+      "preconditions": "The TLV slice and requested one-byte type are initialized.",
+      "testcase_fields": ["type", "length", "value", "remaining TLVs"],
+      "variants": ["match", "miss", "truncated header", "oversized length", "nested sequence"]
+    }
+  ]
+}

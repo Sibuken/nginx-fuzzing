@@ -1,0 +1,3 @@
+request: "GET /broken HTTP/1.1\r\nHost: broken.url.com\r\nX-Long: abc"
+reply: "HTTP/1.1 502 Bad Gateway\r\nContent-Length: 10\r\n\r\nshort"
+

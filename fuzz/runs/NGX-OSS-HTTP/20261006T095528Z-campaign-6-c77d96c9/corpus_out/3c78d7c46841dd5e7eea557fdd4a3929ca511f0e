@@ -1,0 +1,2 @@
+request: "HEAD /headers HTTP/1.1\r\nHost: hees\r\nFoldAccepX-ATT-Device\262de\n\r\n"
+reply: "HEAD /hX-Requested-With\nHost: hees\r\nFoldAccepX-ATT-Deice\262de\n\r\n"

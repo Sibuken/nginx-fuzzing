@@ -1,0 +1,10 @@
+# Local additions to the pinned upstream dictionary. The image concatenates
+# both files; structured mutation remains controlled by libprotobuf-mutator.
+crlf="\x0d\x0a"
+headers_end="\x0d\x0a\x0d\x0a"
+chunked="Transfer-Encoding: chunked\x0d\x0a"
+content_length="Content-Length: "
+proxy_connection="Proxy-Connection: keep-alive\x0d\x0a"
+percent_dot="%2e"
+percent_slash="%2f"
+chunk_end="0\x0d\x0a\x0d\x0a"

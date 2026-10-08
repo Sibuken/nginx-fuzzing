@@ -1,0 +1,2 @@
+request: "GET /a/../b/\3702e%2e/c//d?q\r\n"
+reply: ""

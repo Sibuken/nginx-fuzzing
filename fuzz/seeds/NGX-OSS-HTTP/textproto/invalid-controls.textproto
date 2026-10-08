@@ -1,0 +1,2 @@
+request: "BAD\001METHOD / HTTP/9.9\r\nHost: invalid.url.com\r\nBad Header: x\r\n\r\n"
+reply: "NOTHTTP\r\n"

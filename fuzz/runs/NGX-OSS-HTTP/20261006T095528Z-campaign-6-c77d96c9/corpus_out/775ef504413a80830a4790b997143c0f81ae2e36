@@ -1,0 +1,2 @@
+request: "GET /a/VERSIOree/c//d?q=%00 \r\n"
+reply: ""

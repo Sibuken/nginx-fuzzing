@@ -1,0 +1,2 @@
+request: "POST /chunks HTTP/1.1\r\nHost: chu0;en&&&&&&&&ks&&&&&&&d=yes\r\nTrai value\r\n\r\n"
+reply: "GET /a/../b/%2e%2e/c//d?q=%00 HTTP/1.1\r\nHost: edgem\r\nX_Te.url.com\r\nhttp_refererX_TeLOCKst:\001\000\036\260ue\r\n\r\n"

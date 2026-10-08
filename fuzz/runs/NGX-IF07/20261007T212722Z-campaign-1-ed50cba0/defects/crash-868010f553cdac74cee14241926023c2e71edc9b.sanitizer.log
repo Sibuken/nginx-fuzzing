@@ -1,0 +1,48 @@
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 3263583661
+INFO: Loaded 1 modules   (39601 inline 8-bit counters): 39601 [0x555555cbbce0, 0x555555cc5791), 
+INFO: Loaded 1 PC tables (39601 PCs): 39601 [0x555555cc5798,0x555555d602a8), 
+/opt/fuzz/bin/fuzz/dns_response_fuzzer: Running 1 inputs 1 time(s) each.
+Running: /runs/NGX-IF07/20261007T212722Z-campaign-1-ed50cba0/artifacts/crash-868010f553cdac74cee14241926023c2e71edc9b
+src/core/ngx_resolver.c:2197:27: runtime error: left shift of 219 by 24 places cannot be represented in type 'int'
+    #0 0x5555558efbd2 in ngx_resolver_process_a /work/nginx-fuzz/src/core/ngx_resolver.c:2197:27
+    #1 0x5555558e4bb6 in ngx_resolver_process_response /work/nginx-fuzz/src/core/ngx_resolver.c:1879:9
+    #2 0x5555558e279c in ngx_resolver_fuzz_process_response /work/nginx-fuzz/src/core/ngx_resolver.c:4937:5
+    #3 0x55555586c6a7 in LLVMFuzzerTestOneInput /work/nginx-fuzz/src/fuzz/dns_response_fuzzer.cc:68:5
+    #4 0x5555557926c3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) (/opt/fuzz/bin/fuzz/dns_response_fuzzer+0x23e6c3) (BuildId: ec6b9bd371843fccc321f5a38c34a44095ef579e)
+    #5 0x55555577c6cf in fuzzer::RunOneTest(fuzzer::Fuzzer*, char const*, unsigned long) (/opt/fuzz/bin/fuzz/dns_response_fuzzer+0x2286cf) (BuildId: ec6b9bd371843fccc321f5a38c34a44095ef579e)
+    #6 0x555555782406 in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) (/opt/fuzz/bin/fuzz/dns_response_fuzzer+0x22e406) (BuildId: ec6b9bd371843fccc321f5a38c34a44095ef579e)
+    #7 0x5555557ac242 in main (/opt/fuzz/bin/fuzz/dns_response_fuzzer+0x258242) (BuildId: ec6b9bd371843fccc321f5a38c34a44095ef579e)
+    #8 0x7fffff1f9249  (/lib/x86_64-linux-gnu/libc.so.6+0x27249) (BuildId: 93ac61ec5a8eb1396f9fbd350e3169a558528a40)
+    #9 0x7fffff1f9304 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x27304) (BuildId: 93ac61ec5a8eb1396f9fbd350e3169a558528a40)
+    #10 0x555555776d60 in _start (/opt/fuzz/bin/fuzz/dns_response_fuzzer+0x222d60) (BuildId: ec6b9bd371843fccc321f5a38c34a44095ef579e)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior src/core/ngx_resolver.c:2197:27 in 
+==57418== ERROR: libFuzzer: deadly signal
+    #0 0x5555558390b1 in __sanitizer_print_stack_trace (/opt/fuzz/bin/fuzz/dns_response_fuzzer+0x2e50b1) (BuildId: ec6b9bd371843fccc321f5a38c34a44095ef579e)
+    #1 0x5555557aba08 in fuzzer::PrintStackTrace() (/opt/fuzz/bin/fuzz/dns_response_fuzzer+0x257a08) (BuildId: ec6b9bd371843fccc321f5a38c34a44095ef579e)
+    #2 0x5555557912d3 in fuzzer::Fuzzer::CrashCallback() (/opt/fuzz/bin/fuzz/dns_response_fuzzer+0x23d2d3) (BuildId: ec6b9bd371843fccc321f5a38c34a44095ef579e)
+    #3 0x7fffff20e04f  (/lib/x86_64-linux-gnu/libc.so.6+0x3c04f) (BuildId: 93ac61ec5a8eb1396f9fbd350e3169a558528a40)
+    #4 0x7fffff25ceeb  (/lib/x86_64-linux-gnu/libc.so.6+0x8aeeb) (BuildId: 93ac61ec5a8eb1396f9fbd350e3169a558528a40)
+    #5 0x7fffff20dfb1 in raise (/lib/x86_64-linux-gnu/libc.so.6+0x3bfb1) (BuildId: 93ac61ec5a8eb1396f9fbd350e3169a558528a40)
+    #6 0x7fffff1f8471 in abort (/lib/x86_64-linux-gnu/libc.so.6+0x26471) (BuildId: 93ac61ec5a8eb1396f9fbd350e3169a558528a40)
+    #7 0x555555853326 in __sanitizer::Abort() (/opt/fuzz/bin/fuzz/dns_response_fuzzer+0x2ff326) (BuildId: ec6b9bd371843fccc321f5a38c34a44095ef579e)
+    #8 0x5555558511c0 in __sanitizer::Die() (/opt/fuzz/bin/fuzz/dns_response_fuzzer+0x2fd1c0) (BuildId: ec6b9bd371843fccc321f5a38c34a44095ef579e)
+    #9 0x555555864eeb in __ubsan::ScopedReport::~ScopedReport() (/opt/fuzz/bin/fuzz/dns_response_fuzzer+0x310eeb) (BuildId: ec6b9bd371843fccc321f5a38c34a44095ef579e)
+    #10 0x55555586700d in handleShiftOutOfBoundsImpl(__ubsan::ShiftOutOfBoundsData*, unsigned long, unsigned long, __ubsan::ReportOptions) ubsan_handlers.cpp.o
+    #11 0x55555586708d in __ubsan_handle_shift_out_of_bounds_abort (/opt/fuzz/bin/fuzz/dns_response_fuzzer+0x31308d) (BuildId: ec6b9bd371843fccc321f5a38c34a44095ef579e)
+    #12 0x5555558efbd2 in ngx_resolver_process_a /work/nginx-fuzz/src/core/ngx_resolver.c:2197:27
+    #13 0x5555558e4bb6 in ngx_resolver_process_response /work/nginx-fuzz/src/core/ngx_resolver.c:1879:9
+    #14 0x5555558e279c in ngx_resolver_fuzz_process_response /work/nginx-fuzz/src/core/ngx_resolver.c:4937:5
+    #15 0x55555586c6a7 in LLVMFuzzerTestOneInput /work/nginx-fuzz/src/fuzz/dns_response_fuzzer.cc:68:5
+    #16 0x5555557926c3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) (/opt/fuzz/bin/fuzz/dns_response_fuzzer+0x23e6c3) (BuildId: ec6b9bd371843fccc321f5a38c34a44095ef579e)
+    #17 0x55555577c6cf in fuzzer::RunOneTest(fuzzer::Fuzzer*, char const*, unsigned long) (/opt/fuzz/bin/fuzz/dns_response_fuzzer+0x2286cf) (BuildId: ec6b9bd371843fccc321f5a38c34a44095ef579e)
+    #18 0x555555782406 in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) (/opt/fuzz/bin/fuzz/dns_response_fuzzer+0x22e406) (BuildId: ec6b9bd371843fccc321f5a38c34a44095ef579e)
+    #19 0x5555557ac242 in main (/opt/fuzz/bin/fuzz/dns_response_fuzzer+0x258242) (BuildId: ec6b9bd371843fccc321f5a38c34a44095ef579e)
+    #20 0x7fffff1f9249  (/lib/x86_64-linux-gnu/libc.so.6+0x27249) (BuildId: 93ac61ec5a8eb1396f9fbd350e3169a558528a40)
+    #21 0x7fffff1f9304 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x27304) (BuildId: 93ac61ec5a8eb1396f9fbd350e3169a558528a40)
+    #22 0x555555776d60 in _start (/opt/fuzz/bin/fuzz/dns_response_fuzzer+0x222d60) (BuildId: ec6b9bd371843fccc321f5a38c34a44095ef579e)
+
+NOTE: libFuzzer has rudimentary signal handlers.
+      Combine libFuzzer with AddressSanitizer or similar for better crash reports.
+SUMMARY: libFuzzer: deadly signal

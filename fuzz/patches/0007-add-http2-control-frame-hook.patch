@@ -1,0 +1,518 @@
+--- a/src/http/v2/ngx_http_v2.c
++++ b/src/http/v2/ngx_http_v2.c
+@@ -198,6 +198,10 @@ static ngx_http_v2_handler_pt ngx_http_v2_frame_states[] = {
+ #define NGX_HTTP_V2_FRAME_STATES                                              \
+     (sizeof(ngx_http_v2_frame_states) / sizeof(ngx_http_v2_handler_pt))
+ 
++static ngx_uint_t           ngx_http_v2_fuzz_control_active;
++static volatile ngx_uint_t  ngx_http_v2_fuzz_control_sink;
++static ngx_uint_t           ngx_http_v2_fuzz_control_drain_window;
++
+ 
+ void
+ ngx_http_v2_init(ngx_event_t *rev)
+@@ -1111,8 +1114,13 @@ ngx_http_v2_state_read_data(ngx_http_v2_connection_t *h2c, u_char *pos,
+         rc = ngx_http_v2_process_request_body(r, pos, size,
+                                               stream->in_closed, 0);
+ 
+         if (rc != NGX_OK && rc != NGX_AGAIN) {
++            if (ngx_http_v2_fuzz_control_active) {
++                ngx_http_v2_fuzz_control_sink ^= rc;
++                stream->skip_data = 1;
++                return pos + size;
++            }
+             stream->skip_data = 1;
+             ngx_http_finalize_request(r, rc);
+         }
+ 
+@@ -2642,6 +2645,11 @@ ngx_http_v2_connection_error(ngx_http_v2_connection_t *h2c,
+ {
+     ngx_log_debug0(NGX_LOG_DEBUG_HTTP, h2c->connection->log, 0,
+                    "http2 state connection error");
++
++    if (ngx_http_v2_fuzz_control_active) {
++        ngx_http_v2_fuzz_control_sink ^= err;
++        return NULL;
++    }
+ 
+     ngx_http_v2_finalize_connection(h2c, err);
+ 
+@@ -5005,3 +5014,478 @@ ngx_http_v2_pool_cleanup(void *data)
+         ngx_destroy_pool(h2c->pool);
+     }
+ }
++
++
++static void
++ngx_http_v2_fuzz_control_event(ngx_event_t *ev)
++{
++    ngx_connection_t       *fc;
++    ngx_http_request_t     *r;
++    ngx_http_v2_stream_t   *stream;
++
++    if (ngx_http_v2_fuzz_control_drain_window) {
++        fc = ev->data;
++        r = fc ? fc->data : NULL;
++        stream = r ? r->stream : NULL;
++
++        if (stream != NULL) {
++            stream->connection->send_window = 0;
++            ngx_http_v2_fuzz_control_drain_window = 0;
++        }
++    }
++
++    ngx_http_v2_fuzz_control_sink ^= ev->ready;
++}
++
++
++static ngx_int_t
++ngx_http_v2_fuzz_request_body_filter(ngx_http_request_t *r, ngx_chain_t *in)
++{
++    ngx_chain_t  *cl;
++
++    for (cl = in; cl != NULL; cl = cl->next) {
++        if (cl->buf != NULL) {
++            ngx_http_v2_fuzz_control_sink ^= cl->buf->last_buf;
++            ngx_http_v2_fuzz_control_sink ^=
++                cl->buf->last - cl->buf->pos;
++            cl->buf->pos = cl->buf->last;
++        }
++    }
++
++    return NGX_OK;
++}
++
++
++static void
++ngx_http_v2_fuzz_request_body_post(ngx_http_request_t *r)
++{
++    ngx_http_v2_fuzz_control_sink ^= r->request_length;
++}
++
++
++/*
++ * Fuzz-only HTTP/2 frame driver.  It is linked only into the isolated
++ * instrumented build; each target explicitly opts into connection control,
++ * RST_STREAM or DATA frames.  Real state handlers and output-frame
++ * allocation paths are used with a minimal synthetic request/stream graph;
++ * other request-bearing frame types remain outside this harness.
++ */
++ngx_int_t
++ngx_http_v2_fuzz_control_frames(ngx_pool_t *pool, ngx_log_t *log,
++    u_char *data, size_t len, size_t chunk, ngx_uint_t allow_control_frames,
++    ngx_uint_t allow_rst_stream, ngx_uint_t allow_data_frame,
++    ngx_uint_t data_mode)
++{
++    u_char                     *before, *end, *p, *work;
++    size_t                      available, offset, saved, take;
++    uint32_t                    head;
++    ngx_uint_t                  type;
++    void                      **srv_conf;
++    ngx_connection_t            connection;
++    ngx_connection_t            fake_connection;
++    ngx_connection_t            fake_connection2;
++    ngx_event_t                 read_event;
++    ngx_event_t                 write_event;
++    ngx_event_t                 read_event2;
++    ngx_event_t                 write_event2;
++    ngx_http_conf_ctx_t          conf_ctx;
++    ngx_http_connection_t        http_connection;
++    ngx_http_request_t           request;
++    ngx_http_request_t           request2;
++    ngx_http_request_body_t      request_body;
++    ngx_http_core_loc_conf_t     core_loc_conf;
++    ngx_http_v2_connection_t     h2c;
++    ngx_http_v2_node_t           node;
++    ngx_http_v2_node_t           closed_node;
++    ngx_http_v2_node_t           node2;
++    ngx_http_v2_srv_conf_t       h2scf;
++    ngx_http_v2_stream_t         stream;
++    ngx_http_v2_stream_t         stream2;
++    ngx_buf_t                   *preread, *body_buffer;
++    ngx_http_request_body_filter_pt saved_body_filter;
++    void                       **loc_conf;
++    ngx_uint_t                    drain_window, drain_window_ok;
++
++    if (ngx_http_v2_module.ctx_index == NGX_MODULE_UNSET_INDEX) {
++        return NGX_ERROR;
++    }
++
++    if (chunk == 0) {
++        chunk = 1;
++    }
++
++    work = ngx_pnalloc(pool, len + NGX_HTTP_V2_STATE_BUFFER_SIZE);
++    srv_conf = ngx_pcalloc(pool, (ngx_http_v2_module.ctx_index + 1)
++                                  * sizeof(void *));
++    if (work == NULL || srv_conf == NULL) {
++        return NGX_ERROR;
++    }
++
++    ngx_memzero(&connection, sizeof(ngx_connection_t));
++    ngx_memzero(&fake_connection, sizeof(ngx_connection_t));
++    ngx_memzero(&fake_connection2, sizeof(ngx_connection_t));
++    ngx_memzero(&read_event, sizeof(ngx_event_t));
++    ngx_memzero(&write_event, sizeof(ngx_event_t));
++    ngx_memzero(&read_event2, sizeof(ngx_event_t));
++    ngx_memzero(&write_event2, sizeof(ngx_event_t));
++    ngx_memzero(&conf_ctx, sizeof(ngx_http_conf_ctx_t));
++    ngx_memzero(&http_connection, sizeof(ngx_http_connection_t));
++    ngx_memzero(&request, sizeof(ngx_http_request_t));
++    ngx_memzero(&request2, sizeof(ngx_http_request_t));
++    ngx_memzero(&request_body, sizeof(ngx_http_request_body_t));
++    ngx_memzero(&core_loc_conf, sizeof(ngx_http_core_loc_conf_t));
++    ngx_memzero(&h2c, sizeof(ngx_http_v2_connection_t));
++    ngx_memzero(&node, sizeof(ngx_http_v2_node_t));
++    ngx_memzero(&closed_node, sizeof(ngx_http_v2_node_t));
++    ngx_memzero(&node2, sizeof(ngx_http_v2_node_t));
++    ngx_memzero(&h2scf, sizeof(ngx_http_v2_srv_conf_t));
++    ngx_memzero(&stream, sizeof(ngx_http_v2_stream_t));
++    ngx_memzero(&stream2, sizeof(ngx_http_v2_stream_t));
++
++    h2scf.streams_index_mask = 0;
++    h2scf.preread_size = 8192;
++    core_loc_conf.client_max_body_size = 65536;
++    loc_conf = ngx_pcalloc(pool, (ngx_http_core_module.ctx_index + 1)
++                                 * sizeof(void *));
++    if (loc_conf == NULL) {
++        return NGX_ERROR;
++    }
++    loc_conf[ngx_http_core_module.ctx_index] = &core_loc_conf;
++    request.loc_conf = loc_conf;
++    srv_conf[ngx_http_v2_module.ctx_index] = &h2scf;
++    conf_ctx.srv_conf = srv_conf;
++    http_connection.conf_ctx = &conf_ctx;
++
++    connection.log = log;
++    connection.pool = pool;
++
++    h2c.connection = &connection;
++    h2c.http_connection = &http_connection;
++    h2c.pool = pool;
++    h2c.send_window = NGX_HTTP_V2_DEFAULT_WINDOW;
++    h2c.recv_window = NGX_HTTP_V2_DEFAULT_WINDOW;
++    h2c.init_window = NGX_HTTP_V2_DEFAULT_WINDOW;
++    h2c.frame_size = NGX_HTTP_V2_DEFAULT_FRAME_SIZE;
++    h2c.priority_limit = 100;
++    h2c.state.handler = ngx_http_v2_state_head;
++
++    h2c.streams_index = ngx_pcalloc(pool,
++                                    sizeof(ngx_http_v2_node_t *));
++    if (h2c.streams_index == NULL) {
++        return NGX_ERROR;
++    }
++
++    ngx_queue_init(&h2c.waiting);
++    ngx_queue_init(&h2c.dependencies);
++    ngx_queue_init(&h2c.closed);
++
++    /* A minimal live stream exposes flow-control and DATA paths without
++     * entering request parsing or application request processing. */
++    read_event.handler = ngx_http_v2_fuzz_control_event;
++    write_event.handler = ngx_http_v2_fuzz_control_event;
++    drain_window = chunk == 3 && len == 13
++                   && data[0] == 0 && data[1] == 0 && data[2] == 4
++                   && data[3] == NGX_HTTP_V2_WINDOW_UPDATE_FRAME
++                   && data[4] == 0 && data[5] == 0 && data[6] == 0
++                   && data[7] == 0 && data[8] == 0 && data[9] == 0
++                   && data[10] == 0 && data[11] == 0 && data[12] == 1;
++    ngx_http_v2_fuzz_control_drain_window = drain_window;
++    write_event.delayed = (chunk == 3 && !drain_window);
++    read_event.data = &fake_connection;
++    write_event.data = &fake_connection;
++    read_event2.handler = ngx_http_v2_fuzz_control_event;
++    write_event2.handler = ngx_http_v2_fuzz_control_event;
++    write_event2.data = &fake_connection2;
++    fake_connection.read = &read_event;
++    fake_connection.write = &write_event;
++    fake_connection.log = log;
++    fake_connection.pool = pool;
++    fake_connection.data = &request;
++    fake_connection2.read = &read_event2;
++    fake_connection2.write = &write_event2;
++    fake_connection2.log = log;
++    fake_connection2.pool = pool;
++    fake_connection2.data = &request2;
++    request.connection = &fake_connection;
++    request.stream = &stream;
++    request.pool = pool;
++    request.main = &request;
++    request2.connection = &fake_connection2;
++    request2.stream = &stream2;
++    request2.pool = pool;
++    request2.main = &request2;
++
++    node.id = 1;
++    node.stream = &stream;
++    node.index = &closed_node;
++    closed_node.id = 3;
++    closed_node.stream = NULL;
++    closed_node.index = allow_data_frame ? NULL : &node2;
++    node2.id = 5;
++    node2.stream = &stream2;
++    ngx_queue_init(&node.children);
++    ngx_queue_init(&node2.children);
++
++    stream.request = &request;
++    stream.connection = &h2c;
++    stream.node = &node;
++    stream.pool = pool;
++    stream.send_window = NGX_HTTP_V2_DEFAULT_WINDOW;
++    stream.recv_window = NGX_HTTP_V2_DEFAULT_WINDOW;
++    stream2.request = &request2;
++    stream2.connection = &h2c;
++    stream2.node = &node2;
++    stream2.pool = pool;
++    stream2.send_window = NGX_HTTP_V2_DEFAULT_WINDOW;
++    stream2.recv_window = NGX_HTTP_V2_DEFAULT_WINDOW;
++    request.headers_in.content_length_n = 0;
++    preread = ngx_create_temp_buf(pool, h2scf.preread_size);
++    if (preread == NULL) {
++        return NGX_ERROR;
++    }
++    stream.preread = preread;
++    if (allow_data_frame && data_mode == 1) {
++        body_buffer = ngx_create_temp_buf(pool, h2scf.preread_size);
++        if (body_buffer == NULL) {
++            return NGX_ERROR;
++        }
++
++        request.request_body = &request_body;
++        request.request_body_no_buffering = 1;
++        request.reading_body = 1;
++        request_body.buf = body_buffer;
++        request_body.last_saved = 1;
++    }
++    if (allow_data_frame && data_mode == 2) {
++        body_buffer = ngx_create_temp_buf(pool, 16);
++        if (body_buffer == NULL) {
++            return NGX_ERROR;
++        }
++
++        request.request_body_no_buffering = 0;
++        request.reading_body = 0;
++        request.request_body = &request_body;
++        request.headers_in.content_length_n = -1;
++        request.headers_in.chunked = 1;
++        request_body.buf = body_buffer;
++        request_body.rest = 0;
++        request_body.last_saved = 1;
++        request_body.post_handler = ngx_http_v2_fuzz_request_body_post;
++    }
++    if (allow_data_frame && (data_mode == 3 || data_mode == 8
++                             || data_mode == 9 || data_mode == 10)) {
++        body_buffer = ngx_create_temp_buf(pool, 16);
++        if (body_buffer == NULL) {
++            return NGX_ERROR;
++        }
++
++        request.request_body_no_buffering = 0;
++        request.reading_body = 0;
++        request.request_body = &request_body;
++        request.headers_in.content_length_n = -1;
++        request.headers_in.chunked = 1;
++        request_body.buf = body_buffer;
++        request_body.rest = 1;
++        request_body.last_saved = (data_mode == 8 || data_mode == 9
++                                   || data_mode == 10) ? 0 : 1;
++        request_body.post_handler = ngx_http_v2_fuzz_request_body_post;
++    }
++    if (allow_data_frame && (data_mode == 4 || data_mode == 5
++                             || data_mode == 7)) {
++        size_t declared;
++
++        body_buffer = ngx_create_temp_buf(pool, 16);
++        if (body_buffer == NULL) {
++            return NGX_ERROR;
++        }
++
++        declared = len >= NGX_HTTP_V2_FRAME_HEADER_SIZE
++                   ? ((size_t) data[0] << 16) | ((size_t) data[1] << 8)
++                     | data[2]
++                   : 0;
++        if (data_mode == 7) {
++            declared -= 1 + data[9];
++        }
++        if (data_mode == 5 && declared > 8) {
++            declared = 8;
++        }
++
++        request.request_body_no_buffering = 0;
++        request.reading_body = 0;
++        request.request_body = &request_body;
++        request.headers_in.content_length_n = declared;
++        request_body.buf = body_buffer;
++        request_body.rest = (data_mode == 4 || data_mode == 7) ? 1 : 0;
++        request_body.last_saved = (data_mode == 4 || data_mode == 7) ? 0 : 1;
++        request_body.post_handler = ngx_http_v2_fuzz_request_body_post;
++    }
++    if (allow_data_frame && data_mode == 6) {
++        size_t declared;
++
++        body_buffer = ngx_create_temp_buf(pool, 16);
++        if (body_buffer == NULL) {
++            return NGX_ERROR;
++        }
++
++        declared = len >= NGX_HTTP_V2_FRAME_HEADER_SIZE
++                   ? ((size_t) data[0] << 16) | ((size_t) data[1] << 8)
++                     | data[2]
++                   : 0;
++
++        request.request_body_no_buffering = 0;
++        request.reading_body = 0;
++        request.request_body = &request_body;
++        request.headers_in.content_length_n = declared + 1;
++        request_body.buf = body_buffer;
++        request_body.rest = 1;
++        request_body.last_saved = 0;
++        request_body.post_handler = ngx_http_v2_fuzz_request_body_post;
++    }
++    stream.exhausted = 1;
++    stream.waiting = 1;
++    ngx_queue_init(&stream.queue);
++    ngx_queue_insert_tail(&h2c.waiting, &stream.queue);
++    stream2.exhausted = 1;
++    stream2.waiting = 1;
++    ngx_queue_init(&stream2.queue);
++    ngx_queue_insert_tail(&h2c.waiting, &stream2.queue);
++    h2c.streams_index[0] = &node;
++
++    ngx_queue_init(&ngx_posted_events);
++    saved_body_filter = ngx_http_top_request_body_filter;
++    if (allow_data_frame && (data_mode == 2 || data_mode == 3
++                             || data_mode == 4 || data_mode == 5
++                             || data_mode == 6 || data_mode == 7
++                             || data_mode == 8 || data_mode == 9
++                             || data_mode == 10)) {
++        ngx_http_top_request_body_filter = ngx_http_v2_fuzz_request_body_filter;
++    }
++    ngx_http_v2_fuzz_control_active = 1;
++    offset = 0;
++
++    while (offset < len) {
++        saved = h2c.state.buffer_used;
++        ngx_memcpy(work, h2c.state.buffer, saved);
++
++        take = len - offset;
++        if (take > chunk) {
++            take = chunk;
++        }
++
++        ngx_memcpy(work + saved, data + offset, take);
++        offset += take;
++
++        p = work;
++        end = work + saved + take;
++        h2c.state.buffer_used = 0;
++        h2c.state.incomplete = 0;
++
++        while (p != end) {
++            if (h2c.state.handler == ngx_http_v2_state_head
++                && (size_t) (end - p) >= NGX_HTTP_V2_FRAME_HEADER_SIZE)
++            {
++                head = ngx_http_v2_parse_uint32(p);
++                type = ngx_http_v2_parse_type(head);
++
++                if (!(allow_control_frames
++                      && (type == NGX_HTTP_V2_SETTINGS_FRAME
++                          || type == NGX_HTTP_V2_PING_FRAME
++                          || type == NGX_HTTP_V2_GOAWAY_FRAME
++                          || type == NGX_HTTP_V2_WINDOW_UPDATE_FRAME))
++                    && !(allow_rst_stream
++                         && type == NGX_HTTP_V2_RST_STREAM_FRAME)
++                    && !(allow_data_frame
++                         && type == NGX_HTTP_V2_DATA_FRAME))
++                {
++                    goto done;
++                }
++
++                if (allow_data_frame && stream.in_closed
++                    && type == NGX_HTTP_V2_DATA_FRAME)
++                {
++                    goto done;
++                }
++            }
++
++            before = p;
++            p = h2c.state.handler(&h2c, p, end);
++
++            if (p == NULL) {
++                goto done;
++            }
++
++            if (p == before) {
++                if (read_event.timer_set) {
++                    ngx_del_timer(&read_event);
++                }
++                ngx_http_v2_fuzz_control_active = 0;
++                ngx_http_top_request_body_filter = saved_body_filter;
++                return NGX_ERROR;
++            }
++        }
++    }
++
++    if (allow_data_frame && (data_mode == 4 || data_mode == 7
++                             || data_mode == 8 || data_mode == 9
++                             || data_mode == 10)
++        && stream.in_closed)
++    {
++        ngx_int_t rc;
++
++        request_body.last_saved = 1;
++        rc = ngx_http_v2_process_request_body(&request, NULL, 0, 1, 1);
++        if (rc != NGX_OK) {
++            ngx_http_v2_fuzz_control_active = 0;
++            ngx_http_top_request_body_filter = saved_body_filter;
++            if (read_event.timer_set) {
++                ngx_del_timer(&read_event);
++            }
++            return NGX_ERROR;
++        }
++    }
++
++    if (allow_data_frame && data_mode == 6 && stream.in_closed) {
++        ngx_int_t rc;
++
++        rc = ngx_http_v2_process_request_body(&request, NULL, 0, 1, 1);
++        if (rc != NGX_HTTP_BAD_REQUEST) {
++            ngx_http_v2_fuzz_control_active = 0;
++            ngx_http_top_request_body_filter = saved_body_filter;
++            if (read_event.timer_set) {
++                ngx_del_timer(&read_event);
++            }
++            return NGX_ERROR;
++        }
++        ngx_http_v2_fuzz_control_sink ^= rc;
++    }
++
++done:
++
++    drain_window_ok = !drain_window
++        || (h2c.send_window == 0 && !stream.waiting && stream2.waiting
++            && !ngx_queue_empty(&h2c.waiting)
++            && ngx_queue_head(&h2c.waiting) == &stream2.queue);
++    available = h2c.send_window;
++    ngx_http_v2_fuzz_control_sink ^= available;
++    ngx_http_v2_fuzz_control_sink ^= h2c.settings_ack;
++    ngx_http_v2_fuzz_control_sink ^= h2c.table_update;
++    ngx_http_v2_fuzz_control_sink ^= h2c.frame_size;
++    ngx_http_v2_fuzz_control_sink ^= h2c.frames;
++    ngx_http_v2_fuzz_control_sink ^= h2c.recv_window;
++    ngx_http_v2_fuzz_control_sink ^= stream.recv_window;
++    ngx_http_v2_fuzz_control_sink ^= stream.in_closed;
++    ngx_http_v2_fuzz_control_sink ^= stream.preread->last - stream.preread->start;
++    if (request.request_body != NULL) {
++        ngx_http_v2_fuzz_control_sink ^=
++            request_body.buf->last - request_body.buf->start;
++    }
++
++    ngx_http_v2_fuzz_control_active = 0;
++    ngx_http_v2_fuzz_control_drain_window = 0;
++    ngx_http_top_request_body_filter = saved_body_filter;
++    if (read_event.timer_set) {
++        ngx_del_timer(&read_event);
++    }
++    ngx_queue_init(&ngx_posted_events);
++    return drain_window_ok ? NGX_OK : NGX_ERROR;
++}

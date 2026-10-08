@@ -1,0 +1,2 @@
+request: "POST /chu\253nks HTTP/1.1\r\nHost: chunks.u+rl.com\r\nTransfer-Encoding: chunked\r\n\r\nA;foo=bar\376\376\376\376\376\376\376\376\376\376\376\r\nr: val\210e^\367\r\n8"
+reply: ""

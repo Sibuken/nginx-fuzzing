@@ -1,0 +1,1454 @@
+{
+  "adapter": {
+    "configuration_profile": "real HTTP/2 response-body send chain, trailer HPACK serialization and queued DATA/HEADERS frames",
+    "input_format": "bounded count-prefixed trailer/control records (mode and two bytes), optional field bytes, or synthesized body, followed by optional body bytes",
+    "known_limitations": [
+      "The hook invokes ngx_http_v2_send_chain with a synthetic connection and consumes its output in memory; no socket or operating-system send is used.",
+      "Mode 0 suppresses a field; modes 2 and 3 synthesize oversized key/value lengths; mode 4 creates 255-byte fields for CONTINUATION framing; modes 5/6 force stream/connection flow control; mode 7 synthesizes a body length from the two record length bytes; mode 8 sets an 8-byte stream window for partial sends.",
+      "The input is capped at 65536 bytes and uses a fresh pool for each invocation; frame handlers run synchronously while the stream is marked blocked to suppress posted events.",
+      "Modes 5\u201321 are control records and are active only when the declared record count is exactly one. Mode 9 starts with a non-ready parent write event so queued output remains pending; mode 10 makes the in-memory sink return NGX_CHAIN_ERROR with connection event posting suppressed; mode 11 retries a pending queue after making the parent write event ready; mode 12 begins with a pre-existing connection error; mode 13 drops write readiness after output, exercises timer insertion, then retries and removes the timer; mode 14 injects ngx_handle_write_event failure; mode 15 injects ngx_tcp_push failure; mode 16 injects a successful tcp_push; mode 17 activates only for the canonical zero-length record followed by body byte 'A', partially sends the first frame header, and verifies the frame remains queued; mode 18 posts and then removes the write event on the output error path; mode 19 begins with the write event already posted and verifies the already-posted event branch without leaving a dangling queue entry; modes 20/21 force tcp_nodelay after successful tcp_push and inject its success/failure result. Linker wrappers affect only their selected one-shot calls and otherwise delegate normally. For these modes the fuzzer treats a failed state assertion as a crash."
+    ],
+    "mutator": "libFuzzer byte mutator",
+    "origin": "custom",
+    "state": "Fuzz fields populate headers_out.trailers; an END_STREAM body buffer enters ngx_http_v2_send_chain, which creates DATA output as needed, serializes trailers through ngx_http_v2_create_trailers_frame, queues terminal frames, then drains them through ngx_http_v2_send_output_queue and the real DATA/HEADERS handlers using a socket-free consuming send_chain stub."
+  },
+  "build": {
+    "coverage_binary_sha256": "758d70cd5df8ff081cc09738f3f889040cf0de4d16726b21add1eaff1611acb5",
+    "coverage_compile_flags": "-O1 -g -fprofile-instr-generate -fcoverage-mapping",
+    "coverage_link_flags": "-fsanitize=fuzzer -fprofile-instr-generate",
+    "fuzz_binary_sha256": "687bb2e678d3e801e82f5bfd170ed65d89318bf82a81e9ddec9b3d0d1cfe3b46",
+    "fuzz_compile_flags": "-O1 -gline-tables-only -fno-omit-frame-pointer -fsanitize=fuzzer-no-link,address,undefined -fno-sanitize=alignment -fno-sanitize-recover=undefined",
+    "fuzz_link_flags": "-fsanitize=fuzzer,address,undefined -fno-sanitize=alignment -fno-sanitize-recover=undefined"
+  },
+  "command": [
+    "/opt/fuzz/bin/fuzz/http2_response_trailers_fuzzer",
+    "-fork=1",
+    "-ignore_crashes=1",
+    "-dict=/runs/NGX-IF20/20261007T080826Z-campaign-1-5b60cb61/dictionary.dict",
+    "-artifact_prefix=/runs/NGX-IF20/20261007T080826Z-campaign-1-5b60cb61/artifacts/",
+    "-max_len=65536",
+    "-timeout=10",
+    "-rss_limit_mb=2048",
+    "-print_final_stats=1",
+    "-seed=1",
+    "-max_total_time=300",
+    "/runs/NGX-IF20/20261007T080826Z-campaign-1-5b60cb61/corpus_out",
+    "/runs/NGX-IF20/20261007T080826Z-campaign-1-5b60cb61/corpus_in"
+  ],
+  "corpus": {
+    "corpus_in": {
+      "bytes": 277,
+      "files": 25
+    },
+    "corpus_out": {
+      "bytes": 39703,
+      "files": 191
+    }
+  },
+  "corpus_in": [
+    {
+      "name": "already-posted-event",
+      "sha256": "396cc26c017c5a636bc7237b09f8786c2bf3e1d6b91fb1bf2125a3de38e21af8",
+      "size": 5
+    },
+    {
+      "name": "body-with-trailers",
+      "sha256": "b5d116ea5ded1de980d2ce3b67b6d1ed79f103d9702fcdb0d04cd89e968f6657",
+      "size": 15
+    },
+    {
+      "name": "connection-window-zero",
+      "sha256": "9370ec62d162b6b250a5ba744a4fee3340cfe8dc46f8fbca25de68524fa60527",
+      "size": 5
+    },
+    {
+      "name": "continuation",
+      "sha256": "298f81ede178cc1adbae75ca07ff25bff9f3e0e96f3235504dcf6d9bb9984e8c",
+      "size": 103
+    },
+    {
+      "name": "empty",
+      "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+      "size": 1
+    },
+    {
+      "name": "multi-data-frames",
+      "sha256": "d5383a78123a2ce244a4a2e88fc1f697983d3d63618497861de3ba0f050d4455",
+      "size": 4
+    },
+    {
+      "name": "one-valid",
+      "sha256": "62105d3397ad8f183977a21b1a4374da4362ecbd031b26b8c9743c5c61f4c1d5",
+      "size": 12
+    },
+    {
+      "name": "output-error",
+      "sha256": "be59daabb354b1fe5e667c7745cb6ac9eb88e8b8a38833a29d9ccaf7cf038d66",
+      "size": 12
+    },
+    {
+      "name": "oversized-key",
+      "sha256": "d81fe96dc500bc43e1cd5800bef9d72b3d030bdb7e860e10c522e4246b30bd93",
+      "size": 4
+    },
+    {
+      "name": "oversized-value",
+      "sha256": "28af04312e59926c8142828bc02fbfa88fa225b992ab8c3eb5cf011a8026d9c2",
+      "size": 5
+    },
+    {
+      "name": "partial-frame-header",
+      "sha256": "141106b1c47eec4c25e579f3716ac38ac0f10e63042983630ace7d60fd0d468f",
+      "size": 5
+    },
+    {
+      "name": "partial-send",
+      "sha256": "7b73bcbec40743668bcfad4e8dc2dae54dac6c37f1be24c362946b3b8edf3846",
+      "size": 14
+    },
+    {
+      "name": "post-error-event",
+      "sha256": "788dcc6015435dd69813ba38fad784f0d3725c149e49775a55a9354acc4c7de7",
+      "size": 5
+    },
+    {
+      "name": "preexisting-error",
+      "sha256": "76b44873cc9f903e486ab5bd8a8c9cade2d7c6ebfbd548f21ae17d551759bffe",
+      "size": 5
+    },
+    {
+      "name": "skipped-field",
+      "sha256": "4ce77d4c65dbdc09228b36bdcd4a0ac481a0456c3d33b50210efd9cd369d898a",
+      "size": 12
+    },
+    {
+      "name": "stream-window-zero",
+      "sha256": "5ebde2be89a96b2f357e51c54cf4249f3fec54f703d6047c52941e5b5fe3e388",
+      "size": 5
+    },
+    {
+      "name": "tcp-nodelay-failure",
+      "sha256": "62a635d0bae17a36f2c45c2bd2619a320b7b32c792b7d32afc6ad9972236b06e",
+      "size": 5
+    },
+    {
+      "name": "tcp-nodelay-success",
+      "sha256": "191a7db1e235786a439eed49406205540aba96be35f9f06299986f441577a01f",
+      "size": 5
+    },
+    {
+      "name": "tcp-push-failure",
+      "sha256": "c4afc885bd5c5e4b06e8922f174954aa775b575ab435890024797d755b1f0aa7",
+      "size": 5
+    },
+    {
+      "name": "tcp-push-success",
+      "sha256": "895a185e9229b97166ad050a72741c9594fdfd2b12ae693ee140ae02d16d6c1d",
+      "size": 5
+    },
+    {
+      "name": "two-fields",
+      "sha256": "507ce9eeaabf89bc9df79bb6bcc1847c42e38f9caab6b786134c264082469e4f",
+      "size": 11
+    },
+    {
+      "name": "write-backpressure",
+      "sha256": "50d68e4c58216d135dff6999aa0f6a57fb12b04b8ab05787f0321ee113274b3d",
+      "size": 12
+    },
+    {
+      "name": "write-event-failure",
+      "sha256": "625e517a1c6b2be2593c3e58468dda39244ad790c3be86c246cd85bb3f43fdd6",
+      "size": 5
+    },
+    {
+      "name": "write-retry",
+      "sha256": "86fce52419a48bc6c974c66c299e1ce1ffa34b38b75e38941a9ef1d261539894",
+      "size": 12
+    },
+    {
+      "name": "write-timeout-retry",
+      "sha256": "31d69364c5ef16eb252c7aa1ff87c0f73693cb95a5f8de3da81d5c37710f9f13",
+      "size": 5
+    }
+  ],
+  "coverage": {
+    "baseline": {
+      "duration_seconds": 8.492,
+      "inputs": 25,
+      "label": "baseline",
+      "nginx_source": {
+        "branches": {
+          "covered": 637,
+          "percent": 1.87,
+          "total": 34042
+        },
+        "lines": {
+          "covered": 1794,
+          "percent": 2.31,
+          "total": 77567
+        }
+      },
+      "scopes": [
+        {
+          "branches": {
+            "covered": 99,
+            "percent": 61.11,
+            "total": 162
+          },
+          "file": "src/http/v2/ngx_http_v2_filter_module.c",
+          "functions": [
+            "ngx_http_v2_send_chain",
+            "ngx_http_v2_filter_get_data_frame",
+            "ngx_http_v2_create_trailers_frame",
+            "ngx_http_v2_create_headers_frame"
+          ],
+          "id": "NGX-IF20-response-trailers",
+          "lines": {
+            "covered": 315,
+            "percent": 82.89,
+            "total": 380
+          }
+        },
+        {
+          "branches": {
+            "covered": 35,
+            "percent": 97.22,
+            "total": 36
+          },
+          "file": "src/http/v2/ngx_http_v2.c",
+          "functions": [
+            "ngx_http_v2_send_output_queue"
+          ],
+          "id": "NGX-IF20-output-queue",
+          "lines": {
+            "covered": 81,
+            "percent": 97.59,
+            "total": 83
+          }
+        }
+      ],
+      "whole_instrumented_build": {
+        "branches": {
+          "count": 33836,
+          "covered": 637,
+          "notcovered": 33199,
+          "percent": 1.8826102376167397
+        },
+        "functions": {
+          "count": 1697,
+          "covered": 60,
+          "percent": 3.5356511490866236
+        },
+        "instantiations": {
+          "count": 3807,
+          "covered": 60,
+          "percent": 1.5760441292356184
+        },
+        "lines": {
+          "count": 76670,
+          "covered": 1673,
+          "percent": 2.1820790400417374
+        },
+        "regions": {
+          "count": 60409,
+          "covered": 1317,
+          "notcovered": 59092,
+          "percent": 2.180138721051499
+        }
+      }
+    },
+    "final": {
+      "duration_seconds": 14.371,
+      "inputs": 215,
+      "label": "final",
+      "nginx_source": {
+        "branches": {
+          "covered": 676,
+          "percent": 1.99,
+          "total": 34042
+        },
+        "lines": {
+          "covered": 1832,
+          "percent": 2.36,
+          "total": 77567
+        }
+      },
+      "scopes": [
+        {
+          "branches": {
+            "covered": 102,
+            "percent": 62.96,
+            "total": 162
+          },
+          "file": "src/http/v2/ngx_http_v2_filter_module.c",
+          "functions": [
+            "ngx_http_v2_send_chain",
+            "ngx_http_v2_filter_get_data_frame",
+            "ngx_http_v2_create_trailers_frame",
+            "ngx_http_v2_create_headers_frame"
+          ],
+          "id": "NGX-IF20-response-trailers",
+          "lines": {
+            "covered": 319,
+            "percent": 83.95,
+            "total": 380
+          }
+        },
+        {
+          "branches": {
+            "covered": 36,
+            "percent": 100.0,
+            "total": 36
+          },
+          "file": "src/http/v2/ngx_http_v2.c",
+          "functions": [
+            "ngx_http_v2_send_output_queue"
+          ],
+          "id": "NGX-IF20-output-queue",
+          "lines": {
+            "covered": 83,
+            "percent": 100.0,
+            "total": 83
+          }
+        }
+      ],
+      "whole_instrumented_build": {
+        "branches": {
+          "count": 33836,
+          "covered": 676,
+          "notcovered": 33160,
+          "percent": 1.997872088899397
+        },
+        "functions": {
+          "count": 1697,
+          "covered": 60,
+          "percent": 3.5356511490866236
+        },
+        "instantiations": {
+          "count": 3807,
+          "covered": 60,
+          "percent": 1.5760441292356184
+        },
+        "lines": {
+          "count": 76670,
+          "covered": 1711,
+          "percent": 2.2316421025172817
+        },
+        "regions": {
+          "count": 60409,
+          "covered": 1364,
+          "notcovered": 59045,
+          "percent": 2.257941697429191
+        }
+      }
+    },
+    "plateau_validation": {
+      "duration_seconds": 14.138,
+      "inputs": 215,
+      "label": "plateau-validation-0025",
+      "nginx_source": {
+        "branches": {
+          "covered": 676,
+          "percent": 1.99,
+          "total": 34042
+        },
+        "lines": {
+          "covered": 1832,
+          "percent": 2.36,
+          "total": 77567
+        }
+      },
+      "scopes": [
+        {
+          "branches": {
+            "covered": 102,
+            "percent": 62.96,
+            "total": 162
+          },
+          "file": "src/http/v2/ngx_http_v2_filter_module.c",
+          "functions": [
+            "ngx_http_v2_send_chain",
+            "ngx_http_v2_filter_get_data_frame",
+            "ngx_http_v2_create_trailers_frame",
+            "ngx_http_v2_create_headers_frame"
+          ],
+          "id": "NGX-IF20-response-trailers",
+          "lines": {
+            "covered": 319,
+            "percent": 83.95,
+            "total": 380
+          }
+        },
+        {
+          "branches": {
+            "covered": 36,
+            "percent": 100.0,
+            "total": 36
+          },
+          "file": "src/http/v2/ngx_http_v2.c",
+          "functions": [
+            "ngx_http_v2_send_output_queue"
+          ],
+          "id": "NGX-IF20-output-queue",
+          "lines": {
+            "covered": 83,
+            "percent": 100.0,
+            "total": 83
+          }
+        }
+      ],
+      "whole_instrumented_build": {
+        "branches": {
+          "count": 33836,
+          "covered": 676,
+          "notcovered": 33160,
+          "percent": 1.997872088899397
+        },
+        "functions": {
+          "count": 1697,
+          "covered": 60,
+          "percent": 3.5356511490866236
+        },
+        "instantiations": {
+          "count": 3807,
+          "covered": 60,
+          "percent": 1.5760441292356184
+        },
+        "lines": {
+          "count": 76670,
+          "covered": 1711,
+          "percent": 2.2316421025172817
+        },
+        "regions": {
+          "count": 60409,
+          "covered": 1364,
+          "notcovered": 59045,
+          "percent": 2.257941697429191
+        }
+      }
+    }
+  },
+  "coverage_checkpoints": [
+    {
+      "batch_seconds": 303.782,
+      "coverage_increased": true,
+      "elapsed_seconds": 315.527,
+      "new_corpus_inputs": 168,
+      "new_findings": 0,
+      "round": 1,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 0.0
+    },
+    {
+      "batch_seconds": 303.798,
+      "coverage_increased": false,
+      "elapsed_seconds": 626.616,
+      "new_corpus_inputs": 5,
+      "new_findings": 0,
+      "round": 2,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 311.089
+    },
+    {
+      "batch_seconds": 303.89,
+      "coverage_increased": false,
+      "elapsed_seconds": 937.949,
+      "new_corpus_inputs": 2,
+      "new_findings": 0,
+      "round": 3,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 622.422
+    },
+    {
+      "batch_seconds": 303.824,
+      "coverage_increased": false,
+      "elapsed_seconds": 1249.404,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 4,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 933.877
+    },
+    {
+      "batch_seconds": 303.789,
+      "coverage_increased": false,
+      "elapsed_seconds": 1561.364,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 5,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 1245.837
+    },
+    {
+      "batch_seconds": 303.869,
+      "coverage_increased": false,
+      "elapsed_seconds": 1865.248,
+      "new_corpus_inputs": 0,
+      "new_findings": 0,
+      "round": 6,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 1549.721
+    },
+    {
+      "batch_seconds": 303.859,
+      "coverage_increased": false,
+      "elapsed_seconds": 2169.119,
+      "new_corpus_inputs": 0,
+      "new_findings": 0,
+      "round": 7,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 1853.592
+    },
+    {
+      "batch_seconds": 303.895,
+      "coverage_increased": false,
+      "elapsed_seconds": 2481.263,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 8,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 2165.736
+    },
+    {
+      "batch_seconds": 303.965,
+      "coverage_increased": false,
+      "elapsed_seconds": 2793.744,
+      "new_corpus_inputs": 2,
+      "new_findings": 0,
+      "round": 9,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 2478.218
+    },
+    {
+      "batch_seconds": 303.911,
+      "coverage_increased": false,
+      "elapsed_seconds": 3105.784,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 10,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 2790.257
+    },
+    {
+      "batch_seconds": 303.922,
+      "coverage_increased": false,
+      "elapsed_seconds": 3409.721,
+      "new_corpus_inputs": 0,
+      "new_findings": 0,
+      "round": 11,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 3094.194
+    },
+    {
+      "batch_seconds": 303.93,
+      "coverage_increased": false,
+      "elapsed_seconds": 3722.217,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 12,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 3406.69
+    },
+    {
+      "batch_seconds": 303.922,
+      "coverage_increased": false,
+      "elapsed_seconds": 4034.494,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 13,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 3718.967
+    },
+    {
+      "batch_seconds": 303.918,
+      "coverage_increased": false,
+      "elapsed_seconds": 4347.019,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 14,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 4031.492
+    },
+    {
+      "batch_seconds": 303.98,
+      "coverage_increased": false,
+      "elapsed_seconds": 4651.016,
+      "new_corpus_inputs": 0,
+      "new_findings": 0,
+      "round": 15,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 4335.489
+    },
+    {
+      "batch_seconds": 303.99,
+      "coverage_increased": false,
+      "elapsed_seconds": 4963.53,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 16,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 4648.003
+    },
+    {
+      "batch_seconds": 303.942,
+      "coverage_increased": false,
+      "elapsed_seconds": 5267.489,
+      "new_corpus_inputs": 0,
+      "new_findings": 0,
+      "round": 17,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 4951.962
+    },
+    {
+      "batch_seconds": 303.971,
+      "coverage_increased": false,
+      "elapsed_seconds": 5571.478,
+      "new_corpus_inputs": 0,
+      "new_findings": 0,
+      "round": 18,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 5255.951
+    },
+    {
+      "batch_seconds": 303.967,
+      "coverage_increased": false,
+      "elapsed_seconds": 5883.991,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 19,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 5568.464
+    },
+    {
+      "batch_seconds": 303.9,
+      "coverage_increased": false,
+      "elapsed_seconds": 6196.421,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 20,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 5880.894
+    },
+    {
+      "batch_seconds": 303.994,
+      "coverage_increased": false,
+      "elapsed_seconds": 6509.007,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 21,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 6193.48
+    },
+    {
+      "batch_seconds": 303.9,
+      "coverage_increased": false,
+      "elapsed_seconds": 6821.371,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 22,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 6505.844
+    },
+    {
+      "batch_seconds": 303.739,
+      "coverage_increased": false,
+      "elapsed_seconds": 7125.127,
+      "new_corpus_inputs": 0,
+      "new_findings": 0,
+      "round": 23,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 6809.6
+    },
+    {
+      "batch_seconds": 303.781,
+      "coverage_increased": false,
+      "elapsed_seconds": 7428.924,
+      "new_corpus_inputs": 0,
+      "new_findings": 0,
+      "round": 24,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 7113.397
+    },
+    {
+      "batch_seconds": 303.78,
+      "coverage_increased": false,
+      "elapsed_seconds": 7741.082,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 25,
+      "scopes": [
+        {
+          "covered_branches": 102,
+          "covered_lines": 319,
+          "id": "NGX-IF20-response-trailers"
+        },
+        {
+          "covered_branches": 36,
+          "covered_lines": 83,
+          "id": "NGX-IF20-output-queue"
+        }
+      ],
+      "seconds_since_growth": 7425.555
+    }
+  ],
+  "coverage_threshold_met": false,
+  "dictionary": {
+    "path": "dictionary.dict",
+    "sha256": "fb9cae58b799db39196e0ac89deff7126288b69f822b02ec30ecd6f65a65877d"
+  },
+  "duration_seconds": 7778.134,
+  "environment": {
+    "allocator_mode": "fresh request pool, synthetic connection and HTTP/2 stream per input",
+    "container_architecture": "x86_64",
+    "emulated": true,
+    "host_architecture": "arm64",
+    "image_id": "sha256:fc07f57d19d54f69d3d08d0b08adf6ab259222cc0bc79966927248b592dcf4d9",
+    "image_reference": "nginx-fuzz:1.30.5",
+    "platform": "linux/amd64",
+    "toolchain": [
+      "Debian clang version 14.0.6",
+      "Target: x86_64-pc-linux-gnu",
+      "Thread model: posix",
+      "InstalledDir: /usr/bin",
+      "Debian LLVM version 14.0.6",
+      "  Optimized build.",
+      "  Default target: x86_64-pc-linux-gnu",
+      "  Host CPU: westmere",
+      "libprotoc 29.3"
+    ]
+  },
+  "exit_code": 0,
+  "findings": [],
+  "finished_at_utc": "2026-10-07T10:18:05Z",
+  "fork_worker_counters": [
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 1,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 2,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 3,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 4,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 5,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 6,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 7,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 8,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 9,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 10,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 11,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 12,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 13,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 14,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 15,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 16,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 17,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 18,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 19,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 20,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 21,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 22,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 23,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 24,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 25,
+      "timeouts": 0
+    }
+  ],
+  "kind": "campaign",
+  "limits": {
+    "coverage_check_interval_seconds": 300,
+    "fuzzer_mode": "fork",
+    "max_len": 65536,
+    "max_seconds": 0,
+    "random_seed": 1,
+    "rss_limit_mb": 2048,
+    "seconds": null,
+    "single_process": false,
+    "timeout_seconds": 10
+  },
+  "nginx": {
+    "revision": "4556c714d1cfa587f92c7c0365c09209d42d148b",
+    "source_sha256": "b13133a91e035cbfebdbe3474988d691e8870f87e5864befde7ec21b7635a8d9",
+    "version": "1.30.5"
+  },
+  "patches": [
+    {
+      "name": "._0001-nginx-1.30-setup-checks.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0002-add-proxy-protocol-target.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0003-nginx-per-input-cleanup.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0004-add-dns-response-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0005-expose-config-tokenizer.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0006-expose-http2-parser-hooks.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0007-add-http2-control-frame-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0008-add-http2-header-block-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0009-add-http2-pseudo-header-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0010-add-http2-live-header-block-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0011-add-http2-live-headers-frame-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0012-add-http2-response-trailers-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0013-add-http2-response-trailers-target.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0014-add-http2-upstream-trailers-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0015-add-http2-upstream-trailers-target.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "0001-nginx-1.30-setup-checks.patch",
+      "sha256": "6678efa2e6e083b2aef145ec205eaa97a474127f4473d89b6344d02a73e60b3d",
+      "size": 1758
+    },
+    {
+      "name": "0002-add-proxy-protocol-target.patch",
+      "sha256": "b6a3b06f94c2ada9ae2d23a05e77fa81ac825bf44ce86ad8645fe33f80448e9a",
+      "size": 5258
+    },
+    {
+      "name": "0003-nginx-per-input-cleanup.patch",
+      "sha256": "a365d349453fd1b3a35ae0dcd580fb7aa8d2e5d7ed5fa61cb78089064232ffd9",
+      "size": 1914
+    },
+    {
+      "name": "0004-add-dns-response-hook.patch",
+      "sha256": "4adc724bac16bcbb528c61753e287c4f776fc72fb91bf54b9bcc6a181a404e24",
+      "size": 5217
+    },
+    {
+      "name": "0005-expose-config-tokenizer.patch",
+      "sha256": "64a6e481579bd9706ab919e3bd0b17bd3241c027f01974c7cf15cfbdf56f0bc6",
+      "size": 441
+    },
+    {
+      "name": "0006-expose-http2-parser-hooks.patch",
+      "sha256": "2f605b4c4b0c6b9f28637962bdf7a483b5ddd48f003316c5c209536f42fcc946",
+      "size": 2634
+    },
+    {
+      "name": "0007-add-http2-control-frame-hook.patch",
+      "sha256": "31338194116592bccb641b4a190ec54580927d260af6bbc390e5cbf69de81273",
+      "size": 19179
+    },
+    {
+      "name": "0008-add-http2-header-block-hook.patch",
+      "sha256": "6d5dc3d32def018e140f71bb492af21d9d76e2a9091dbd0c67fac0e7768e2435",
+      "size": 3355
+    },
+    {
+      "name": "0009-add-http2-pseudo-header-hook.patch",
+      "sha256": "0d19ca454e9ad334a44cb2ab7565648123f7675a5f176ba4bdc489c0173c9d21",
+      "size": 4875
+    },
+    {
+      "name": "0010-add-http2-live-header-block-hook.patch",
+      "sha256": "6f0ffe9632e3762cab1bcea1db3d79e1b9a6cd318aef5c96692b2a4aa3bbd1eb",
+      "size": 10147
+    },
+    {
+      "name": "0011-add-http2-live-headers-frame-hook.patch",
+      "sha256": "afc4e89ee29d2a3887d27fe104343386ea63efaf7c9aad451cda8cd28bd0165d",
+      "size": 9777
+    },
+    {
+      "name": "0012-add-http2-response-trailers-hook.patch",
+      "sha256": "ebdf6efe4e673006b30b4cbe38c86563265ae1982b80070394fdad98b4585baa",
+      "size": 23226
+    },
+    {
+      "name": "0013-add-http2-response-trailers-target.patch",
+      "sha256": "b914cb3a30a7e035a44034f1d7776716e455e7055bc03dcd198f8cee027b75f0",
+      "size": 1842
+    },
+    {
+      "name": "0014-add-http2-upstream-trailers-hook.patch",
+      "sha256": "32fd997ba6f10c044ae7fe28ace7bf3fcbee819e1396431174facdd5e7306108",
+      "size": 7988
+    },
+    {
+      "name": "0015-add-http2-upstream-trailers-target.patch",
+      "sha256": "fb5b523e30159f4d3ed5e51a26a8d7f8f542388fac1e5bcb010c500c2af70aa2",
+      "size": 388
+    }
+  ],
+  "regression_check": {
+    "cases": [],
+    "passed": true,
+    "target": "NGX-IF20"
+  },
+  "run_id": "20261007T080826Z-campaign-1-5b60cb61",
+  "schema_version": 1,
+  "scope": [
+    {
+      "callers": [
+        "ngx_http_v2_init_stream (installs the send_chain callback)",
+        "ngx_http_v2_filter_send"
+      ],
+      "contract": "Pass an END_STREAM body buffer through ngx_http_v2_send_chain, serialize response trailers, and queue bounded DATA and final HEADERS/CONTINUATION frames.",
+      "file": "src/http/v2/ngx_http_v2_filter_module.c",
+      "functions": [
+        "ngx_http_v2_send_chain",
+        "ngx_http_v2_filter_get_data_frame",
+        "ngx_http_v2_create_trailers_frame",
+        "ngx_http_v2_create_headers_frame"
+      ],
+      "id": "NGX-IF20-response-trailers",
+      "preconditions": "Synthetic request/stream connection, parent HTTP/2 connection with a ready output event and valid minimal HTTP core location configuration, and fresh pool per input.",
+      "testcase_fields": [
+        "record count",
+        "record mode",
+        "key/value lengths or synthesized body length",
+        "key bytes",
+        "value bytes",
+        "remaining body bytes",
+        "flow-control window"
+      ],
+      "variants": [
+        "empty body",
+        "non-empty body",
+        "empty trailer list",
+        "valid active field",
+        "hash-zero skipped field",
+        "oversized key",
+        "oversized value",
+        "multiple fields",
+        "truncated key/value bytes",
+        "large trailer block requiring CONTINUATION",
+        "stream window exhausted",
+        "connection window exhausted",
+        "partial DATA send with bytes remaining",
+        "body split into multiple DATA frames",
+        "parent write event not ready",
+        "output sink error",
+        "pending output queue retried after write readiness"
+      ]
+    },
+    {
+      "callers": [
+        "ngx_http_v2_filter_send"
+      ],
+      "contract": "Consume the queued frame chain in memory and process its real DATA/HEADERS completion handlers without using a socket.",
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": [
+        "ngx_http_v2_send_output_queue"
+      ],
+      "id": "NGX-IF20-output-queue",
+      "preconditions": "Synthetic ready write event, valid minimal HTTP core loc_conf, socket-free chain sink and stream.blocked suppressing event posts.",
+      "testcase_fields": [
+        "queued DATA/HEADERS/CONTINUATION frame types",
+        "partial or exhausted flow-control modes"
+      ],
+      "variants": [
+        "complete queue drain",
+        "multiple DATA frames",
+        "trailer HEADERS and CONTINUATION",
+        "partial body remains after queue drain",
+        "queue retained while parent write event is not ready",
+        "send_chain error and pre-existing connection error paths",
+        "queue drained on retry after write readiness",
+        "timer inserted when write readiness drops after output",
+        "timer removed after retry",
+        "injected write-event registration failure",
+        "injected tcp_push failure and success",
+        "partially sent frame retained by its completion handler",
+        "write event posted and cleaned after output error",
+        "already-posted write event branch",
+        "injected tcp_nodelay success and failure after tcp_push",
+        "failed control-mode invariants become fuzz findings"
+      ]
+    }
+  ],
+  "signal": null,
+  "started_at_utc": "2026-10-07T08:08:26Z",
+  "status": "passed",
+  "stop_policy": {
+    "continue_after_finding": true,
+    "coverage_metric": "cumulative LLVM scope lines and branches",
+    "fuzzer_fork_mode": true,
+    "ignore_crashes": true,
+    "plateau_seconds": 7200,
+    "scope_threshold_percent": 90,
+    "stop_on_coverage": true,
+    "stop_on_first_finding": false
+  },
+  "stop_reason": "coverage_plateau",
+  "target": "NGX-IF20",
+  "upstream": {
+    "libprotobuf_mutator": {
+      "archive_sha256": "260408230cbb08009da01fb2445ac75e08576d85b57da47ad0a794b91429803f",
+      "archive_url": "https://github.com/google/libprotobuf-mutator/archive/c1c950eae0440c3808f2b8bd7c57d0c6a42c1a90.tar.gz",
+      "repository": "https://github.com/google/libprotobuf-mutator.git",
+      "revision": "c1c950eae0440c3808f2b8bd7c57d0c6a42c1a90"
+    },
+    "oss_fuzz": {
+      "archive_sha256": "07dc5e75c112d4a0855122f1fee3bd15f15a97c8220f39857f328640940c15db",
+      "archive_url": "https://github.com/google/oss-fuzz/archive/2cc3fa481cbf724c0091fd3c75fdd4142e698409.tar.gz",
+      "files": {
+        "Dockerfile": "be2203b67cae6995866695f090bd717b8e69bc1755a0f29ccf0c955f7fb9d111",
+        "add_fuzzers.diff": "2c5b5b6450aefe525babc51e0989b0748b91a09a69095e8f3d4c94872106582a",
+        "build.sh": "373fd963367f994c2febde8e6093eb78e7b37d460cc2a385dc5daa6870c29167",
+        "fuzz/http_request_fuzzer.cc": "b61888048a3db1d38c56b5d1ba1aa1523ba9f2d02151f38b07a82b509cdcdd99",
+        "fuzz/http_request_fuzzer.dict": "543d68c43d13decb3749d9fff0a09a0f495cf993c4d8d4b1fcc5f0e742dd83e1",
+        "fuzz/http_request_proto.proto": "7066b8670dff7f90e7a0367b561876eb3d37bb8eb0ebff9a80901f5d007532be",
+        "fuzz/wrappers.c": "e46d489120acef1a90bdf9364ebbd53a23cfc64494158e4fd6ddfddb1dcb914c",
+        "make_fuzzers": "139d9238f1dd127b3d972bb92b2a3abe9918c3624f40787cd49af6efe9f521f9",
+        "project.yaml": "391e5aacd69ed5b8382b68cda1f985f77a0c707b6d131ecca06b32e08da09553"
+      },
+      "project_path": "projects/nginx",
+      "repository": "https://github.com/google/oss-fuzz.git",
+      "revision": "2cc3fa481cbf724c0091fd3c75fdd4142e698409"
+    },
+    "protobuf": {
+      "revision": "b407e8416e3893036aee5af9a12bd9b6a0e2b2e6",
+      "source": "libprotobuf-mutator/cmake/external/protobuf.cmake",
+      "version": "29.3"
+    },
+    "toolchain": {
+      "base_image": "debian:bookworm-slim@sha256:3783cc01769c7b2b1b83a5c5ad96c815348e28ed7da68e2e3687004faa906251",
+      "clang": "14",
+      "fuzzing_engine": "libFuzzer",
+      "llvm_cov": "14",
+      "platform": "linux/amd64",
+      "sanitizers": [
+        "address",
+        "undefined"
+      ]
+    }
+  },
+  "upstream_target": null
+}

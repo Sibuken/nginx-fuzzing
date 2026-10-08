@@ -1,0 +1,2 @@
+request: "GET /c//d?q=%00 HTTP/1.1\r\nHost: edquery_stringX_Test: value\r\n\r\n"
+reply: ""

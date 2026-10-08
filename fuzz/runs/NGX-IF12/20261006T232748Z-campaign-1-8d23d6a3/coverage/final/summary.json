@@ -1,0 +1,117 @@
+{
+  "duration_seconds": 14.614,
+  "inputs": 254,
+  "label": "final",
+  "nginx_source": {
+    "branches": {
+      "covered": 352,
+      "percent": 1.03,
+      "total": 34026
+    },
+    "lines": {
+      "covered": 1199,
+      "percent": 1.55,
+      "total": 77572
+    }
+  },
+  "scopes": [
+    {
+      "branches": {
+        "covered": 40,
+        "percent": 83.33,
+        "total": 48
+      },
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": [
+        "ngx_http_v2_state_settings",
+        "ngx_http_v2_state_settings_params"
+      ],
+      "id": "NGX-IF12-settings",
+      "lines": {
+        "covered": 92,
+        "percent": 94.85,
+        "total": 97
+      }
+    },
+    {
+      "branches": {
+        "covered": 11,
+        "percent": 78.57,
+        "total": 14
+      },
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": [
+        "ngx_http_v2_state_ping"
+      ],
+      "id": "NGX-IF12-ping",
+      "lines": {
+        "covered": 31,
+        "percent": 93.94,
+        "total": 33
+      }
+    },
+    {
+      "branches": {
+        "covered": 8,
+        "percent": 80.0,
+        "total": 10
+      },
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": [
+        "ngx_http_v2_state_goaway"
+      ],
+      "id": "NGX-IF12-goaway",
+      "lines": {
+        "covered": 17,
+        "percent": 100.0,
+        "total": 17
+      }
+    },
+    {
+      "branches": {
+        "covered": 31,
+        "percent": 86.11,
+        "total": 36
+      },
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": [
+        "ngx_http_v2_state_window_update"
+      ],
+      "id": "NGX-IF12-window-update",
+      "lines": {
+        "covered": 86,
+        "percent": 95.56,
+        "total": 90
+      }
+    }
+  ],
+  "whole_instrumented_build": {
+    "branches": {
+      "count": 33820,
+      "covered": 352,
+      "notcovered": 33468,
+      "percent": 1.0408042578356003
+    },
+    "functions": {
+      "count": 1698,
+      "covered": 48,
+      "percent": 2.8268551236749118
+    },
+    "instantiations": {
+      "count": 3808,
+      "covered": 48,
+      "percent": 1.2605042016806722
+    },
+    "lines": {
+      "count": 76675,
+      "covered": 1114,
+      "percent": 1.452885555917835
+    },
+    "regions": {
+      "count": 60392,
+      "covered": 758,
+      "notcovered": 59634,
+      "percent": 1.2551331302159228
+    }
+  }
+}

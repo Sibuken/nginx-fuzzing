@@ -1,0 +1,2 @@
+request: "GET /a/../b/%2e%2e/c//d?q=%00 HTTP/1.1\r\nHost: edge.((((((((((((edge.(((((((((((((((((((((((((((((((*((((((Status((;(((((((((proxy_protocol_server_port*((((((((;(((((((((((((((((ur((((((((((((((((*(proxy_read_timeout(((((((;(((((((((((((((((url.)com\r\nX~"
+reply: ""

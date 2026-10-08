@@ -1,0 +1,2 @@
+request: "GET request:/a/ \"GEUpgrade-Insecure-RequestsT /a/./.\\r\\n\r\n\"\nreply: \"\"\n"
+reply: ""

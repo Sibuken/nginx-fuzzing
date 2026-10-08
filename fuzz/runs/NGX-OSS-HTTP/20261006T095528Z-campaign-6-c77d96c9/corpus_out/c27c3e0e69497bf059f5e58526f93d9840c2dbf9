@@ -1,0 +1,2 @@
+request: "GET /a/.*/b/%2evLOCK\r\n\r\n"
+reply: "#"

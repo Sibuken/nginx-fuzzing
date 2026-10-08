@@ -1,0 +1,2 @@
+request: "GET /a/../b/%2e%2e\362c//d?q=%00 HTTP/1.1\r\nHost: [edge.u$$$$$$$$Strict-Transport-S$$arg_$$$$http_user_agent_Tes:t: v#lue\r\n\r\n"
+reply: ""

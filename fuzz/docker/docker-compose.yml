@@ -1,0 +1,17 @@
+services:
+  nginx-fuzz:
+    platform: linux/amd64
+    image: ${FUZZ_IMAGE:-nginx-fuzz:1.30.5}
+    environment:
+      FUZZ_IMAGE_REFERENCE: ${FUZZ_IMAGE:-nginx-fuzz:1.30.5}
+      FUZZ_IMAGE_ID: ${FUZZ_IMAGE_ID:-not supplied by compose}
+    volumes:
+      - ${FUZZ_RUNS_DIR:-../runs}:/runs
+    command: ["smoke", "NGX-OSS-HTTP"]
+    networks:
+      - fuzz
+
+networks:
+  fuzz:
+    external: true
+    name: ${FUZZ_DOCKER_NETWORK:-nginx-fuzz-shared}

@@ -1,0 +1,2 @@
+request: "PATCH /resource?q=a+b HTTP/1.1\r\nHost: api.url.com\r\nContent-Length: 3\r\n\r\na=b"
+reply: "HTTP/1.0 409 Conflict\r\nContent-Length: 0\r\n\r\n"

@@ -1,0 +1,2 @@
+request: "HTTPMKCOL/1.0 404 Not Found\r\nContent-Length: 0\r\n\r\n"
+reply: ""

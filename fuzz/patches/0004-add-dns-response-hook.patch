@@ -1,0 +1,203 @@
+--- a/src/core/ngx_resolver.c
++++ b/src/core/ngx_resolver.c
+@@ -4739,3 +4739,200 @@ ngx_resolver_cmp_srvs(const void *one, const void *two)
+ 
+     return p1 - p2;
+ }
++
++
++/*
++ * Fuzz-only entry point.  This file is patched only in the isolated build
++ * copy.  Prepare one pending resolver node from a valid uncompressed question
++ * so response parsing reaches the same answer paths as an asynchronous query,
++ * without opening sockets or entering an event loop.
++ */
++static void
++ngx_resolver_fuzz_handler(ngx_resolver_ctx_t *ctx)
++{
++    ngx_resolver_free(ctx->resolver, ctx);
++}
++
++
++void
++ngx_resolver_fuzz_process_response(ngx_resolver_t *r, u_char *buf, size_t n,
++    ngx_uint_t mode)
++{
++    u_char                *query;
++    size_t                 len;
++    in_addr_t              addr;
++    uint32_t               hash;
++    ngx_int_t              octet;
++    ngx_str_t              name;
++    ngx_uint_t             flags, i, mask, nqs, qclass, qtype;
++    ngx_queue_t           *queue;
++    ngx_rbtree_t          *tree;
++    ngx_resolver_ctx_t    *ctx;
++    ngx_resolver_hdr_t    *response;
++    ngx_resolver_node_t   *rn;
++
++    ctx = NULL;
++    rn = NULL;
++    ngx_str_null(&name);
++
++    if (n < sizeof(ngx_resolver_hdr_t)) {
++        goto parse;
++    }
++
++    response = (ngx_resolver_hdr_t *) buf;
++    flags = (response->flags_hi << 8) + response->flags_lo;
++    nqs = (response->nqs_hi << 8) + response->nqs_lo;
++
++    /* TCP fallback would require live resolver connections. */
++    if ((flags & 0xf870) != 0x8000 || (flags & 0x0200) || nqs != 1) {
++        goto parse;
++    }
++
++    i = sizeof(ngx_resolver_hdr_t);
++
++    for ( ;; ) {
++        if (i >= n || (buf[i] & 0xc0)) {
++            goto parse;
++        }
++
++        len = buf[i++];
++        if (len == 0) {
++            break;
++        }
++
++        if (len > 63 || i + len > n) {
++            goto parse;
++        }
++
++        i += len;
++    }
++
++    if (i == sizeof(ngx_resolver_hdr_t) + 1
++        || i + sizeof(ngx_resolver_qs_t) > n)
++    {
++        goto parse;
++    }
++
++    qtype = (buf[i] << 8) + buf[i + 1];
++    qclass = (buf[i + 2] << 8) + buf[i + 3];
++
++    if (qclass != 1
++        || (qtype != NGX_RESOLVE_A && qtype != NGX_RESOLVE_SRV
++            && qtype != NGX_RESOLVE_PTR
++#if (NGX_HAVE_INET6)
++            && qtype != NGX_RESOLVE_AAAA
++#endif
++           ))
++    {
++        goto parse;
++    }
++
++    rn = ngx_resolver_calloc(r, sizeof(ngx_resolver_node_t));
++    if (rn == NULL) {
++        goto parse;
++    }
++
++    query = ngx_resolver_alloc(r, 2);
++    if (query == NULL) {
++        ngx_resolver_free(r, rn);
++        rn = NULL;
++        goto parse;
++    }
++
++    query[0] = response->ident_hi;
++    query[1] = response->ident_lo;
++    rn->query = query;
++    rn->qlen = 2;
++    rn->ttl = NGX_MAX_UINT32_VALUE;
++
++    if (qtype == NGX_RESOLVE_PTR) {
++        i = sizeof(ngx_resolver_hdr_t);
++        addr = 0;
++
++        for (mask = 0; mask < 32; mask += 8) {
++            if (i >= n) {
++                goto discard;
++            }
++
++            len = buf[i++];
++            if (len == 0 || i + len > n) {
++                goto discard;
++            }
++
++            octet = ngx_atoi(&buf[i], len);
++            if (octet == NGX_ERROR || octet > 255) {
++                goto discard;
++            }
++
++            addr += (in_addr_t) octet << mask;
++            i += len;
++        }
++
++        if (i + sizeof("\7in-addr\4arpa") > n
++            || ngx_strncasecmp(&buf[i], (u_char *) "\7in-addr\4arpa",
++                               sizeof("\7in-addr\4arpa"))
++               != 0)
++        {
++            goto discard;
++        }
++
++        rn->node.key = addr;
++        tree = &r->addr_rbtree;
++        queue = &r->addr_resend_queue;
++
++    } else {
++        if (ngx_resolver_copy(r, &name, buf,
++                              buf + sizeof(ngx_resolver_hdr_t), buf + n)
++            != NGX_OK || name.len > 65535)
++        {
++            goto discard;
++        }
++
++        rn->name = name.data;
++        rn->nlen = (u_short) name.len;
++        hash = ngx_crc32_short(name.data, name.len);
++        rn->node.key = hash;
++
++        if (qtype == NGX_RESOLVE_SRV) {
++            tree = &r->srv_rbtree;
++            queue = &r->srv_resend_queue;
++
++        } else {
++            tree = &r->name_rbtree;
++            queue = &r->name_resend_queue;
++        }
++    }
++
++    rn->naddrs = (qtype == NGX_RESOLVE_A) ? (u_short) -1 : 0;
++#if (NGX_HAVE_INET6)
++    rn->naddrs6 = (qtype == NGX_RESOLVE_AAAA) ? (u_short) -1 : 0;
++    if (qtype == NGX_RESOLVE_AAAA) {
++        rn->query6 = query;
++    }
++#endif
++
++    if ((mode & 2) && qtype != NGX_RESOLVE_SRV) {
++        ctx = ngx_resolver_calloc(r, sizeof(ngx_resolver_ctx_t));
++        if (ctx == NULL) {
++            goto discard;
++        }
++
++        ctx->resolver = r;
++        ctx->node = rn;
++        ctx->handler = ngx_resolver_fuzz_handler;
++        ctx->recursion = NGX_RESOLVER_MAX_RECURSION;
++        rn->waiting = ctx;
++    }
++
++    ngx_rbtree_insert(tree, &rn->node);
++    ngx_queue_insert_head(queue, &rn->queue);
++    goto parse;
++
++discard:
++
++    ngx_resolver_free_node(r, rn);
++
++parse:
++
++    ngx_resolver_process_response(r, buf, n, mode & 1);
++}

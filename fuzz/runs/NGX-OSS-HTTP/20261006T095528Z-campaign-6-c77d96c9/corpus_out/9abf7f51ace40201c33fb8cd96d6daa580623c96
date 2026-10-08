@@ -1,0 +1,2 @@
+request: "PROPFIND /collection/%41limit_conMKWORKSPACEn_zone/%7euser HTTP/1.1\r\nHost: dav.url.com\r\nDh:00\r\n\r\n"
+reply: ""

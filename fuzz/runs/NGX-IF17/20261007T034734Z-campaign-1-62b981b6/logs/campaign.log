@@ -1,0 +1,984 @@
+[2026-10-07T03:47:43.464Z] elapsed=00:00:08 no_coverage_growth=00:00:00 watchdog event=started target=NGX-IF17 policy=coverage_stagnation required_seconds=7200 clock=monotonic
+[2026-10-07T03:47:43.465Z] elapsed=00:00:08 no_coverage_growth=00:00:00 watchdog event=coverage_baseline scope_lines=131 last_coverage_change_elapsed=00:00:00
+[2026-10-07T03:47:43.465Z] elapsed=00:00:08 no_coverage_growth=00:00:00 watchdog event=round_started round=1 round_limit_seconds=300 scope_lines=131
+[2026-10-07T03:47:43.500Z] elapsed=00:00:08 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T03:47:43.500Z] elapsed=00:00:08 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T03:47:43.500Z] elapsed=00:00:08 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T03:47:43.505Z] elapsed=00:00:08 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T03:47:43.505Z] elapsed=00:00:08 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T03:47:43.506Z] elapsed=00:00:08 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T03:47:43.575Z] elapsed=00:00:08 round_elapsed=00:00:00 INFO: -fork=1: 2 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork54.dir
+[2026-10-07T03:47:45.674Z] elapsed=00:00:11 round_elapsed=00:00:02 #144244: cov: 127 ft: 127 corp: 2 exec/s 72122 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T03:47:45.970Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x55555586c470 in initialize_runtime() /work/nginx-fuzz/src/fuzz/http2_request_headers_fuzzer.cc:21
+[2026-10-07T03:47:45.971Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x55555586c730 in __wrap_ngx_destroy_pool /work/nginx-fuzz/src/fuzz/wrappers.c:41
+[2026-10-07T03:47:45.971Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555877bf0 in ngx_create_pool /work/nginx-fuzz/src/core/ngx_palloc.c:20
+[2026-10-07T03:47:45.971Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555877e70 in ngx_destroy_pool /work/nginx-fuzz/src/core/ngx_palloc.c:48
+[2026-10-07T03:47:45.971Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555878290 in ngx_palloc /work/nginx-fuzz/src/core/ngx_palloc.c:124
+[2026-10-07T03:47:45.972Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x5555558782c0 in ngx_palloc_large /work/nginx-fuzz/src/core/ngx_palloc.c:215
+[2026-10-07T03:47:45.972Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x5555558784d0 in ngx_pnalloc /work/nginx-fuzz/src/core/ngx_palloc.c:137
+[2026-10-07T03:47:45.972Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555878620 in ngx_palloc_small /work/nginx-fuzz/src/core/ngx_palloc.c:150
+[2026-10-07T03:47:45.972Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555878ba0 in ngx_pcalloc /work/nginx-fuzz/src/core/ngx_palloc.c:299
+[2026-10-07T03:47:45.972Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555879480 in ngx_array_create /work/nginx-fuzz/src/core/ngx_array.c:14
+[2026-10-07T03:47:45.973Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x5555558797f0 in ngx_array_push /work/nginx-fuzz/src/core/ngx_array.c:49
+[2026-10-07T03:47:45.973Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x55555587a270 in ngx_list_push /work/nginx-fuzz/src/core/ngx_list.c:32
+[2026-10-07T03:47:45.973Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x55555587a600 in ngx_hash_find /work/nginx-fuzz/src/core/ngx_hash.c:14
+[2026-10-07T03:47:45.973Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x55555587b0b0 in ngx_hash_find_combined /work/nginx-fuzz/src/core/ngx_hash.c:213
+[2026-10-07T03:47:45.974Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x55555587e180 in ngx_hash_key /work/nginx-fuzz/src/core/ngx_hash.c:636
+[2026-10-07T03:47:45.974Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555887e50 in ngx_strlow /work/nginx-fuzz/src/core/ngx_string.c:24
+[2026-10-07T03:47:45.974Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555888480 in ngx_sprintf /work/nginx-fuzz/src/core/ngx_string.c:124
+[2026-10-07T03:47:45.974Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555888620 in ngx_vslprintf /work/nginx-fuzz/src/core/ngx_string.c:166
+[2026-10-07T03:47:45.974Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x55555588b610 in ngx_sprintf_str /work/nginx-fuzz/src/core/ngx_string.c:573
+[2026-10-07T03:47:45.974Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x55555588c450 in ngx_sprintf_num /work/nginx-fuzz/src/core/ngx_string.c:487
+[2026-10-07T03:47:45.975Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x5555558b7940 in ngx_time_init /work/nginx-fuzz/src/core/ngx_times.c:67
+[2026-10-07T03:47:45.975Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x5555558b79b0 in ngx_time_update /work/nginx-fuzz/src/core/ngx_times.c:82
+[2026-10-07T03:47:45.975Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x5555558b8e40 in ngx_gmtime /work/nginx-fuzz/src/core/ngx_times.c:321
+[2026-10-07T03:47:45.975Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x5555558d57e0 in ngx_preinit_modules /work/nginx-fuzz/src/core/ngx_module.c:27
+[2026-10-07T03:47:45.975Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x5555558d5c90 in ngx_count_modules /work/nginx-fuzz/src/core/ngx_module.c:84
+[2026-10-07T03:47:45.976Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555917d00 in ngx_localtime /work/nginx-fuzz/src/os/unix/ngx_time.c:58
+[2026-10-07T03:47:45.976Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x5555559182a0 in ngx_strerror_init /work/nginx-fuzz/src/os/unix/ngx_errno.c:48
+[2026-10-07T03:47:45.976Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555918300 in ngx_alloc /work/nginx-fuzz/src/os/unix/ngx_alloc.c:19
+[2026-10-07T03:47:45.976Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555918470 in ngx_memalign /work/nginx-fuzz/src/os/unix/ngx_alloc.c:53
+[2026-10-07T03:47:45.976Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x55555596ac50 in ngx_http_process_request_uri /work/nginx-fuzz/src/http/ngx_http_request.c:1275
+[2026-10-07T03:47:45.977Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x55555596d370 in ngx_http_validate_host /work/nginx-fuzz/src/http/ngx_http_request.c:2192
+[2026-10-07T03:47:45.977Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x55555596dd20 in ngx_http_set_virtual_server /work/nginx-fuzz/src/http/ngx_http_request.c:2389
+[2026-10-07T03:47:45.977Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x55555597f700 in ngx_http_parse_uri /work/nginx-fuzz/src/http/ngx_http_parse.c:1136
+[2026-10-07T03:47:45.977Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x5555559f84f0 in ngx_http_huff_decode /work/nginx-fuzz/src/http/ngx_http_huff_decode.c:2645
+[2026-10-07T03:47:45.977Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x5555559f8860 in ngx_http_huff_decode_bits /work/nginx-fuzz/src/http/ngx_http_huff_decode.c:2697
+[2026-10-07T03:47:45.977Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555a4ad30 in ngx_http_v2_parse_int /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:2697
+[2026-10-07T03:47:45.978Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555a4e290 in ngx_http_v2_validate_header /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:3372
+[2026-10-07T03:47:45.978Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555a4ebb0 in ngx_http_v2_pseudo_header /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:3640
+[2026-10-07T03:47:45.978Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555a504e0 in ngx_http_v2_fuzz_live_header_block /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:3866
+[2026-10-07T03:47:45.978Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555a51f30 in ngx_list_init /work/nginx-fuzz/src/core/ngx_list.h:38
+[2026-10-07T03:47:45.978Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555a520a0 in ngx_http_v2_state_header_block /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:1395
+[2026-10-07T03:47:45.978Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555a66900 in ngx_http_v2_state_complete /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:2574
+[2026-10-07T03:47:45.979Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555a6a400 in ngx_http_v2_state_process_header /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:1724
+[2026-10-07T03:47:45.979Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555a6ba10 in ngx_http_v2_state_header_complete /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:1920
+[2026-10-07T03:47:45.979Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555a6d930 in ngx_http_v2_state_field_len /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:1495
+[2026-10-07T03:47:45.979Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555a6e530 in ngx_http_v2_cookie /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:4296
+[2026-10-07T03:47:45.979Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555a6ee70 in ngx_http_v2_state_field_huff /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:1582
+[2026-10-07T03:47:45.979Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555a6f460 in ngx_http_v2_state_field_raw /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:1637
+[2026-10-07T03:47:45.979Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555a70760 in ngx_http_v2_get_indexed_header /work/nginx-fuzz/src/http/v2/ngx_http_v2_table.c:106
+[2026-10-07T03:47:45.980Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555a712c0 in ngx_http_v2_add_header /work/nginx-fuzz/src/http/v2/ngx_http_v2_table.c:191
+[2026-10-07T03:47:45.980Z] elapsed=00:00:11 round_elapsed=00:00:02   NEW_FUNC: 0x555555a72720 in ngx_http_v2_table_size /work/nginx-fuzz/src/http/v2/ngx_http_v2_table.c:337
+[2026-10-07T03:47:49.126Z] elapsed=00:00:14 round_elapsed=00:00:05 #360241: cov: 551 ft: 940 corp: 339 exec/s 71999 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T03:47:49.211Z] elapsed=00:00:14 round_elapsed=00:00:05   NEW_FUNC: 0x555555980270 in ngx_http_parse_complex_uri /work/nginx-fuzz/src/http/ngx_http_parse.c:1287
+[2026-10-07T03:47:53.312Z] elapsed=00:00:18 round_elapsed=00:00:09 #661346: cov: 568 ft: 1067 corp: 421 exec/s 75276 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T03:47:58.488Z] elapsed=00:00:23 round_elapsed=00:00:15 #1034194: cov: 569 ft: 1118 corp: 457 exec/s 74569 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T03:48:04.664Z] elapsed=00:00:30 round_elapsed=00:00:21 #1482133: cov: 577 ft: 1207 corp: 499 exec/s 74656 oom/timeout/crash: 0/0/0 time: 21s job: 5 dft_time: 0
+[2026-10-07T03:48:11.834Z] elapsed=00:00:37 round_elapsed=00:00:28 #2032620: cov: 579 ft: 1221 corp: 511 exec/s 78641 oom/timeout/crash: 0/0/0 time: 28s job: 6 dft_time: 0
+[2026-10-07T03:48:19.998Z] elapsed=00:00:45 round_elapsed=00:00:36 #2638220: cov: 579 ft: 1231 corp: 518 exec/s 75700 oom/timeout/crash: 0/0/0 time: 36s job: 7 dft_time: 0
+[2026-10-07T03:48:29.178Z] elapsed=00:00:54 round_elapsed=00:00:45 #3296304: cov: 579 ft: 1241 corp: 523 exec/s 73120 oom/timeout/crash: 0/0/0 time: 45s job: 8 dft_time: 0
+[2026-10-07T03:48:39.356Z] elapsed=00:01:04 round_elapsed=00:00:55 #4061532: cov: 579 ft: 1244 corp: 525 exec/s 76522 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T03:48:50.518Z] elapsed=00:01:15 round_elapsed=00:01:07 #4918154: cov: 579 ft: 1244 corp: 525 exec/s 77874 oom/timeout/crash: 0/0/0 time: 67s job: 10 dft_time: 0
+[2026-10-07T03:49:02.680Z] elapsed=00:01:28 round_elapsed=00:01:19 #5831180: cov: 579 ft: 1244 corp: 525 exec/s 76085 oom/timeout/crash: 0/0/0 time: 79s job: 11 dft_time: 0
+[2026-10-07T03:49:15.845Z] elapsed=00:01:41 round_elapsed=00:01:32 #6797912: cov: 579 ft: 1245 corp: 526 exec/s 74364 oom/timeout/crash: 0/0/0 time: 92s job: 12 dft_time: 0
+[2026-10-07T03:49:30.011Z] elapsed=00:01:55 round_elapsed=00:01:46 #7832262: cov: 579 ft: 1253 corp: 530 exec/s 73882 oom/timeout/crash: 0/0/0 time: 106s job: 13 dft_time: 0
+[2026-10-07T03:49:45.175Z] elapsed=00:02:10 round_elapsed=00:02:01 #8950054: cov: 579 ft: 1255 corp: 531 exec/s 74519 oom/timeout/crash: 0/0/0 time: 121s job: 14 dft_time: 0
+[2026-10-07T03:50:01.343Z] elapsed=00:02:26 round_elapsed=00:02:17 #10148075: cov: 579 ft: 1266 corp: 541 exec/s 74876 oom/timeout/crash: 0/0/0 time: 137s job: 15 dft_time: 0
+[2026-10-07T03:50:18.504Z] elapsed=00:02:43 round_elapsed=00:02:35 #11477168: cov: 579 ft: 1266 corp: 541 exec/s 78181 oom/timeout/crash: 0/0/0 time: 154s job: 16 dft_time: 0
+[2026-10-07T03:50:36.665Z] elapsed=00:03:02 round_elapsed=00:02:53 #12863167: cov: 579 ft: 1266 corp: 541 exec/s 76999 oom/timeout/crash: 0/0/0 time: 173s job: 17 dft_time: 0
+[2026-10-07T03:50:55.831Z] elapsed=00:03:21 round_elapsed=00:03:12 #14246958: cov: 579 ft: 1267 corp: 542 exec/s 72831 oom/timeout/crash: 0/0/0 time: 192s job: 18 dft_time: 0
+[2026-10-07T03:51:15.994Z] elapsed=00:03:41 round_elapsed=00:03:32 #15746345: cov: 579 ft: 1267 corp: 542 exec/s 74969 oom/timeout/crash: 0/0/0 time: 212s job: 19 dft_time: 0
+[2026-10-07T03:51:37.156Z] elapsed=00:04:02 round_elapsed=00:03:53 #17324498: cov: 579 ft: 1267 corp: 542 exec/s 75150 oom/timeout/crash: 0/0/0 time: 233s job: 20 dft_time: 0
+[2026-10-07T03:51:59.319Z] elapsed=00:04:24 round_elapsed=00:04:15 #18850045: cov: 579 ft: 1267 corp: 542 exec/s 69343 oom/timeout/crash: 0/0/0 time: 255s job: 21 dft_time: 0
+[2026-10-07T03:52:22.485Z] elapsed=00:04:47 round_elapsed=00:04:39 #20548438: cov: 579 ft: 1270 corp: 543 exec/s 73843 oom/timeout/crash: 0/0/0 time: 278s job: 22 dft_time: 0
+[2026-10-07T03:52:46.647Z] elapsed=00:05:12 round_elapsed=00:05:03 #22422362: cov: 579 ft: 1270 corp: 543 exec/s 78080 oom/timeout/crash: 0/0/0 time: 303s job: 23 dft_time: 0
+[2026-10-07T03:52:46.709Z] elapsed=00:05:12 round_elapsed=00:05:03 INFO: fuzzed for 303 seconds, wrapping up soon
+[2026-10-07T03:52:46.723Z] elapsed=00:05:12 round_elapsed=00:05:03 INFO: exiting: 0 time: 303s
+[2026-10-07T03:53:10.211Z] elapsed=00:05:35 no_coverage_growth=00:00:00 watchdog event=coverage_checkpoint round=1 scope_lines=467 coverage_increased=true new_inputs=541 findings=0 idle_seconds=0.0 required_seconds=7200
+[2026-10-07T03:53:10.211Z] elapsed=00:05:35 no_coverage_growth=00:00:00 watchdog event=round_started round=2 round_limit_seconds=300 scope_lines=467
+[2026-10-07T03:53:10.241Z] elapsed=00:05:35 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T03:53:10.241Z] elapsed=00:05:35 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T03:53:10.241Z] elapsed=00:05:35 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T03:53:10.245Z] elapsed=00:05:35 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T03:53:10.245Z] elapsed=00:05:35 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T03:53:10.246Z] elapsed=00:05:35 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T03:53:10.381Z] elapsed=00:05:35 round_elapsed=00:00:00 INFO: -fork=1: 511 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork1384.dir
+[2026-10-07T03:53:12.485Z] elapsed=00:05:37 round_elapsed=00:00:02 #115790: cov: 1269 ft: 1269 corp: 511 exec/s 57895 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T03:53:15.587Z] elapsed=00:05:40 round_elapsed=00:00:05 #312409: cov: 1269 ft: 1269 corp: 511 exec/s 65539 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T03:53:19.687Z] elapsed=00:05:45 round_elapsed=00:00:09 #573817: cov: 1269 ft: 1269 corp: 511 exec/s 65352 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T03:53:24.787Z] elapsed=00:05:50 round_elapsed=00:00:14 #920982: cov: 1269 ft: 1269 corp: 511 exec/s 69433 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T03:53:30.888Z] elapsed=00:05:56 round_elapsed=00:00:20 #1339236: cov: 1269 ft: 1269 corp: 511 exec/s 69709 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T03:53:37.989Z] elapsed=00:06:03 round_elapsed=00:00:27 #1829849: cov: 1269 ft: 1269 corp: 511 exec/s 70087 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T03:53:46.093Z] elapsed=00:06:11 round_elapsed=00:00:35 #2387765: cov: 1269 ft: 1269 corp: 511 exec/s 69739 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T03:53:55.195Z] elapsed=00:06:20 round_elapsed=00:00:44 #3044891: cov: 1269 ft: 1269 corp: 511 exec/s 73014 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T03:54:05.295Z] elapsed=00:06:30 round_elapsed=00:00:55 #3758766: cov: 1269 ft: 1269 corp: 511 exec/s 71387 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T03:54:16.398Z] elapsed=00:06:41 round_elapsed=00:01:06 #4574289: cov: 1269 ft: 1269 corp: 511 exec/s 74138 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T03:54:28.503Z] elapsed=00:06:53 round_elapsed=00:01:18 #5447738: cov: 1269 ft: 1269 corp: 511 exec/s 72787 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T03:54:41.604Z] elapsed=00:07:06 round_elapsed=00:01:31 #6413603: cov: 1269 ft: 1269 corp: 511 exec/s 74297 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T03:54:55.705Z] elapsed=00:07:21 round_elapsed=00:01:45 #7448178: cov: 1269 ft: 1269 corp: 511 exec/s 73898 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T03:55:10.809Z] elapsed=00:07:36 round_elapsed=00:02:00 #8531525: cov: 1269 ft: 1269 corp: 511 exec/s 72223 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T03:55:26.911Z] elapsed=00:07:52 round_elapsed=00:02:16 #9773207: cov: 1269 ft: 1269 corp: 511 exec/s 77605 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T03:55:44.014Z] elapsed=00:08:09 round_elapsed=00:02:33 #11007694: cov: 1269 ft: 1269 corp: 511 exec/s 72616 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T03:55:44.237Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x55555586c470 in initialize_runtime() /work/nginx-fuzz/src/fuzz/http2_request_headers_fuzzer.cc:21
+[2026-10-07T03:55:44.237Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x55555586c730 in __wrap_ngx_destroy_pool /work/nginx-fuzz/src/fuzz/wrappers.c:41
+[2026-10-07T03:55:44.238Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555877bf0 in ngx_create_pool /work/nginx-fuzz/src/core/ngx_palloc.c:20
+[2026-10-07T03:55:44.238Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555877e70 in ngx_destroy_pool /work/nginx-fuzz/src/core/ngx_palloc.c:48
+[2026-10-07T03:55:44.238Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555878290 in ngx_palloc /work/nginx-fuzz/src/core/ngx_palloc.c:124
+[2026-10-07T03:55:44.238Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x5555558782c0 in ngx_palloc_large /work/nginx-fuzz/src/core/ngx_palloc.c:215
+[2026-10-07T03:55:44.238Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x5555558784d0 in ngx_pnalloc /work/nginx-fuzz/src/core/ngx_palloc.c:137
+[2026-10-07T03:55:44.238Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555878620 in ngx_palloc_small /work/nginx-fuzz/src/core/ngx_palloc.c:150
+[2026-10-07T03:55:44.239Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555878ba0 in ngx_pcalloc /work/nginx-fuzz/src/core/ngx_palloc.c:299
+[2026-10-07T03:55:44.239Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555887e50 in ngx_strlow /work/nginx-fuzz/src/core/ngx_string.c:24
+[2026-10-07T03:55:44.240Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555888480 in ngx_sprintf /work/nginx-fuzz/src/core/ngx_string.c:124
+[2026-10-07T03:55:44.240Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555888620 in ngx_vslprintf /work/nginx-fuzz/src/core/ngx_string.c:166
+[2026-10-07T03:55:44.240Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x55555588b610 in ngx_sprintf_str /work/nginx-fuzz/src/core/ngx_string.c:573
+[2026-10-07T03:55:44.240Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x55555588c450 in ngx_sprintf_num /work/nginx-fuzz/src/core/ngx_string.c:487
+[2026-10-07T03:55:44.240Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x5555558b7940 in ngx_time_init /work/nginx-fuzz/src/core/ngx_times.c:67
+[2026-10-07T03:55:44.240Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x5555558b79b0 in ngx_time_update /work/nginx-fuzz/src/core/ngx_times.c:82
+[2026-10-07T03:55:44.240Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x5555558b8e40 in ngx_gmtime /work/nginx-fuzz/src/core/ngx_times.c:321
+[2026-10-07T03:55:44.240Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x5555558d57e0 in ngx_preinit_modules /work/nginx-fuzz/src/core/ngx_module.c:27
+[2026-10-07T03:55:44.241Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x5555558d5c90 in ngx_count_modules /work/nginx-fuzz/src/core/ngx_module.c:84
+[2026-10-07T03:55:44.241Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555917d00 in ngx_localtime /work/nginx-fuzz/src/os/unix/ngx_time.c:58
+[2026-10-07T03:55:44.241Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x5555559182a0 in ngx_strerror_init /work/nginx-fuzz/src/os/unix/ngx_errno.c:48
+[2026-10-07T03:55:44.241Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555918300 in ngx_alloc /work/nginx-fuzz/src/os/unix/ngx_alloc.c:19
+[2026-10-07T03:55:44.241Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555918470 in ngx_memalign /work/nginx-fuzz/src/os/unix/ngx_alloc.c:53
+[2026-10-07T03:55:44.241Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x55555596d370 in ngx_http_validate_host /work/nginx-fuzz/src/http/ngx_http_request.c:2192
+[2026-10-07T03:55:44.241Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x5555559f84f0 in ngx_http_huff_decode /work/nginx-fuzz/src/http/ngx_http_huff_decode.c:2645
+[2026-10-07T03:55:44.242Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x5555559f8860 in ngx_http_huff_decode_bits /work/nginx-fuzz/src/http/ngx_http_huff_decode.c:2697
+[2026-10-07T03:55:44.242Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555a4ad30 in ngx_http_v2_parse_int /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:2697
+[2026-10-07T03:55:44.242Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555a4e290 in ngx_http_v2_validate_header /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:3372
+[2026-10-07T03:55:44.242Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555a4ebb0 in ngx_http_v2_pseudo_header /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:3640
+[2026-10-07T03:55:44.242Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555a504e0 in ngx_http_v2_fuzz_live_header_block /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:3866
+[2026-10-07T03:55:44.242Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555a51f30 in ngx_list_init /work/nginx-fuzz/src/core/ngx_list.h:38
+[2026-10-07T03:55:44.242Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555a520a0 in ngx_http_v2_state_header_block /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:1395
+[2026-10-07T03:55:44.242Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555a66900 in ngx_http_v2_state_complete /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:2574
+[2026-10-07T03:55:44.242Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555a6a400 in ngx_http_v2_state_process_header /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:1724
+[2026-10-07T03:55:44.242Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555a6ba10 in ngx_http_v2_state_header_complete /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:1920
+[2026-10-07T03:55:44.242Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555a6d930 in ngx_http_v2_state_field_len /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:1495
+[2026-10-07T03:55:44.243Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555a6ee70 in ngx_http_v2_state_field_huff /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:1582
+[2026-10-07T03:55:44.243Z] elapsed=00:08:09 round_elapsed=00:02:34   NEW_FUNC: 0x555555a70760 in ngx_http_v2_get_indexed_header /work/nginx-fuzz/src/http/v2/ngx_http_v2_table.c:106
+[2026-10-07T03:56:02.343Z] elapsed=00:08:27 round_elapsed=00:02:52 #12371992: cov: 1445 ft: 1276 corp: 515 exec/s 75794 oom/timeout/crash: 0/0/0 time: 172s job: 17 dft_time: 0
+[2026-10-07T03:56:21.447Z] elapsed=00:08:46 round_elapsed=00:03:11 #13652441: cov: 1445 ft: 1276 corp: 515 exec/s 67392 oom/timeout/crash: 0/0/0 time: 191s job: 18 dft_time: 0
+[2026-10-07T03:56:41.622Z] elapsed=00:09:06 round_elapsed=00:03:31 #14914110: cov: 1449 ft: 1283 corp: 520 exec/s 63083 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T03:57:02.724Z] elapsed=00:09:28 round_elapsed=00:03:52 #16531392: cov: 1449 ft: 1283 corp: 520 exec/s 77013 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T03:57:24.828Z] elapsed=00:09:50 round_elapsed=00:04:14 #18030563: cov: 1449 ft: 1283 corp: 520 exec/s 68144 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T03:57:47.933Z] elapsed=00:10:13 round_elapsed=00:04:37 #19555592: cov: 1449 ft: 1283 corp: 520 exec/s 66305 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T03:58:12.045Z] elapsed=00:10:37 round_elapsed=00:05:01 #21074322: cov: 1449 ft: 1283 corp: 520 exec/s 63280 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T03:58:12.046Z] elapsed=00:10:37 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T03:58:12.059Z] elapsed=00:10:37 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T03:58:21.175Z] elapsed=00:10:46 no_coverage_growth=00:05:10 watchdog event=coverage_checkpoint round=2 scope_lines=467 coverage_increased=false new_inputs=9 findings=0 idle_seconds=311.0 required_seconds=7200
+[2026-10-07T03:58:21.176Z] elapsed=00:10:46 no_coverage_growth=00:05:10 watchdog event=round_started round=3 round_limit_seconds=300 scope_lines=467
+[2026-10-07T03:58:21.207Z] elapsed=00:10:46 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T03:58:21.207Z] elapsed=00:10:46 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T03:58:21.207Z] elapsed=00:10:46 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T03:58:21.211Z] elapsed=00:10:46 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T03:58:21.211Z] elapsed=00:10:46 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T03:58:21.212Z] elapsed=00:10:46 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T03:58:21.351Z] elapsed=00:10:46 round_elapsed=00:00:00 INFO: -fork=1: 521 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork1561.dir
+[2026-10-07T03:58:23.452Z] elapsed=00:10:48 round_elapsed=00:00:02 #127197: cov: 1283 ft: 1283 corp: 521 exec/s 63598 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T03:58:26.552Z] elapsed=00:10:51 round_elapsed=00:00:05 #342491: cov: 1283 ft: 1283 corp: 521 exec/s 71764 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T03:58:30.652Z] elapsed=00:10:56 round_elapsed=00:00:09 #618195: cov: 1283 ft: 1283 corp: 521 exec/s 68926 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T03:58:35.753Z] elapsed=00:11:01 round_elapsed=00:00:14 #912798: cov: 1283 ft: 1283 corp: 521 exec/s 58920 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T03:58:41.860Z] elapsed=00:11:07 round_elapsed=00:00:20 #1284356: cov: 1283 ft: 1283 corp: 521 exec/s 61926 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T03:58:48.961Z] elapsed=00:11:14 round_elapsed=00:00:27 #1770215: cov: 1283 ft: 1283 corp: 521 exec/s 69408 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T03:58:57.064Z] elapsed=00:11:22 round_elapsed=00:00:35 #2322045: cov: 1283 ft: 1283 corp: 521 exec/s 68978 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T03:59:06.168Z] elapsed=00:11:31 round_elapsed=00:00:44 #2980573: cov: 1283 ft: 1283 corp: 521 exec/s 73169 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T03:59:16.270Z] elapsed=00:11:41 round_elapsed=00:00:55 #3717588: cov: 1283 ft: 1283 corp: 521 exec/s 73701 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T03:59:27.372Z] elapsed=00:11:52 round_elapsed=00:01:06 #4491342: cov: 1283 ft: 1283 corp: 521 exec/s 70341 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T03:59:27.577Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x55555586c470 in initialize_runtime() /work/nginx-fuzz/src/fuzz/http2_request_headers_fuzzer.cc:21
+[2026-10-07T03:59:27.577Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x55555586c730 in __wrap_ngx_destroy_pool /work/nginx-fuzz/src/fuzz/wrappers.c:41
+[2026-10-07T03:59:27.577Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555877bf0 in ngx_create_pool /work/nginx-fuzz/src/core/ngx_palloc.c:20
+[2026-10-07T03:59:27.578Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555877e70 in ngx_destroy_pool /work/nginx-fuzz/src/core/ngx_palloc.c:48
+[2026-10-07T03:59:27.578Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555878290 in ngx_palloc /work/nginx-fuzz/src/core/ngx_palloc.c:124
+[2026-10-07T03:59:27.578Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x5555558782c0 in ngx_palloc_large /work/nginx-fuzz/src/core/ngx_palloc.c:215
+[2026-10-07T03:59:27.578Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x5555558784d0 in ngx_pnalloc /work/nginx-fuzz/src/core/ngx_palloc.c:137
+[2026-10-07T03:59:27.578Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555878620 in ngx_palloc_small /work/nginx-fuzz/src/core/ngx_palloc.c:150
+[2026-10-07T03:59:27.578Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555878ba0 in ngx_pcalloc /work/nginx-fuzz/src/core/ngx_palloc.c:299
+[2026-10-07T03:59:27.578Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555887e50 in ngx_strlow /work/nginx-fuzz/src/core/ngx_string.c:24
+[2026-10-07T03:59:27.579Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555888480 in ngx_sprintf /work/nginx-fuzz/src/core/ngx_string.c:124
+[2026-10-07T03:59:27.579Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555888620 in ngx_vslprintf /work/nginx-fuzz/src/core/ngx_string.c:166
+[2026-10-07T03:59:27.579Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x55555588b610 in ngx_sprintf_str /work/nginx-fuzz/src/core/ngx_string.c:573
+[2026-10-07T03:59:27.579Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x55555588c450 in ngx_sprintf_num /work/nginx-fuzz/src/core/ngx_string.c:487
+[2026-10-07T03:59:27.579Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x5555558b7940 in ngx_time_init /work/nginx-fuzz/src/core/ngx_times.c:67
+[2026-10-07T03:59:27.579Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x5555558b79b0 in ngx_time_update /work/nginx-fuzz/src/core/ngx_times.c:82
+[2026-10-07T03:59:27.579Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x5555558b8e40 in ngx_gmtime /work/nginx-fuzz/src/core/ngx_times.c:321
+[2026-10-07T03:59:27.579Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x5555558d57e0 in ngx_preinit_modules /work/nginx-fuzz/src/core/ngx_module.c:27
+[2026-10-07T03:59:27.580Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x5555558d5c90 in ngx_count_modules /work/nginx-fuzz/src/core/ngx_module.c:84
+[2026-10-07T03:59:27.580Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555917d00 in ngx_localtime /work/nginx-fuzz/src/os/unix/ngx_time.c:58
+[2026-10-07T03:59:27.580Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x5555559182a0 in ngx_strerror_init /work/nginx-fuzz/src/os/unix/ngx_errno.c:48
+[2026-10-07T03:59:27.580Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555918300 in ngx_alloc /work/nginx-fuzz/src/os/unix/ngx_alloc.c:19
+[2026-10-07T03:59:27.580Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555918470 in ngx_memalign /work/nginx-fuzz/src/os/unix/ngx_alloc.c:53
+[2026-10-07T03:59:27.580Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x5555559f84f0 in ngx_http_huff_decode /work/nginx-fuzz/src/http/ngx_http_huff_decode.c:2645
+[2026-10-07T03:59:27.580Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x5555559f8860 in ngx_http_huff_decode_bits /work/nginx-fuzz/src/http/ngx_http_huff_decode.c:2697
+[2026-10-07T03:59:27.580Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555a4ad30 in ngx_http_v2_parse_int /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:2697
+[2026-10-07T03:59:27.580Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555a4e290 in ngx_http_v2_validate_header /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:3372
+[2026-10-07T03:59:27.580Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555a504e0 in ngx_http_v2_fuzz_live_header_block /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:3866
+[2026-10-07T03:59:27.581Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555a51f30 in ngx_list_init /work/nginx-fuzz/src/core/ngx_list.h:38
+[2026-10-07T03:59:27.581Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555a520a0 in ngx_http_v2_state_header_block /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:1395
+[2026-10-07T03:59:27.581Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555a6a400 in ngx_http_v2_state_process_header /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:1724
+[2026-10-07T03:59:27.581Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555a6ba10 in ngx_http_v2_state_header_complete /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:1920
+[2026-10-07T03:59:27.581Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555a6d930 in ngx_http_v2_state_field_len /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:1495
+[2026-10-07T03:59:27.581Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555a6ee70 in ngx_http_v2_state_field_huff /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:1582
+[2026-10-07T03:59:27.581Z] elapsed=00:11:52 round_elapsed=00:01:06   NEW_FUNC: 0x555555a70760 in ngx_http_v2_get_indexed_header /work/nginx-fuzz/src/http/v2/ngx_http_v2_table.c:106
+[2026-10-07T03:59:39.682Z] elapsed=00:12:05 round_elapsed=00:01:18 #5413452: cov: 1431 ft: 1284 corp: 522 exec/s 76842 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T03:59:52.785Z] elapsed=00:12:18 round_elapsed=00:01:31 #6294346: cov: 1431 ft: 1284 corp: 522 exec/s 67761 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T04:00:06.888Z] elapsed=00:12:32 round_elapsed=00:01:45 #7207782: cov: 1431 ft: 1284 corp: 522 exec/s 65245 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T04:00:21.991Z] elapsed=00:12:47 round_elapsed=00:02:00 #8274173: cov: 1431 ft: 1284 corp: 522 exec/s 71092 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T04:00:38.096Z] elapsed=00:13:03 round_elapsed=00:02:16 #9371753: cov: 1431 ft: 1284 corp: 522 exec/s 68598 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T04:00:55.199Z] elapsed=00:13:20 round_elapsed=00:02:34 #10508241: cov: 1431 ft: 1284 corp: 522 exec/s 66852 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T04:01:13.302Z] elapsed=00:13:38 round_elapsed=00:02:52 #11782587: cov: 1431 ft: 1284 corp: 522 exec/s 70797 oom/timeout/crash: 0/0/0 time: 172s job: 17 dft_time: 0
+[2026-10-07T04:01:32.404Z] elapsed=00:13:57 round_elapsed=00:03:11 #13222786: cov: 1431 ft: 1284 corp: 522 exec/s 75799 oom/timeout/crash: 0/0/0 time: 191s job: 18 dft_time: 0
+[2026-10-07T04:01:52.508Z] elapsed=00:14:17 round_elapsed=00:03:31 #14688771: cov: 1431 ft: 1284 corp: 522 exec/s 73299 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T04:02:13.616Z] elapsed=00:14:38 round_elapsed=00:03:52 #16058536: cov: 1431 ft: 1284 corp: 522 exec/s 65226 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T04:02:35.721Z] elapsed=00:15:01 round_elapsed=00:04:14 #17524351: cov: 1431 ft: 1284 corp: 522 exec/s 66627 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T04:02:58.822Z] elapsed=00:15:24 round_elapsed=00:04:37 #19216825: cov: 1431 ft: 1284 corp: 522 exec/s 73585 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T04:02:58.892Z] elapsed=00:15:24 round_elapsed=00:04:37   NEW_FUNC: 0x55555596ac50 in ngx_http_process_request_uri /work/nginx-fuzz/src/http/ngx_http_request.c:1275
+[2026-10-07T04:02:58.892Z] elapsed=00:15:24 round_elapsed=00:04:37   NEW_FUNC: 0x55555597f700 in ngx_http_parse_uri /work/nginx-fuzz/src/http/ngx_http_parse.c:1136
+[2026-10-07T04:02:58.892Z] elapsed=00:15:24 round_elapsed=00:04:37   NEW_FUNC: 0x555555980270 in ngx_http_parse_complex_uri /work/nginx-fuzz/src/http/ngx_http_parse.c:1287
+[2026-10-07T04:02:58.893Z] elapsed=00:15:24 round_elapsed=00:04:37   NEW_FUNC: 0x555555a4ebb0 in ngx_http_v2_pseudo_header /work/nginx-fuzz/src/http/v2/ngx_http_v2.c:3640
+[2026-10-07T04:02:58.893Z] elapsed=00:15:24 round_elapsed=00:04:37   NEW_FUNC: 0x555555a712c0 in ngx_http_v2_add_header /work/nginx-fuzz/src/http/v2/ngx_http_v2_table.c:191
+[2026-10-07T04:03:23.007Z] elapsed=00:15:48 round_elapsed=00:05:01 #20813861: cov: 1479 ft: 1287 corp: 523 exec/s 66543 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T04:03:23.009Z] elapsed=00:15:48 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T04:03:23.020Z] elapsed=00:15:48 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T04:03:32.243Z] elapsed=00:15:57 no_coverage_growth=00:10:22 watchdog event=coverage_checkpoint round=3 scope_lines=467 coverage_increased=false new_inputs=2 findings=0 idle_seconds=622.0 required_seconds=7200
+[2026-10-07T04:03:32.243Z] elapsed=00:15:57 no_coverage_growth=00:10:22 watchdog event=round_started round=4 round_limit_seconds=300 scope_lines=467
+[2026-10-07T04:03:32.275Z] elapsed=00:15:57 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T04:03:32.275Z] elapsed=00:15:57 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T04:03:32.275Z] elapsed=00:15:57 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T04:03:32.279Z] elapsed=00:15:57 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T04:03:32.280Z] elapsed=00:15:57 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T04:03:32.280Z] elapsed=00:15:57 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T04:03:32.420Z] elapsed=00:15:57 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork1721.dir
+[2026-10-07T04:03:34.525Z] elapsed=00:15:59 round_elapsed=00:00:02 #124535: cov: 1285 ft: 1285 corp: 522 exec/s 62267 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T04:03:37.627Z] elapsed=00:16:02 round_elapsed=00:00:05 #310271: cov: 1285 ft: 1285 corp: 522 exec/s 61912 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T04:03:41.726Z] elapsed=00:16:07 round_elapsed=00:00:09 #588908: cov: 1285 ft: 1285 corp: 522 exec/s 69659 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T04:03:46.825Z] elapsed=00:16:12 round_elapsed=00:00:14 #923260: cov: 1285 ft: 1285 corp: 522 exec/s 66870 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T04:03:52.926Z] elapsed=00:16:18 round_elapsed=00:00:20 #1366179: cov: 1285 ft: 1285 corp: 522 exec/s 73819 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T04:04:00.026Z] elapsed=00:16:25 round_elapsed=00:00:27 #1840786: cov: 1285 ft: 1285 corp: 522 exec/s 67801 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T04:04:08.128Z] elapsed=00:16:33 round_elapsed=00:00:35 #2364456: cov: 1285 ft: 1285 corp: 522 exec/s 65458 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T04:04:17.229Z] elapsed=00:16:42 round_elapsed=00:00:44 #2935634: cov: 1285 ft: 1285 corp: 522 exec/s 63464 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T04:04:27.328Z] elapsed=00:16:52 round_elapsed=00:00:55 #3681729: cov: 1285 ft: 1285 corp: 522 exec/s 74609 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T04:04:38.429Z] elapsed=00:17:03 round_elapsed=00:01:06 #4530536: cov: 1285 ft: 1285 corp: 522 exec/s 77164 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T04:04:50.530Z] elapsed=00:17:15 round_elapsed=00:01:18 #5446851: cov: 1285 ft: 1285 corp: 522 exec/s 76359 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T04:05:03.633Z] elapsed=00:17:29 round_elapsed=00:01:31 #6287403: cov: 1285 ft: 1285 corp: 522 exec/s 64657 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T04:05:17.735Z] elapsed=00:17:43 round_elapsed=00:01:45 #7236934: cov: 1285 ft: 1285 corp: 522 exec/s 67823 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T04:05:32.838Z] elapsed=00:17:58 round_elapsed=00:02:00 #8308109: cov: 1285 ft: 1285 corp: 522 exec/s 71411 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T04:05:48.940Z] elapsed=00:18:14 round_elapsed=00:02:16 #9452586: cov: 1285 ft: 1285 corp: 522 exec/s 71529 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T04:06:06.042Z] elapsed=00:18:31 round_elapsed=00:02:33 #10580591: cov: 1285 ft: 1285 corp: 522 exec/s 66353 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T04:06:24.146Z] elapsed=00:18:49 round_elapsed=00:02:51 #11906905: cov: 1285 ft: 1285 corp: 522 exec/s 73684 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T04:06:43.250Z] elapsed=00:19:08 round_elapsed=00:03:11 #13363394: cov: 1285 ft: 1285 corp: 522 exec/s 76657 oom/timeout/crash: 0/0/0 time: 190s job: 18 dft_time: 0
+[2026-10-07T04:07:03.353Z] elapsed=00:19:28 round_elapsed=00:03:31 #14662195: cov: 1285 ft: 1285 corp: 522 exec/s 64940 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T04:07:24.456Z] elapsed=00:19:49 round_elapsed=00:03:52 #16117987: cov: 1285 ft: 1285 corp: 522 exec/s 69323 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T04:07:46.561Z] elapsed=00:20:11 round_elapsed=00:04:14 #17605791: cov: 1285 ft: 1285 corp: 522 exec/s 67627 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T04:08:09.669Z] elapsed=00:20:35 round_elapsed=00:04:37 #19231568: cov: 1285 ft: 1285 corp: 522 exec/s 70685 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T04:08:33.772Z] elapsed=00:20:59 round_elapsed=00:05:01 #20885614: cov: 1285 ft: 1285 corp: 522 exec/s 68918 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T04:08:33.773Z] elapsed=00:20:59 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T04:08:33.785Z] elapsed=00:20:59 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T04:08:33.893Z] elapsed=00:20:59 no_coverage_growth=00:15:23 watchdog event=coverage_checkpoint round=4 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=923.7 required_seconds=7200
+[2026-10-07T04:08:33.893Z] elapsed=00:20:59 no_coverage_growth=00:15:23 watchdog event=round_started round=5 round_limit_seconds=300 scope_lines=467
+[2026-10-07T04:08:33.923Z] elapsed=00:20:59 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T04:08:33.923Z] elapsed=00:20:59 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T04:08:33.923Z] elapsed=00:20:59 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T04:08:33.926Z] elapsed=00:20:59 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T04:08:33.927Z] elapsed=00:20:59 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T04:08:33.928Z] elapsed=00:20:59 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T04:08:34.056Z] elapsed=00:20:59 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork1822.dir
+[2026-10-07T04:08:36.163Z] elapsed=00:21:01 round_elapsed=00:00:02 #119420: cov: 1285 ft: 1285 corp: 522 exec/s 59710 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T04:08:39.275Z] elapsed=00:21:04 round_elapsed=00:00:05 #286539: cov: 1285 ft: 1285 corp: 522 exec/s 55706 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T04:08:43.404Z] elapsed=00:21:08 round_elapsed=00:00:09 #549878: cov: 1285 ft: 1285 corp: 522 exec/s 65834 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T04:08:48.512Z] elapsed=00:21:13 round_elapsed=00:00:14 #877466: cov: 1285 ft: 1285 corp: 522 exec/s 65517 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T04:08:54.612Z] elapsed=00:21:19 round_elapsed=00:00:20 #1317310: cov: 1285 ft: 1285 corp: 522 exec/s 73307 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T04:09:01.713Z] elapsed=00:21:27 round_elapsed=00:00:27 #1771774: cov: 1285 ft: 1285 corp: 522 exec/s 64923 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T04:09:09.813Z] elapsed=00:21:35 round_elapsed=00:00:35 #2291231: cov: 1285 ft: 1285 corp: 522 exec/s 64932 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T04:09:18.913Z] elapsed=00:21:44 round_elapsed=00:00:45 #2859889: cov: 1285 ft: 1285 corp: 522 exec/s 63184 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T04:09:29.018Z] elapsed=00:21:54 round_elapsed=00:00:55 #3604324: cov: 1285 ft: 1285 corp: 522 exec/s 74443 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T04:09:40.119Z] elapsed=00:22:05 round_elapsed=00:01:06 #4480600: cov: 1285 ft: 1285 corp: 522 exec/s 79661 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T04:09:52.222Z] elapsed=00:22:17 round_elapsed=00:01:18 #5401413: cov: 1285 ft: 1285 corp: 522 exec/s 76734 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T04:10:05.327Z] elapsed=00:22:30 round_elapsed=00:01:31 #6236673: cov: 1285 ft: 1285 corp: 522 exec/s 64250 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T04:10:19.446Z] elapsed=00:22:44 round_elapsed=00:01:45 #7192579: cov: 1285 ft: 1285 corp: 522 exec/s 68279 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T04:10:34.554Z] elapsed=00:22:59 round_elapsed=00:02:00 #8297797: cov: 1285 ft: 1285 corp: 522 exec/s 73681 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T04:10:50.662Z] elapsed=00:23:16 round_elapsed=00:02:16 #9433655: cov: 1285 ft: 1285 corp: 522 exec/s 70991 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T04:11:07.771Z] elapsed=00:23:33 round_elapsed=00:02:33 #10576805: cov: 1285 ft: 1285 corp: 522 exec/s 67244 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T04:11:25.874Z] elapsed=00:23:51 round_elapsed=00:02:51 #11888015: cov: 1285 ft: 1285 corp: 522 exec/s 72845 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T04:11:44.978Z] elapsed=00:24:10 round_elapsed=00:03:11 #13333771: cov: 1285 ft: 1285 corp: 522 exec/s 76092 oom/timeout/crash: 0/0/0 time: 191s job: 18 dft_time: 0
+[2026-10-07T04:12:05.081Z] elapsed=00:24:30 round_elapsed=00:03:31 #14630293: cov: 1285 ft: 1285 corp: 522 exec/s 64826 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T04:12:26.184Z] elapsed=00:24:51 round_elapsed=00:03:52 #16076790: cov: 1285 ft: 1285 corp: 522 exec/s 68880 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T04:12:48.292Z] elapsed=00:25:13 round_elapsed=00:04:14 #17609594: cov: 1285 ft: 1285 corp: 522 exec/s 69672 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T04:13:11.397Z] elapsed=00:25:36 round_elapsed=00:04:37 #19243835: cov: 1285 ft: 1285 corp: 522 exec/s 71053 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T04:13:35.499Z] elapsed=00:26:00 round_elapsed=00:05:01 #20897361: cov: 1285 ft: 1285 corp: 522 exec/s 68896 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T04:13:35.500Z] elapsed=00:26:00 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T04:13:35.511Z] elapsed=00:26:00 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T04:13:35.614Z] elapsed=00:26:00 no_coverage_growth=00:20:25 watchdog event=coverage_checkpoint round=5 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=1225.4 required_seconds=7200
+[2026-10-07T04:13:35.614Z] elapsed=00:26:00 no_coverage_growth=00:20:25 watchdog event=round_started round=6 round_limit_seconds=300 scope_lines=467
+[2026-10-07T04:13:35.645Z] elapsed=00:26:01 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T04:13:35.645Z] elapsed=00:26:01 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T04:13:35.645Z] elapsed=00:26:01 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T04:13:35.649Z] elapsed=00:26:01 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T04:13:35.649Z] elapsed=00:26:01 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T04:13:35.650Z] elapsed=00:26:01 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T04:13:35.784Z] elapsed=00:26:01 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork1923.dir
+[2026-10-07T04:13:37.887Z] elapsed=00:26:03 round_elapsed=00:00:02 #125988: cov: 1285 ft: 1285 corp: 522 exec/s 62994 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T04:13:40.986Z] elapsed=00:26:06 round_elapsed=00:00:05 #316893: cov: 1285 ft: 1285 corp: 522 exec/s 63635 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T04:13:45.086Z] elapsed=00:26:10 round_elapsed=00:00:09 #584388: cov: 1285 ft: 1285 corp: 522 exec/s 66873 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T04:13:50.196Z] elapsed=00:26:15 round_elapsed=00:00:14 #903757: cov: 1285 ft: 1285 corp: 522 exec/s 63873 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T04:13:56.306Z] elapsed=00:26:21 round_elapsed=00:00:20 #1316217: cov: 1285 ft: 1285 corp: 522 exec/s 68743 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T04:14:03.410Z] elapsed=00:26:28 round_elapsed=00:00:27 #1788159: cov: 1285 ft: 1285 corp: 522 exec/s 67420 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T04:14:11.512Z] elapsed=00:26:36 round_elapsed=00:00:35 #2315056: cov: 1285 ft: 1285 corp: 522 exec/s 65862 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T04:14:20.614Z] elapsed=00:26:45 round_elapsed=00:00:44 #2877621: cov: 1285 ft: 1285 corp: 522 exec/s 62507 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T04:14:30.716Z] elapsed=00:26:56 round_elapsed=00:00:55 #3618627: cov: 1285 ft: 1285 corp: 522 exec/s 74100 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T04:14:41.819Z] elapsed=00:27:07 round_elapsed=00:01:06 #4496759: cov: 1285 ft: 1285 corp: 522 exec/s 79830 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T04:14:53.932Z] elapsed=00:27:19 round_elapsed=00:01:18 #5406211: cov: 1285 ft: 1285 corp: 522 exec/s 75787 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T04:15:07.033Z] elapsed=00:27:32 round_elapsed=00:01:31 #6253005: cov: 1285 ft: 1285 corp: 522 exec/s 65138 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T04:15:21.137Z] elapsed=00:27:46 round_elapsed=00:01:45 #7200609: cov: 1285 ft: 1285 corp: 522 exec/s 67686 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T04:15:36.243Z] elapsed=00:28:01 round_elapsed=00:02:00 #8295315: cov: 1285 ft: 1285 corp: 522 exec/s 72980 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T04:15:52.346Z] elapsed=00:28:17 round_elapsed=00:02:16 #9438089: cov: 1285 ft: 1285 corp: 522 exec/s 71423 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T04:16:09.448Z] elapsed=00:28:34 round_elapsed=00:02:33 #10602147: cov: 1285 ft: 1285 corp: 522 exec/s 68474 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T04:16:27.552Z] elapsed=00:28:52 round_elapsed=00:02:51 #11927406: cov: 1285 ft: 1285 corp: 522 exec/s 73625 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T04:16:46.656Z] elapsed=00:29:12 round_elapsed=00:03:11 #13357752: cov: 1285 ft: 1285 corp: 522 exec/s 75281 oom/timeout/crash: 0/0/0 time: 191s job: 18 dft_time: 0
+[2026-10-07T04:17:06.762Z] elapsed=00:29:32 round_elapsed=00:03:31 #14653919: cov: 1285 ft: 1285 corp: 522 exec/s 64808 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T04:17:27.872Z] elapsed=00:29:53 round_elapsed=00:03:52 #16104971: cov: 1285 ft: 1285 corp: 522 exec/s 69097 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T04:17:49.978Z] elapsed=00:30:15 round_elapsed=00:04:14 #17635910: cov: 1285 ft: 1285 corp: 522 exec/s 69588 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T04:18:13.087Z] elapsed=00:30:38 round_elapsed=00:04:37 #19245373: cov: 1285 ft: 1285 corp: 522 exec/s 69976 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T04:18:37.195Z] elapsed=00:31:02 round_elapsed=00:05:01 #20880831: cov: 1285 ft: 1285 corp: 522 exec/s 68144 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T04:18:37.195Z] elapsed=00:31:02 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T04:18:37.207Z] elapsed=00:31:02 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T04:18:37.316Z] elapsed=00:31:02 no_coverage_growth=00:25:27 watchdog event=coverage_checkpoint round=6 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=1527.1 required_seconds=7200
+[2026-10-07T04:18:37.316Z] elapsed=00:31:02 no_coverage_growth=00:25:27 watchdog event=round_started round=7 round_limit_seconds=300 scope_lines=467
+[2026-10-07T04:18:37.350Z] elapsed=00:31:02 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T04:18:37.350Z] elapsed=00:31:02 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T04:18:37.350Z] elapsed=00:31:02 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T04:18:37.354Z] elapsed=00:31:02 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T04:18:37.354Z] elapsed=00:31:02 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T04:18:37.356Z] elapsed=00:31:02 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T04:18:37.490Z] elapsed=00:31:02 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork2024.dir
+[2026-10-07T04:18:39.594Z] elapsed=00:31:04 round_elapsed=00:00:02 #129534: cov: 1285 ft: 1285 corp: 522 exec/s 64767 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T04:18:42.696Z] elapsed=00:31:08 round_elapsed=00:00:05 #319903: cov: 1285 ft: 1285 corp: 522 exec/s 63456 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T04:18:46.798Z] elapsed=00:31:12 round_elapsed=00:00:09 #593305: cov: 1285 ft: 1285 corp: 522 exec/s 68350 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T04:18:51.900Z] elapsed=00:31:17 round_elapsed=00:00:14 #921153: cov: 1285 ft: 1285 corp: 522 exec/s 65569 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T04:18:58.002Z] elapsed=00:31:23 round_elapsed=00:00:20 #1358627: cov: 1285 ft: 1285 corp: 522 exec/s 72912 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T04:19:05.110Z] elapsed=00:31:30 round_elapsed=00:00:27 #1789625: cov: 1285 ft: 1285 corp: 522 exec/s 61571 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T04:19:13.237Z] elapsed=00:31:38 round_elapsed=00:00:35 #2307585: cov: 1285 ft: 1285 corp: 522 exec/s 64745 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T04:19:22.341Z] elapsed=00:31:47 round_elapsed=00:00:45 #2869985: cov: 1285 ft: 1285 corp: 522 exec/s 62488 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T04:19:32.442Z] elapsed=00:31:57 round_elapsed=00:00:55 #3613225: cov: 1285 ft: 1285 corp: 522 exec/s 74324 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T04:19:43.546Z] elapsed=00:32:08 round_elapsed=00:01:06 #4485897: cov: 1285 ft: 1285 corp: 522 exec/s 79333 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T04:19:55.649Z] elapsed=00:32:21 round_elapsed=00:01:18 #5401922: cov: 1285 ft: 1285 corp: 522 exec/s 76335 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T04:20:08.754Z] elapsed=00:32:34 round_elapsed=00:01:31 #6209072: cov: 1285 ft: 1285 corp: 522 exec/s 62088 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T04:20:22.855Z] elapsed=00:32:48 round_elapsed=00:01:45 #7167595: cov: 1285 ft: 1285 corp: 522 exec/s 68465 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T04:20:37.957Z] elapsed=00:33:03 round_elapsed=00:02:00 #8265387: cov: 1285 ft: 1285 corp: 522 exec/s 73186 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T04:20:54.062Z] elapsed=00:33:19 round_elapsed=00:02:16 #9374959: cov: 1285 ft: 1285 corp: 522 exec/s 69348 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T04:21:11.163Z] elapsed=00:33:36 round_elapsed=00:02:33 #10536342: cov: 1285 ft: 1285 corp: 522 exec/s 68316 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T04:21:29.268Z] elapsed=00:33:54 round_elapsed=00:02:51 #11867117: cov: 1285 ft: 1285 corp: 522 exec/s 73931 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T04:21:48.371Z] elapsed=00:34:13 round_elapsed=00:03:11 #13305819: cov: 1285 ft: 1285 corp: 522 exec/s 75721 oom/timeout/crash: 0/0/0 time: 191s job: 18 dft_time: 0
+[2026-10-07T04:22:08.475Z] elapsed=00:34:33 round_elapsed=00:03:31 #14605100: cov: 1285 ft: 1285 corp: 522 exec/s 64964 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T04:22:29.578Z] elapsed=00:34:54 round_elapsed=00:03:52 #16059567: cov: 1285 ft: 1285 corp: 522 exec/s 69260 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T04:22:51.682Z] elapsed=00:35:17 round_elapsed=00:04:14 #17600148: cov: 1285 ft: 1285 corp: 522 exec/s 70026 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T04:23:14.788Z] elapsed=00:35:40 round_elapsed=00:04:37 #19228392: cov: 1285 ft: 1285 corp: 522 exec/s 70793 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T04:23:38.892Z] elapsed=00:36:04 round_elapsed=00:05:01 #20877958: cov: 1285 ft: 1285 corp: 522 exec/s 68731 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T04:23:38.892Z] elapsed=00:36:04 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T04:23:38.905Z] elapsed=00:36:04 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T04:23:39.020Z] elapsed=00:36:04 no_coverage_growth=00:30:28 watchdog event=coverage_checkpoint round=7 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=1828.8 required_seconds=7200
+[2026-10-07T04:23:39.021Z] elapsed=00:36:04 no_coverage_growth=00:30:28 watchdog event=round_started round=8 round_limit_seconds=300 scope_lines=467
+[2026-10-07T04:23:39.053Z] elapsed=00:36:04 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T04:23:39.053Z] elapsed=00:36:04 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T04:23:39.053Z] elapsed=00:36:04 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T04:23:39.057Z] elapsed=00:36:04 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T04:23:39.058Z] elapsed=00:36:04 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T04:23:39.059Z] elapsed=00:36:04 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T04:23:39.192Z] elapsed=00:36:04 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork2125.dir
+[2026-10-07T04:23:41.293Z] elapsed=00:36:06 round_elapsed=00:00:02 #124827: cov: 1285 ft: 1285 corp: 522 exec/s 62413 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T04:23:44.392Z] elapsed=00:36:09 round_elapsed=00:00:05 #316646: cov: 1285 ft: 1285 corp: 522 exec/s 63939 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T04:23:48.492Z] elapsed=00:36:13 round_elapsed=00:00:09 #594733: cov: 1285 ft: 1285 corp: 522 exec/s 69521 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T04:23:53.593Z] elapsed=00:36:18 round_elapsed=00:00:14 #927053: cov: 1285 ft: 1285 corp: 522 exec/s 66464 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T04:23:59.695Z] elapsed=00:36:25 round_elapsed=00:00:20 #1352474: cov: 1285 ft: 1285 corp: 522 exec/s 70903 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T04:24:06.798Z] elapsed=00:36:32 round_elapsed=00:00:27 #1815437: cov: 1285 ft: 1285 corp: 522 exec/s 66137 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T04:24:14.910Z] elapsed=00:36:40 round_elapsed=00:00:35 #2324989: cov: 1285 ft: 1285 corp: 522 exec/s 63694 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T04:24:24.020Z] elapsed=00:36:49 round_elapsed=00:00:44 #2865084: cov: 1285 ft: 1285 corp: 522 exec/s 60010 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T04:24:34.126Z] elapsed=00:36:59 round_elapsed=00:00:55 #3599030: cov: 1285 ft: 1285 corp: 522 exec/s 73394 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T04:24:45.227Z] elapsed=00:37:10 round_elapsed=00:01:06 #4467874: cov: 1285 ft: 1285 corp: 522 exec/s 78985 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T04:24:57.328Z] elapsed=00:37:22 round_elapsed=00:01:18 #5393351: cov: 1285 ft: 1285 corp: 522 exec/s 77123 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T04:25:10.432Z] elapsed=00:37:35 round_elapsed=00:01:31 #6206821: cov: 1285 ft: 1285 corp: 522 exec/s 62574 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T04:25:24.535Z] elapsed=00:37:49 round_elapsed=00:01:45 #7149590: cov: 1285 ft: 1285 corp: 522 exec/s 67340 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T04:25:39.640Z] elapsed=00:38:05 round_elapsed=00:02:00 #8215627: cov: 1285 ft: 1285 corp: 522 exec/s 71069 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T04:25:55.752Z] elapsed=00:38:21 round_elapsed=00:02:16 #9324984: cov: 1285 ft: 1285 corp: 522 exec/s 69334 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T04:26:12.856Z] elapsed=00:38:38 round_elapsed=00:02:33 #10447178: cov: 1285 ft: 1285 corp: 522 exec/s 66011 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T04:26:30.960Z] elapsed=00:38:56 round_elapsed=00:02:51 #11762446: cov: 1285 ft: 1285 corp: 522 exec/s 73070 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T04:26:50.063Z] elapsed=00:39:15 round_elapsed=00:03:11 #13187150: cov: 1285 ft: 1285 corp: 522 exec/s 74984 oom/timeout/crash: 0/0/0 time: 191s job: 18 dft_time: 0
+[2026-10-07T04:27:10.166Z] elapsed=00:39:35 round_elapsed=00:03:31 #14474956: cov: 1285 ft: 1285 corp: 522 exec/s 64390 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T04:27:31.268Z] elapsed=00:39:56 round_elapsed=00:03:52 #15929458: cov: 1285 ft: 1285 corp: 522 exec/s 69262 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T04:27:53.375Z] elapsed=00:40:18 round_elapsed=00:04:14 #17455046: cov: 1285 ft: 1285 corp: 522 exec/s 69344 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T04:28:16.478Z] elapsed=00:40:41 round_elapsed=00:04:37 #19070705: cov: 1285 ft: 1285 corp: 522 exec/s 70246 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T04:28:40.584Z] elapsed=00:41:05 round_elapsed=00:05:01 #20700904: cov: 1285 ft: 1285 corp: 522 exec/s 67924 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T04:28:40.584Z] elapsed=00:41:05 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T04:28:40.597Z] elapsed=00:41:05 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T04:28:40.706Z] elapsed=00:41:06 no_coverage_growth=00:35:30 watchdog event=coverage_checkpoint round=8 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=2130.5 required_seconds=7200
+[2026-10-07T04:28:40.706Z] elapsed=00:41:06 no_coverage_growth=00:35:30 watchdog event=round_started round=9 round_limit_seconds=300 scope_lines=467
+[2026-10-07T04:28:40.737Z] elapsed=00:41:06 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T04:28:40.737Z] elapsed=00:41:06 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T04:28:40.737Z] elapsed=00:41:06 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T04:28:40.742Z] elapsed=00:41:06 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T04:28:40.742Z] elapsed=00:41:06 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T04:28:40.743Z] elapsed=00:41:06 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T04:28:40.876Z] elapsed=00:41:06 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork2226.dir
+[2026-10-07T04:28:42.978Z] elapsed=00:41:08 round_elapsed=00:00:02 #130301: cov: 1285 ft: 1285 corp: 522 exec/s 65150 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T04:28:46.079Z] elapsed=00:41:11 round_elapsed=00:00:05 #321281: cov: 1285 ft: 1285 corp: 522 exec/s 63660 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T04:28:50.179Z] elapsed=00:41:15 round_elapsed=00:00:09 #590761: cov: 1285 ft: 1285 corp: 522 exec/s 67370 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T04:28:55.281Z] elapsed=00:41:20 round_elapsed=00:00:14 #917069: cov: 1285 ft: 1285 corp: 522 exec/s 65261 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T04:29:01.382Z] elapsed=00:41:26 round_elapsed=00:00:20 #1363076: cov: 1285 ft: 1285 corp: 522 exec/s 74334 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T04:29:08.482Z] elapsed=00:41:33 round_elapsed=00:00:27 #1836818: cov: 1285 ft: 1285 corp: 522 exec/s 67677 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T04:29:16.584Z] elapsed=00:41:41 round_elapsed=00:00:35 #2364625: cov: 1285 ft: 1285 corp: 522 exec/s 65975 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T04:29:25.687Z] elapsed=00:41:51 round_elapsed=00:00:44 #2935583: cov: 1285 ft: 1285 corp: 522 exec/s 63439 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T04:29:35.792Z] elapsed=00:42:01 round_elapsed=00:00:55 #3637495: cov: 1285 ft: 1285 corp: 522 exec/s 70191 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T04:29:46.892Z] elapsed=00:42:12 round_elapsed=00:01:06 #4514522: cov: 1285 ft: 1285 corp: 522 exec/s 79729 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T04:29:58.993Z] elapsed=00:42:24 round_elapsed=00:01:18 #5419889: cov: 1285 ft: 1285 corp: 522 exec/s 75447 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T04:30:12.096Z] elapsed=00:42:37 round_elapsed=00:01:31 #6256909: cov: 1285 ft: 1285 corp: 522 exec/s 64386 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T04:30:26.200Z] elapsed=00:42:51 round_elapsed=00:01:45 #7208982: cov: 1285 ft: 1285 corp: 522 exec/s 68005 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T04:30:41.303Z] elapsed=00:43:06 round_elapsed=00:02:00 #8305868: cov: 1285 ft: 1285 corp: 522 exec/s 73125 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T04:30:57.406Z] elapsed=00:43:22 round_elapsed=00:02:16 #9459033: cov: 1285 ft: 1285 corp: 522 exec/s 72072 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T04:31:14.509Z] elapsed=00:43:39 round_elapsed=00:02:33 #10619426: cov: 1285 ft: 1285 corp: 522 exec/s 68258 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T04:31:32.613Z] elapsed=00:43:57 round_elapsed=00:02:51 #11935584: cov: 1285 ft: 1285 corp: 522 exec/s 73119 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T04:31:51.718Z] elapsed=00:44:17 round_elapsed=00:03:11 #13382991: cov: 1285 ft: 1285 corp: 522 exec/s 76179 oom/timeout/crash: 0/0/0 time: 190s job: 18 dft_time: 0
+[2026-10-07T04:32:11.822Z] elapsed=00:44:37 round_elapsed=00:03:31 #14610217: cov: 1285 ft: 1285 corp: 522 exec/s 61361 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T04:32:32.926Z] elapsed=00:44:58 round_elapsed=00:03:52 #16044784: cov: 1285 ft: 1285 corp: 522 exec/s 68312 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T04:32:55.032Z] elapsed=00:45:20 round_elapsed=00:04:14 #17572622: cov: 1285 ft: 1285 corp: 522 exec/s 69447 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T04:33:18.135Z] elapsed=00:45:43 round_elapsed=00:04:37 #19195657: cov: 1285 ft: 1285 corp: 522 exec/s 70566 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T04:33:42.243Z] elapsed=00:46:07 round_elapsed=00:05:01 #20838862: cov: 1285 ft: 1285 corp: 522 exec/s 68466 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T04:33:42.247Z] elapsed=00:46:07 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T04:33:42.259Z] elapsed=00:46:07 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T04:33:42.373Z] elapsed=00:46:07 no_coverage_growth=00:40:32 watchdog event=coverage_checkpoint round=9 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=2432.2 required_seconds=7200
+[2026-10-07T04:33:42.373Z] elapsed=00:46:07 no_coverage_growth=00:40:32 watchdog event=round_started round=10 round_limit_seconds=300 scope_lines=467
+[2026-10-07T04:33:42.405Z] elapsed=00:46:07 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T04:33:42.405Z] elapsed=00:46:07 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T04:33:42.405Z] elapsed=00:46:07 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T04:33:42.409Z] elapsed=00:46:07 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T04:33:42.410Z] elapsed=00:46:07 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T04:33:42.411Z] elapsed=00:46:07 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T04:33:42.546Z] elapsed=00:46:07 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork2327.dir
+[2026-10-07T04:33:44.650Z] elapsed=00:46:10 round_elapsed=00:00:02 #128673: cov: 1285 ft: 1285 corp: 522 exec/s 64336 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T04:33:47.752Z] elapsed=00:46:13 round_elapsed=00:00:05 #317724: cov: 1285 ft: 1285 corp: 522 exec/s 63017 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T04:33:51.853Z] elapsed=00:46:17 round_elapsed=00:00:09 #593823: cov: 1285 ft: 1285 corp: 522 exec/s 69024 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T04:33:56.953Z] elapsed=00:46:22 round_elapsed=00:00:14 #929518: cov: 1285 ft: 1285 corp: 522 exec/s 67139 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T04:34:03.054Z] elapsed=00:46:28 round_elapsed=00:00:20 #1362705: cov: 1285 ft: 1285 corp: 522 exec/s 72197 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T04:34:10.154Z] elapsed=00:46:35 round_elapsed=00:00:27 #1835697: cov: 1285 ft: 1285 corp: 522 exec/s 67570 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T04:34:18.255Z] elapsed=00:46:43 round_elapsed=00:00:35 #2355073: cov: 1285 ft: 1285 corp: 522 exec/s 64922 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T04:34:27.357Z] elapsed=00:46:52 round_elapsed=00:00:44 #2932461: cov: 1285 ft: 1285 corp: 522 exec/s 64154 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T04:34:37.462Z] elapsed=00:47:02 round_elapsed=00:00:55 #3672677: cov: 1285 ft: 1285 corp: 522 exec/s 74021 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T04:34:48.571Z] elapsed=00:47:13 round_elapsed=00:01:06 #4492990: cov: 1285 ft: 1285 corp: 522 exec/s 74573 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T04:35:00.675Z] elapsed=00:47:26 round_elapsed=00:01:18 #5404798: cov: 1285 ft: 1285 corp: 522 exec/s 75984 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T04:35:13.779Z] elapsed=00:47:39 round_elapsed=00:01:31 #6234560: cov: 1285 ft: 1285 corp: 522 exec/s 63827 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T04:35:27.883Z] elapsed=00:47:53 round_elapsed=00:01:45 #7139231: cov: 1285 ft: 1285 corp: 522 exec/s 64619 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T04:35:42.985Z] elapsed=00:48:08 round_elapsed=00:02:00 #8244909: cov: 1285 ft: 1285 corp: 522 exec/s 73711 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T04:35:59.094Z] elapsed=00:48:24 round_elapsed=00:02:16 #9385888: cov: 1285 ft: 1285 corp: 522 exec/s 71311 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T04:36:16.199Z] elapsed=00:48:41 round_elapsed=00:02:33 #10521513: cov: 1285 ft: 1285 corp: 522 exec/s 66801 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T04:36:34.301Z] elapsed=00:48:59 round_elapsed=00:02:51 #11845672: cov: 1285 ft: 1285 corp: 522 exec/s 73564 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T04:36:53.405Z] elapsed=00:49:18 round_elapsed=00:03:11 #13291518: cov: 1285 ft: 1285 corp: 522 exec/s 76097 oom/timeout/crash: 0/0/0 time: 190s job: 18 dft_time: 0
+[2026-10-07T04:37:13.510Z] elapsed=00:49:38 round_elapsed=00:03:31 #14538626: cov: 1285 ft: 1285 corp: 522 exec/s 62355 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T04:37:34.613Z] elapsed=00:49:59 round_elapsed=00:03:52 #15999157: cov: 1285 ft: 1285 corp: 522 exec/s 69549 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T04:37:56.717Z] elapsed=00:50:22 round_elapsed=00:04:14 #17490936: cov: 1285 ft: 1285 corp: 522 exec/s 67808 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T04:38:19.820Z] elapsed=00:50:45 round_elapsed=00:04:37 #19119875: cov: 1285 ft: 1285 corp: 522 exec/s 70823 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T04:38:43.925Z] elapsed=00:51:09 round_elapsed=00:05:01 #20732692: cov: 1285 ft: 1285 corp: 522 exec/s 67200 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T04:38:43.925Z] elapsed=00:51:09 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T04:38:43.938Z] elapsed=00:51:09 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T04:38:44.046Z] elapsed=00:51:09 no_coverage_growth=00:45:33 watchdog event=coverage_checkpoint round=10 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=2733.8 required_seconds=7200
+[2026-10-07T04:38:44.046Z] elapsed=00:51:09 no_coverage_growth=00:45:33 watchdog event=round_started round=11 round_limit_seconds=300 scope_lines=467
+[2026-10-07T04:38:44.077Z] elapsed=00:51:09 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T04:38:44.077Z] elapsed=00:51:09 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T04:38:44.077Z] elapsed=00:51:09 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T04:38:44.082Z] elapsed=00:51:09 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T04:38:44.082Z] elapsed=00:51:09 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T04:38:44.083Z] elapsed=00:51:09 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T04:38:44.219Z] elapsed=00:51:09 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork2428.dir
+[2026-10-07T04:38:46.321Z] elapsed=00:51:11 round_elapsed=00:00:02 #130158: cov: 1285 ft: 1285 corp: 522 exec/s 65079 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T04:38:49.422Z] elapsed=00:51:14 round_elapsed=00:00:05 #320872: cov: 1285 ft: 1285 corp: 522 exec/s 63571 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T04:38:53.522Z] elapsed=00:51:18 round_elapsed=00:00:09 #588662: cov: 1285 ft: 1285 corp: 522 exec/s 66947 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T04:38:58.622Z] elapsed=00:51:23 round_elapsed=00:00:14 #926274: cov: 1285 ft: 1285 corp: 522 exec/s 67522 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T04:39:04.725Z] elapsed=00:51:30 round_elapsed=00:00:20 #1363373: cov: 1285 ft: 1285 corp: 522 exec/s 72849 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T04:39:11.831Z] elapsed=00:51:37 round_elapsed=00:00:27 #1832522: cov: 1285 ft: 1285 corp: 522 exec/s 67021 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T04:39:19.934Z] elapsed=00:51:45 round_elapsed=00:00:35 #2357397: cov: 1285 ft: 1285 corp: 522 exec/s 65609 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T04:39:29.039Z] elapsed=00:51:54 round_elapsed=00:00:44 #2923245: cov: 1285 ft: 1285 corp: 522 exec/s 62872 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T04:39:39.143Z] elapsed=00:52:04 round_elapsed=00:00:55 #3662886: cov: 1285 ft: 1285 corp: 522 exec/s 73964 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T04:39:50.250Z] elapsed=00:52:15 round_elapsed=00:01:06 #4532735: cov: 1285 ft: 1285 corp: 522 exec/s 79077 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T04:40:02.363Z] elapsed=00:52:27 round_elapsed=00:01:18 #5384884: cov: 1285 ft: 1285 corp: 522 exec/s 71012 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T04:40:15.475Z] elapsed=00:52:40 round_elapsed=00:01:31 #6205606: cov: 1285 ft: 1285 corp: 522 exec/s 63132 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T04:40:29.578Z] elapsed=00:52:54 round_elapsed=00:01:45 #7146005: cov: 1285 ft: 1285 corp: 522 exec/s 67171 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T04:40:44.683Z] elapsed=00:53:10 round_elapsed=00:02:00 #8232338: cov: 1285 ft: 1285 corp: 522 exec/s 72422 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T04:41:00.787Z] elapsed=00:53:26 round_elapsed=00:02:16 #9374177: cov: 1285 ft: 1285 corp: 522 exec/s 71364 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T04:41:17.891Z] elapsed=00:53:43 round_elapsed=00:02:33 #10532577: cov: 1285 ft: 1285 corp: 522 exec/s 68141 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T04:41:35.994Z] elapsed=00:54:01 round_elapsed=00:02:51 #11857541: cov: 1285 ft: 1285 corp: 522 exec/s 73609 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T04:41:55.098Z] elapsed=00:54:20 round_elapsed=00:03:11 #13298761: cov: 1285 ft: 1285 corp: 522 exec/s 75853 oom/timeout/crash: 0/0/0 time: 191s job: 18 dft_time: 0
+[2026-10-07T04:42:15.200Z] elapsed=00:54:40 round_elapsed=00:03:31 #14581095: cov: 1285 ft: 1285 corp: 522 exec/s 64116 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T04:42:36.302Z] elapsed=00:55:01 round_elapsed=00:03:52 #16023732: cov: 1285 ft: 1285 corp: 522 exec/s 68697 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T04:42:58.406Z] elapsed=00:55:23 round_elapsed=00:04:14 #17559464: cov: 1285 ft: 1285 corp: 522 exec/s 69806 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T04:43:21.509Z] elapsed=00:55:46 round_elapsed=00:04:37 #19212850: cov: 1285 ft: 1285 corp: 522 exec/s 71886 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T04:43:45.613Z] elapsed=00:56:10 round_elapsed=00:05:01 #20860481: cov: 1285 ft: 1285 corp: 522 exec/s 68651 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T04:43:45.614Z] elapsed=00:56:10 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T04:43:45.628Z] elapsed=00:56:10 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T04:43:45.745Z] elapsed=00:56:11 no_coverage_growth=00:50:35 watchdog event=coverage_checkpoint round=11 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=3035.5 required_seconds=7200
+[2026-10-07T04:43:45.745Z] elapsed=00:56:11 no_coverage_growth=00:50:35 watchdog event=round_started round=12 round_limit_seconds=300 scope_lines=467
+[2026-10-07T04:43:45.778Z] elapsed=00:56:11 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T04:43:45.778Z] elapsed=00:56:11 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T04:43:45.778Z] elapsed=00:56:11 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T04:43:45.783Z] elapsed=00:56:11 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T04:43:45.783Z] elapsed=00:56:11 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T04:43:45.785Z] elapsed=00:56:11 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T04:43:45.927Z] elapsed=00:56:11 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork2529.dir
+[2026-10-07T04:43:48.031Z] elapsed=00:56:13 round_elapsed=00:00:02 #128933: cov: 1285 ft: 1285 corp: 522 exec/s 64466 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T04:43:51.134Z] elapsed=00:56:16 round_elapsed=00:00:05 #317188: cov: 1285 ft: 1285 corp: 522 exec/s 62751 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T04:43:55.236Z] elapsed=00:56:20 round_elapsed=00:00:09 #590210: cov: 1285 ft: 1285 corp: 522 exec/s 68255 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T04:44:00.338Z] elapsed=00:56:25 round_elapsed=00:00:14 #920995: cov: 1285 ft: 1285 corp: 522 exec/s 66157 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T04:44:06.441Z] elapsed=00:56:31 round_elapsed=00:00:20 #1360449: cov: 1285 ft: 1285 corp: 522 exec/s 73242 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T04:44:13.542Z] elapsed=00:56:38 round_elapsed=00:00:27 #1831525: cov: 1285 ft: 1285 corp: 522 exec/s 67296 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T04:44:21.642Z] elapsed=00:56:47 round_elapsed=00:00:35 #2358030: cov: 1285 ft: 1285 corp: 522 exec/s 65813 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T04:44:30.743Z] elapsed=00:56:56 round_elapsed=00:00:44 #2929663: cov: 1285 ft: 1285 corp: 522 exec/s 63514 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T04:44:40.845Z] elapsed=00:57:06 round_elapsed=00:00:55 #3672398: cov: 1285 ft: 1285 corp: 522 exec/s 74273 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T04:44:51.947Z] elapsed=00:57:17 round_elapsed=00:01:06 #4542997: cov: 1285 ft: 1285 corp: 522 exec/s 79145 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T04:45:04.057Z] elapsed=00:57:29 round_elapsed=00:01:18 #5449599: cov: 1285 ft: 1285 corp: 522 exec/s 75550 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T04:45:17.167Z] elapsed=00:57:42 round_elapsed=00:01:31 #6260069: cov: 1285 ft: 1285 corp: 522 exec/s 62343 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T04:45:31.272Z] elapsed=00:57:56 round_elapsed=00:01:45 #7213360: cov: 1285 ft: 1285 corp: 522 exec/s 68092 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T04:45:46.375Z] elapsed=00:58:11 round_elapsed=00:02:00 #8312622: cov: 1285 ft: 1285 corp: 522 exec/s 73284 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T04:46:02.484Z] elapsed=00:58:27 round_elapsed=00:02:16 #9453906: cov: 1285 ft: 1285 corp: 522 exec/s 71330 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T04:46:19.585Z] elapsed=00:58:44 round_elapsed=00:02:33 #10552541: cov: 1285 ft: 1285 corp: 522 exec/s 64625 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T04:46:37.687Z] elapsed=00:59:03 round_elapsed=00:02:51 #11885893: cov: 1285 ft: 1285 corp: 522 exec/s 74075 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T04:46:56.789Z] elapsed=00:59:22 round_elapsed=00:03:11 #13322054: cov: 1285 ft: 1285 corp: 522 exec/s 75587 oom/timeout/crash: 0/0/0 time: 191s job: 18 dft_time: 0
+[2026-10-07T04:47:16.896Z] elapsed=00:59:42 round_elapsed=00:03:31 #14609310: cov: 1285 ft: 1285 corp: 522 exec/s 64362 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T04:47:37.999Z] elapsed=01:00:03 round_elapsed=00:03:52 #15989977: cov: 1285 ft: 1285 corp: 522 exec/s 65746 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T04:48:00.106Z] elapsed=01:00:25 round_elapsed=00:04:14 #17478336: cov: 1285 ft: 1285 corp: 522 exec/s 67652 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T04:48:23.210Z] elapsed=01:00:48 round_elapsed=00:04:37 #19109207: cov: 1285 ft: 1285 corp: 522 exec/s 70907 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T04:48:47.318Z] elapsed=01:01:12 round_elapsed=00:05:01 #20756093: cov: 1285 ft: 1285 corp: 522 exec/s 68620 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T04:48:47.319Z] elapsed=01:01:12 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T04:48:47.334Z] elapsed=01:01:12 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T04:48:47.446Z] elapsed=01:01:12 no_coverage_growth=00:55:37 watchdog event=coverage_checkpoint round=12 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=3337.2 required_seconds=7200
+[2026-10-07T04:48:47.446Z] elapsed=01:01:12 no_coverage_growth=00:55:37 watchdog event=round_started round=13 round_limit_seconds=300 scope_lines=467
+[2026-10-07T04:48:47.478Z] elapsed=01:01:12 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T04:48:47.478Z] elapsed=01:01:12 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T04:48:47.478Z] elapsed=01:01:12 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T04:48:47.483Z] elapsed=01:01:12 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T04:48:47.483Z] elapsed=01:01:12 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T04:48:47.486Z] elapsed=01:01:12 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T04:48:47.621Z] elapsed=01:01:12 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork2630.dir
+[2026-10-07T04:48:49.724Z] elapsed=01:01:15 round_elapsed=00:00:02 #129822: cov: 1285 ft: 1285 corp: 522 exec/s 64911 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T04:48:52.827Z] elapsed=01:01:18 round_elapsed=00:00:05 #317233: cov: 1285 ft: 1285 corp: 522 exec/s 62470 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T04:48:56.928Z] elapsed=01:01:22 round_elapsed=00:00:09 #590400: cov: 1285 ft: 1285 corp: 522 exec/s 68291 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T04:49:02.032Z] elapsed=01:01:27 round_elapsed=00:00:14 #921310: cov: 1285 ft: 1285 corp: 522 exec/s 66182 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T04:49:08.133Z] elapsed=01:01:33 round_elapsed=00:00:20 #1364499: cov: 1285 ft: 1285 corp: 522 exec/s 73864 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T04:49:15.233Z] elapsed=01:01:40 round_elapsed=00:00:27 #1838041: cov: 1285 ft: 1285 corp: 522 exec/s 67648 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T04:49:23.333Z] elapsed=01:01:48 round_elapsed=00:00:35 #2362406: cov: 1285 ft: 1285 corp: 522 exec/s 65545 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T04:49:32.435Z] elapsed=01:01:57 round_elapsed=00:00:44 #2930129: cov: 1285 ft: 1285 corp: 522 exec/s 63080 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T04:49:42.536Z] elapsed=01:02:07 round_elapsed=00:00:55 #3672411: cov: 1285 ft: 1285 corp: 522 exec/s 74228 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T04:49:53.637Z] elapsed=01:02:19 round_elapsed=00:01:06 #4545688: cov: 1285 ft: 1285 corp: 522 exec/s 79388 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T04:50:05.739Z] elapsed=01:02:31 round_elapsed=00:01:18 #5472740: cov: 1285 ft: 1285 corp: 522 exec/s 77254 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T04:50:18.858Z] elapsed=01:02:44 round_elapsed=00:01:31 #6286375: cov: 1285 ft: 1285 corp: 522 exec/s 62587 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T04:50:32.972Z] elapsed=01:02:58 round_elapsed=00:01:45 #7219554: cov: 1285 ft: 1285 corp: 522 exec/s 66655 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T04:50:48.076Z] elapsed=01:03:13 round_elapsed=00:02:00 #8299444: cov: 1285 ft: 1285 corp: 522 exec/s 71992 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T04:51:04.180Z] elapsed=01:03:29 round_elapsed=00:02:16 #9440508: cov: 1285 ft: 1285 corp: 522 exec/s 71316 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T04:51:21.283Z] elapsed=01:03:46 round_elapsed=00:02:33 #10597793: cov: 1285 ft: 1285 corp: 522 exec/s 68075 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T04:51:39.388Z] elapsed=01:04:04 round_elapsed=00:02:51 #11917662: cov: 1285 ft: 1285 corp: 522 exec/s 73326 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T04:51:58.491Z] elapsed=01:04:23 round_elapsed=00:03:11 #13349118: cov: 1285 ft: 1285 corp: 522 exec/s 75339 oom/timeout/crash: 0/0/0 time: 191s job: 18 dft_time: 0
+[2026-10-07T04:52:18.594Z] elapsed=01:04:43 round_elapsed=00:03:31 #14631352: cov: 1285 ft: 1285 corp: 522 exec/s 64111 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T04:52:39.699Z] elapsed=01:05:05 round_elapsed=00:03:52 #16069029: cov: 1285 ft: 1285 corp: 522 exec/s 68460 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T04:53:01.803Z] elapsed=01:05:27 round_elapsed=00:04:14 #17595657: cov: 1285 ft: 1285 corp: 522 exec/s 69392 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T04:53:24.909Z] elapsed=01:05:50 round_elapsed=00:04:37 #19223094: cov: 1285 ft: 1285 corp: 522 exec/s 70758 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T04:53:49.015Z] elapsed=01:06:14 round_elapsed=00:05:01 #20868590: cov: 1285 ft: 1285 corp: 522 exec/s 68562 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T04:53:49.018Z] elapsed=01:06:14 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T04:53:49.030Z] elapsed=01:06:14 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T04:53:49.146Z] elapsed=01:06:14 no_coverage_growth=01:00:38 watchdog event=coverage_checkpoint round=13 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=3638.9 required_seconds=7200
+[2026-10-07T04:53:49.147Z] elapsed=01:06:14 no_coverage_growth=01:00:38 watchdog event=round_started round=14 round_limit_seconds=300 scope_lines=467
+[2026-10-07T04:53:49.178Z] elapsed=01:06:14 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T04:53:49.178Z] elapsed=01:06:14 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T04:53:49.178Z] elapsed=01:06:14 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T04:53:49.182Z] elapsed=01:06:14 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T04:53:49.183Z] elapsed=01:06:14 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T04:53:49.185Z] elapsed=01:06:14 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T04:53:49.322Z] elapsed=01:06:14 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork2731.dir
+[2026-10-07T04:53:51.425Z] elapsed=01:06:16 round_elapsed=00:00:02 #127702: cov: 1285 ft: 1285 corp: 522 exec/s 63851 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T04:53:54.527Z] elapsed=01:06:19 round_elapsed=00:00:05 #315208: cov: 1285 ft: 1285 corp: 522 exec/s 62502 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T04:53:58.629Z] elapsed=01:06:23 round_elapsed=00:00:09 #592965: cov: 1285 ft: 1285 corp: 522 exec/s 69439 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T04:54:03.732Z] elapsed=01:06:29 round_elapsed=00:00:14 #927540: cov: 1285 ft: 1285 corp: 522 exec/s 66915 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T04:54:09.834Z] elapsed=01:06:35 round_elapsed=00:00:20 #1369228: cov: 1285 ft: 1285 corp: 522 exec/s 73614 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T04:54:16.934Z] elapsed=01:06:42 round_elapsed=00:00:27 #1844716: cov: 1285 ft: 1285 corp: 522 exec/s 67926 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T04:54:25.036Z] elapsed=01:06:50 round_elapsed=00:00:35 #2366333: cov: 1285 ft: 1285 corp: 522 exec/s 65202 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T04:54:34.149Z] elapsed=01:06:59 round_elapsed=00:00:45 #2930628: cov: 1285 ft: 1285 corp: 522 exec/s 62699 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T04:54:44.251Z] elapsed=01:07:09 round_elapsed=00:00:55 #3673193: cov: 1285 ft: 1285 corp: 522 exec/s 74256 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T04:54:55.354Z] elapsed=01:07:20 round_elapsed=00:01:06 #4547032: cov: 1285 ft: 1285 corp: 522 exec/s 79439 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T04:55:07.458Z] elapsed=01:07:32 round_elapsed=00:01:18 #5427900: cov: 1285 ft: 1285 corp: 522 exec/s 73405 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T04:55:20.565Z] elapsed=01:07:45 round_elapsed=00:01:31 #6260564: cov: 1285 ft: 1285 corp: 522 exec/s 64051 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T04:55:34.678Z] elapsed=01:08:00 round_elapsed=00:01:45 #7163472: cov: 1285 ft: 1285 corp: 522 exec/s 64493 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T04:55:49.786Z] elapsed=01:08:15 round_elapsed=00:02:00 #8214421: cov: 1285 ft: 1285 corp: 522 exec/s 70063 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T04:56:05.892Z] elapsed=01:08:31 round_elapsed=00:02:16 #9305710: cov: 1285 ft: 1285 corp: 522 exec/s 68205 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T04:56:22.998Z] elapsed=01:08:48 round_elapsed=00:02:33 #10470538: cov: 1285 ft: 1285 corp: 522 exec/s 68519 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T04:56:41.101Z] elapsed=01:09:06 round_elapsed=00:02:51 #11756145: cov: 1285 ft: 1285 corp: 522 exec/s 71422 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T04:57:00.203Z] elapsed=01:09:25 round_elapsed=00:03:11 #13200421: cov: 1285 ft: 1285 corp: 522 exec/s 76014 oom/timeout/crash: 0/0/0 time: 191s job: 18 dft_time: 0
+[2026-10-07T04:57:20.306Z] elapsed=01:09:45 round_elapsed=00:03:31 #14480122: cov: 1285 ft: 1285 corp: 522 exec/s 63985 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T04:57:41.412Z] elapsed=01:10:06 round_elapsed=00:03:52 #15904717: cov: 1285 ft: 1285 corp: 522 exec/s 67837 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T04:58:03.516Z] elapsed=01:10:28 round_elapsed=00:04:14 #17451034: cov: 1285 ft: 1285 corp: 522 exec/s 70287 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T04:58:26.623Z] elapsed=01:10:51 round_elapsed=00:04:37 #19063173: cov: 1285 ft: 1285 corp: 522 exec/s 70093 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T04:58:50.727Z] elapsed=01:11:16 round_elapsed=00:05:01 #20725221: cov: 1285 ft: 1285 corp: 522 exec/s 69252 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T04:58:50.730Z] elapsed=01:11:16 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T04:58:50.742Z] elapsed=01:11:16 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T04:58:50.860Z] elapsed=01:11:16 no_coverage_growth=01:05:40 watchdog event=coverage_checkpoint round=14 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=3940.6 required_seconds=7200
+[2026-10-07T04:58:50.860Z] elapsed=01:11:16 no_coverage_growth=01:05:40 watchdog event=round_started round=15 round_limit_seconds=300 scope_lines=467
+[2026-10-07T04:58:50.893Z] elapsed=01:11:16 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T04:58:50.893Z] elapsed=01:11:16 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T04:58:50.893Z] elapsed=01:11:16 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T04:58:50.898Z] elapsed=01:11:16 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T04:58:50.898Z] elapsed=01:11:16 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T04:58:50.899Z] elapsed=01:11:16 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T04:58:51.036Z] elapsed=01:11:16 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork2832.dir
+[2026-10-07T04:58:53.139Z] elapsed=01:11:18 round_elapsed=00:00:02 #129928: cov: 1285 ft: 1285 corp: 522 exec/s 64964 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T04:58:56.240Z] elapsed=01:11:21 round_elapsed=00:00:05 #319642: cov: 1285 ft: 1285 corp: 522 exec/s 63238 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T04:59:00.340Z] elapsed=01:11:25 round_elapsed=00:00:09 #599456: cov: 1285 ft: 1285 corp: 522 exec/s 69953 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T04:59:05.442Z] elapsed=01:11:30 round_elapsed=00:00:14 #933235: cov: 1285 ft: 1285 corp: 522 exec/s 66755 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T04:59:11.545Z] elapsed=01:11:36 round_elapsed=00:00:20 #1377443: cov: 1285 ft: 1285 corp: 522 exec/s 74034 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T04:59:18.649Z] elapsed=01:11:44 round_elapsed=00:00:27 #1830001: cov: 1285 ft: 1285 corp: 522 exec/s 64651 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T04:59:26.751Z] elapsed=01:11:52 round_elapsed=00:00:35 #2353701: cov: 1285 ft: 1285 corp: 522 exec/s 65462 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T04:59:35.852Z] elapsed=01:12:01 round_elapsed=00:00:44 #2923465: cov: 1285 ft: 1285 corp: 522 exec/s 63307 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T04:59:45.954Z] elapsed=01:12:11 round_elapsed=00:00:55 #3675379: cov: 1285 ft: 1285 corp: 522 exec/s 75191 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T04:59:57.055Z] elapsed=01:12:22 round_elapsed=00:01:06 #4554929: cov: 1285 ft: 1285 corp: 522 exec/s 79959 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T05:00:09.157Z] elapsed=01:12:34 round_elapsed=00:01:18 #5478407: cov: 1285 ft: 1285 corp: 522 exec/s 76956 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T05:00:22.261Z] elapsed=01:12:47 round_elapsed=00:01:31 #6325156: cov: 1285 ft: 1285 corp: 522 exec/s 65134 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T05:00:36.367Z] elapsed=01:13:01 round_elapsed=00:01:45 #7280537: cov: 1285 ft: 1285 corp: 522 exec/s 68241 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T05:00:51.478Z] elapsed=01:13:16 round_elapsed=00:02:00 #8319850: cov: 1285 ft: 1285 corp: 522 exec/s 69287 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T05:01:07.586Z] elapsed=01:13:32 round_elapsed=00:02:16 #9453078: cov: 1285 ft: 1285 corp: 522 exec/s 70826 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T05:01:24.690Z] elapsed=01:13:50 round_elapsed=00:02:33 #10598984: cov: 1285 ft: 1285 corp: 522 exec/s 67406 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T05:01:42.793Z] elapsed=01:14:08 round_elapsed=00:02:51 #11915457: cov: 1285 ft: 1285 corp: 522 exec/s 73137 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T05:02:01.897Z] elapsed=01:14:27 round_elapsed=00:03:11 #13286275: cov: 1285 ft: 1285 corp: 522 exec/s 72148 oom/timeout/crash: 0/0/0 time: 190s job: 18 dft_time: 0
+[2026-10-07T05:02:22.002Z] elapsed=01:14:47 round_elapsed=00:03:31 #14574251: cov: 1285 ft: 1285 corp: 522 exec/s 64398 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T05:02:43.106Z] elapsed=01:15:08 round_elapsed=00:03:52 #16020118: cov: 1285 ft: 1285 corp: 522 exec/s 68850 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T05:03:05.210Z] elapsed=01:15:30 round_elapsed=00:04:14 #17560264: cov: 1285 ft: 1285 corp: 522 exec/s 70006 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T05:03:28.314Z] elapsed=01:15:53 round_elapsed=00:04:37 #19194240: cov: 1285 ft: 1285 corp: 522 exec/s 71042 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T05:03:52.420Z] elapsed=01:16:17 round_elapsed=00:05:01 #20848496: cov: 1285 ft: 1285 corp: 522 exec/s 68927 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T05:03:52.422Z] elapsed=01:16:17 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T05:03:52.434Z] elapsed=01:16:17 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T05:03:52.554Z] elapsed=01:16:17 no_coverage_growth=01:10:42 watchdog event=coverage_checkpoint round=15 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=4242.3 required_seconds=7200
+[2026-10-07T05:03:52.555Z] elapsed=01:16:17 no_coverage_growth=01:10:42 watchdog event=round_started round=16 round_limit_seconds=300 scope_lines=467
+[2026-10-07T05:03:52.586Z] elapsed=01:16:17 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T05:03:52.586Z] elapsed=01:16:17 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T05:03:52.586Z] elapsed=01:16:17 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T05:03:52.591Z] elapsed=01:16:17 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T05:03:52.591Z] elapsed=01:16:17 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T05:03:52.593Z] elapsed=01:16:17 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T05:03:52.732Z] elapsed=01:16:18 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork2933.dir
+[2026-10-07T05:03:54.834Z] elapsed=01:16:20 round_elapsed=00:00:02 #130168: cov: 1285 ft: 1285 corp: 522 exec/s 65084 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T05:03:57.932Z] elapsed=01:16:23 round_elapsed=00:00:05 #323408: cov: 1285 ft: 1285 corp: 522 exec/s 64413 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T05:04:02.032Z] elapsed=01:16:27 round_elapsed=00:00:09 #604267: cov: 1285 ft: 1285 corp: 522 exec/s 70214 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T05:04:07.132Z] elapsed=01:16:32 round_elapsed=00:00:14 #939077: cov: 1285 ft: 1285 corp: 522 exec/s 66962 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T05:04:13.236Z] elapsed=01:16:38 round_elapsed=00:00:20 #1382847: cov: 1285 ft: 1285 corp: 522 exec/s 73961 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T05:04:20.337Z] elapsed=01:16:45 round_elapsed=00:00:27 #1860207: cov: 1285 ft: 1285 corp: 522 exec/s 68194 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T05:04:28.438Z] elapsed=01:16:53 round_elapsed=00:00:35 #2384587: cov: 1285 ft: 1285 corp: 522 exec/s 65547 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T05:04:37.539Z] elapsed=01:17:02 round_elapsed=00:00:44 #2953245: cov: 1285 ft: 1285 corp: 522 exec/s 63184 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T05:04:47.642Z] elapsed=01:17:13 round_elapsed=00:00:55 #3664119: cov: 1285 ft: 1285 corp: 522 exec/s 71087 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T05:04:58.749Z] elapsed=01:17:24 round_elapsed=00:01:06 #4490994: cov: 1285 ft: 1285 corp: 522 exec/s 75170 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T05:05:10.851Z] elapsed=01:17:36 round_elapsed=00:01:18 #5410601: cov: 1285 ft: 1285 corp: 522 exec/s 76633 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T05:05:23.953Z] elapsed=01:17:49 round_elapsed=00:01:31 #6257100: cov: 1285 ft: 1285 corp: 522 exec/s 65115 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T05:05:38.057Z] elapsed=01:18:03 round_elapsed=00:01:45 #7191359: cov: 1285 ft: 1285 corp: 522 exec/s 66732 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T05:05:53.166Z] elapsed=01:18:18 round_elapsed=00:02:00 #8231232: cov: 1285 ft: 1285 corp: 522 exec/s 69324 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T05:06:09.290Z] elapsed=01:18:34 round_elapsed=00:02:16 #9323587: cov: 1285 ft: 1285 corp: 522 exec/s 68272 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T05:06:26.400Z] elapsed=01:18:51 round_elapsed=00:02:33 #10460302: cov: 1285 ft: 1285 corp: 522 exec/s 66865 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T05:06:44.506Z] elapsed=01:19:09 round_elapsed=00:02:51 #11788847: cov: 1285 ft: 1285 corp: 522 exec/s 73808 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T05:07:03.610Z] elapsed=01:19:28 round_elapsed=00:03:11 #13236649: cov: 1285 ft: 1285 corp: 522 exec/s 76200 oom/timeout/crash: 0/0/0 time: 191s job: 18 dft_time: 0
+[2026-10-07T05:07:23.715Z] elapsed=01:19:49 round_elapsed=00:03:31 #14532296: cov: 1285 ft: 1285 corp: 522 exec/s 64782 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T05:07:44.819Z] elapsed=01:20:10 round_elapsed=00:03:52 #15956661: cov: 1285 ft: 1285 corp: 522 exec/s 67826 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T05:08:06.926Z] elapsed=01:20:32 round_elapsed=00:04:14 #17497732: cov: 1285 ft: 1285 corp: 522 exec/s 70048 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T05:08:30.032Z] elapsed=01:20:55 round_elapsed=00:04:37 #19132428: cov: 1285 ft: 1285 corp: 522 exec/s 71073 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T05:08:54.138Z] elapsed=01:21:19 round_elapsed=00:05:01 #20799617: cov: 1285 ft: 1285 corp: 522 exec/s 69466 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T05:08:54.138Z] elapsed=01:21:19 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T05:08:54.153Z] elapsed=01:21:19 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T05:08:54.280Z] elapsed=01:21:19 no_coverage_growth=01:15:44 watchdog event=coverage_checkpoint round=16 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=4544.1 required_seconds=7200
+[2026-10-07T05:08:54.280Z] elapsed=01:21:19 no_coverage_growth=01:15:44 watchdog event=round_started round=17 round_limit_seconds=300 scope_lines=467
+[2026-10-07T05:08:54.312Z] elapsed=01:21:19 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T05:08:54.312Z] elapsed=01:21:19 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T05:08:54.312Z] elapsed=01:21:19 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T05:08:54.319Z] elapsed=01:21:19 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T05:08:54.319Z] elapsed=01:21:19 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T05:08:54.320Z] elapsed=01:21:19 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T05:08:54.451Z] elapsed=01:21:19 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork3034.dir
+[2026-10-07T05:08:56.552Z] elapsed=01:21:21 round_elapsed=00:00:02 #129311: cov: 1285 ft: 1285 corp: 522 exec/s 64655 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T05:08:59.652Z] elapsed=01:21:25 round_elapsed=00:00:05 #320040: cov: 1285 ft: 1285 corp: 522 exec/s 63576 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T05:09:03.754Z] elapsed=01:21:29 round_elapsed=00:00:09 #599339: cov: 1285 ft: 1285 corp: 522 exec/s 69824 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T05:09:08.855Z] elapsed=01:21:34 round_elapsed=00:00:14 #934480: cov: 1285 ft: 1285 corp: 522 exec/s 67028 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T05:09:14.957Z] elapsed=01:21:40 round_elapsed=00:00:20 #1371649: cov: 1285 ft: 1285 corp: 522 exec/s 72861 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T05:09:22.059Z] elapsed=01:21:47 round_elapsed=00:00:27 #1830088: cov: 1285 ft: 1285 corp: 522 exec/s 65491 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T05:09:30.163Z] elapsed=01:21:55 round_elapsed=00:00:35 #2353447: cov: 1285 ft: 1285 corp: 522 exec/s 65419 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T05:09:39.264Z] elapsed=01:22:04 round_elapsed=00:00:44 #2900991: cov: 1285 ft: 1285 corp: 522 exec/s 60838 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T05:09:49.366Z] elapsed=01:22:14 round_elapsed=00:00:55 #3644846: cov: 1285 ft: 1285 corp: 522 exec/s 74385 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T05:10:00.468Z] elapsed=01:22:25 round_elapsed=00:01:06 #4521648: cov: 1285 ft: 1285 corp: 522 exec/s 79709 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T05:10:12.569Z] elapsed=01:22:37 round_elapsed=00:01:18 #5438133: cov: 1285 ft: 1285 corp: 522 exec/s 76373 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T05:10:25.674Z] elapsed=01:22:51 round_elapsed=00:01:31 #6246978: cov: 1285 ft: 1285 corp: 522 exec/s 62218 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T05:10:39.779Z] elapsed=01:23:05 round_elapsed=00:01:45 #7170686: cov: 1285 ft: 1285 corp: 522 exec/s 65979 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T05:10:54.883Z] elapsed=01:23:20 round_elapsed=00:02:00 #8193601: cov: 1285 ft: 1285 corp: 522 exec/s 68194 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T05:11:11.026Z] elapsed=01:23:36 round_elapsed=00:02:16 #9272427: cov: 1285 ft: 1285 corp: 522 exec/s 67426 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T05:11:28.141Z] elapsed=01:23:53 round_elapsed=00:02:33 #10406082: cov: 1285 ft: 1285 corp: 522 exec/s 66685 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T05:11:46.247Z] elapsed=01:24:11 round_elapsed=00:02:51 #11710576: cov: 1285 ft: 1285 corp: 522 exec/s 72471 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T05:12:05.352Z] elapsed=01:24:30 round_elapsed=00:03:11 #13087599: cov: 1285 ft: 1285 corp: 522 exec/s 72474 oom/timeout/crash: 0/0/0 time: 191s job: 18 dft_time: 0
+[2026-10-07T05:12:25.456Z] elapsed=01:24:50 round_elapsed=00:03:31 #14377628: cov: 1285 ft: 1285 corp: 522 exec/s 64501 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T05:12:46.561Z] elapsed=01:25:11 round_elapsed=00:03:52 #15822520: cov: 1285 ft: 1285 corp: 522 exec/s 68804 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T05:13:08.666Z] elapsed=01:25:34 round_elapsed=00:04:14 #17353014: cov: 1285 ft: 1285 corp: 522 exec/s 69567 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T05:13:31.770Z] elapsed=01:25:57 round_elapsed=00:04:37 #18977418: cov: 1285 ft: 1285 corp: 522 exec/s 70626 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T05:13:55.876Z] elapsed=01:26:21 round_elapsed=00:05:01 #20635861: cov: 1285 ft: 1285 corp: 522 exec/s 69101 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T05:13:55.879Z] elapsed=01:26:21 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T05:13:55.891Z] elapsed=01:26:21 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T05:13:56.008Z] elapsed=01:26:21 no_coverage_growth=01:20:45 watchdog event=coverage_checkpoint round=17 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=4845.8 required_seconds=7200
+[2026-10-07T05:13:56.008Z] elapsed=01:26:21 no_coverage_growth=01:20:45 watchdog event=round_started round=18 round_limit_seconds=300 scope_lines=467
+[2026-10-07T05:13:56.041Z] elapsed=01:26:21 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T05:13:56.041Z] elapsed=01:26:21 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T05:13:56.041Z] elapsed=01:26:21 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T05:13:56.045Z] elapsed=01:26:21 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T05:13:56.045Z] elapsed=01:26:21 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T05:13:56.046Z] elapsed=01:26:21 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T05:13:56.183Z] elapsed=01:26:21 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork3135.dir
+[2026-10-07T05:13:58.287Z] elapsed=01:26:23 round_elapsed=00:00:02 #124041: cov: 1285 ft: 1285 corp: 522 exec/s 62020 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T05:14:01.390Z] elapsed=01:26:26 round_elapsed=00:00:05 #313260: cov: 1285 ft: 1285 corp: 522 exec/s 63073 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T05:14:05.491Z] elapsed=01:26:30 round_elapsed=00:00:09 #587047: cov: 1285 ft: 1285 corp: 522 exec/s 68446 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T05:14:10.594Z] elapsed=01:26:35 round_elapsed=00:00:14 #918687: cov: 1285 ft: 1285 corp: 522 exec/s 66328 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T05:14:16.697Z] elapsed=01:26:42 round_elapsed=00:00:20 #1356186: cov: 1285 ft: 1285 corp: 522 exec/s 72916 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T05:14:23.800Z] elapsed=01:26:49 round_elapsed=00:00:27 #1820770: cov: 1285 ft: 1285 corp: 522 exec/s 66369 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T05:14:31.901Z] elapsed=01:26:57 round_elapsed=00:00:35 #2345485: cov: 1285 ft: 1285 corp: 522 exec/s 65589 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T05:14:41.002Z] elapsed=01:27:06 round_elapsed=00:00:44 #2920351: cov: 1285 ft: 1285 corp: 522 exec/s 63874 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T05:14:51.104Z] elapsed=01:27:16 round_elapsed=00:00:55 #3662786: cov: 1285 ft: 1285 corp: 522 exec/s 74243 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T05:15:02.205Z] elapsed=01:27:27 round_elapsed=00:01:06 #4500173: cov: 1285 ft: 1285 corp: 522 exec/s 76126 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T05:15:14.309Z] elapsed=01:27:39 round_elapsed=00:01:18 #5412096: cov: 1285 ft: 1285 corp: 522 exec/s 75993 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T05:15:27.416Z] elapsed=01:27:52 round_elapsed=00:01:31 #6254335: cov: 1285 ft: 1285 corp: 522 exec/s 64787 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T05:15:41.524Z] elapsed=01:28:06 round_elapsed=00:01:45 #7213278: cov: 1285 ft: 1285 corp: 522 exec/s 68495 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T05:15:56.627Z] elapsed=01:28:21 round_elapsed=00:02:00 #8310934: cov: 1285 ft: 1285 corp: 522 exec/s 73177 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T05:16:12.730Z] elapsed=01:28:38 round_elapsed=00:02:16 #9451407: cov: 1285 ft: 1285 corp: 522 exec/s 71279 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T05:16:29.849Z] elapsed=01:28:55 round_elapsed=00:02:33 #10552548: cov: 1285 ft: 1285 corp: 522 exec/s 64773 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T05:16:47.966Z] elapsed=01:29:13 round_elapsed=00:02:51 #11811213: cov: 1285 ft: 1285 corp: 522 exec/s 69925 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T05:17:07.072Z] elapsed=01:29:32 round_elapsed=00:03:11 #13179061: cov: 1285 ft: 1285 corp: 522 exec/s 71992 oom/timeout/crash: 0/0/0 time: 191s job: 18 dft_time: 0
+[2026-10-07T05:17:27.175Z] elapsed=01:29:52 round_elapsed=00:03:31 #14455592: cov: 1285 ft: 1285 corp: 522 exec/s 63826 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T05:17:48.278Z] elapsed=01:30:13 round_elapsed=00:03:52 #15835164: cov: 1285 ft: 1285 corp: 522 exec/s 65693 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T05:18:10.388Z] elapsed=01:30:35 round_elapsed=00:04:14 #17329048: cov: 1285 ft: 1285 corp: 522 exec/s 67903 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T05:18:33.492Z] elapsed=01:30:58 round_elapsed=00:04:37 #18934347: cov: 1285 ft: 1285 corp: 522 exec/s 69795 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T05:18:57.594Z] elapsed=01:31:22 round_elapsed=00:05:01 #20607751: cov: 1285 ft: 1285 corp: 522 exec/s 69725 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T05:18:57.594Z] elapsed=01:31:22 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T05:18:57.606Z] elapsed=01:31:22 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T05:18:57.725Z] elapsed=01:31:23 no_coverage_growth=01:25:47 watchdog event=coverage_checkpoint round=18 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=5147.5 required_seconds=7200
+[2026-10-07T05:18:57.725Z] elapsed=01:31:23 no_coverage_growth=01:25:47 watchdog event=round_started round=19 round_limit_seconds=300 scope_lines=467
+[2026-10-07T05:18:57.756Z] elapsed=01:31:23 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T05:18:57.756Z] elapsed=01:31:23 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T05:18:57.756Z] elapsed=01:31:23 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T05:18:57.762Z] elapsed=01:31:23 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T05:18:57.762Z] elapsed=01:31:23 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T05:18:57.764Z] elapsed=01:31:23 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T05:18:57.904Z] elapsed=01:31:23 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork3236.dir
+[2026-10-07T05:19:00.006Z] elapsed=01:31:25 round_elapsed=00:00:02 #130106: cov: 1285 ft: 1285 corp: 522 exec/s 65053 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T05:19:03.108Z] elapsed=01:31:28 round_elapsed=00:00:05 #320030: cov: 1285 ft: 1285 corp: 522 exec/s 63308 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T05:19:07.208Z] elapsed=01:31:32 round_elapsed=00:00:09 #597562: cov: 1285 ft: 1285 corp: 522 exec/s 69383 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T05:19:12.307Z] elapsed=01:31:37 round_elapsed=00:00:14 #927417: cov: 1285 ft: 1285 corp: 522 exec/s 65971 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T05:19:18.408Z] elapsed=01:31:43 round_elapsed=00:00:20 #1369035: cov: 1285 ft: 1285 corp: 522 exec/s 73603 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T05:19:25.507Z] elapsed=01:31:50 round_elapsed=00:00:27 #1844358: cov: 1285 ft: 1285 corp: 522 exec/s 67903 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T05:19:33.605Z] elapsed=01:31:58 round_elapsed=00:00:35 #2385238: cov: 1285 ft: 1285 corp: 522 exec/s 67610 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T05:19:42.704Z] elapsed=01:32:08 round_elapsed=00:00:44 #2964798: cov: 1285 ft: 1285 corp: 522 exec/s 64395 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T05:19:52.803Z] elapsed=01:32:18 round_elapsed=00:00:55 #3720263: cov: 1285 ft: 1285 corp: 522 exec/s 75546 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T05:20:03.904Z] elapsed=01:32:29 round_elapsed=00:01:06 #4607701: cov: 1285 ft: 1285 corp: 522 exec/s 80676 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T05:20:16.006Z] elapsed=01:32:41 round_elapsed=00:01:18 #5536618: cov: 1285 ft: 1285 corp: 522 exec/s 77409 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T05:20:29.107Z] elapsed=01:32:54 round_elapsed=00:01:31 #6385325: cov: 1285 ft: 1285 corp: 522 exec/s 65285 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T05:20:43.208Z] elapsed=01:33:08 round_elapsed=00:01:45 #7347721: cov: 1285 ft: 1285 corp: 522 exec/s 68742 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T05:20:58.308Z] elapsed=01:33:23 round_elapsed=00:02:00 #8446918: cov: 1285 ft: 1285 corp: 522 exec/s 73279 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T05:21:14.410Z] elapsed=01:33:39 round_elapsed=00:02:16 #9598006: cov: 1285 ft: 1285 corp: 522 exec/s 71943 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T05:21:31.523Z] elapsed=01:33:56 round_elapsed=00:02:33 #10741786: cov: 1285 ft: 1285 corp: 522 exec/s 67281 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T05:21:49.644Z] elapsed=01:34:15 round_elapsed=00:02:51 #12021272: cov: 1285 ft: 1285 corp: 522 exec/s 71082 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T05:22:08.751Z] elapsed=01:34:34 round_elapsed=00:03:11 #13464117: cov: 1285 ft: 1285 corp: 522 exec/s 75939 oom/timeout/crash: 0/0/0 time: 190s job: 18 dft_time: 0
+[2026-10-07T05:22:28.854Z] elapsed=01:34:54 round_elapsed=00:03:31 #14768864: cov: 1285 ft: 1285 corp: 522 exec/s 65237 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T05:22:49.960Z] elapsed=01:35:15 round_elapsed=00:03:52 #16238985: cov: 1285 ft: 1285 corp: 522 exec/s 70005 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T05:23:12.067Z] elapsed=01:35:37 round_elapsed=00:04:14 #17733016: cov: 1285 ft: 1285 corp: 522 exec/s 67910 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T05:23:35.169Z] elapsed=01:36:00 round_elapsed=00:04:37 #19384004: cov: 1285 ft: 1285 corp: 522 exec/s 71782 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T05:23:59.272Z] elapsed=01:36:24 round_elapsed=00:05:01 #21003159: cov: 1285 ft: 1285 corp: 522 exec/s 67464 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T05:23:59.273Z] elapsed=01:36:24 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T05:23:59.287Z] elapsed=01:36:24 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T05:23:59.409Z] elapsed=01:36:24 no_coverage_growth=01:30:49 watchdog event=coverage_checkpoint round=19 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=5449.2 required_seconds=7200
+[2026-10-07T05:23:59.409Z] elapsed=01:36:24 no_coverage_growth=01:30:49 watchdog event=round_started round=20 round_limit_seconds=300 scope_lines=467
+[2026-10-07T05:23:59.442Z] elapsed=01:36:24 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T05:23:59.442Z] elapsed=01:36:24 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T05:23:59.442Z] elapsed=01:36:24 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T05:23:59.447Z] elapsed=01:36:24 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T05:23:59.447Z] elapsed=01:36:24 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T05:23:59.448Z] elapsed=01:36:24 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T05:23:59.584Z] elapsed=01:36:24 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork3337.dir
+[2026-10-07T05:24:01.682Z] elapsed=01:36:27 round_elapsed=00:00:02 #130296: cov: 1285 ft: 1285 corp: 522 exec/s 65148 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T05:24:04.782Z] elapsed=01:36:30 round_elapsed=00:00:05 #323586: cov: 1285 ft: 1285 corp: 522 exec/s 64430 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T05:24:08.879Z] elapsed=01:36:34 round_elapsed=00:00:09 #606635: cov: 1285 ft: 1285 corp: 522 exec/s 70762 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T05:24:13.984Z] elapsed=01:36:39 round_elapsed=00:00:14 #946239: cov: 1285 ft: 1285 corp: 522 exec/s 67920 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T05:24:20.087Z] elapsed=01:36:45 round_elapsed=00:00:20 #1385998: cov: 1285 ft: 1285 corp: 522 exec/s 73293 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T05:24:27.189Z] elapsed=01:36:52 round_elapsed=00:00:27 #1858140: cov: 1285 ft: 1285 corp: 522 exec/s 67448 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T05:24:35.287Z] elapsed=01:37:00 round_elapsed=00:00:35 #2388302: cov: 1285 ft: 1285 corp: 522 exec/s 66270 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T05:24:44.385Z] elapsed=01:37:09 round_elapsed=00:00:44 #2966977: cov: 1285 ft: 1285 corp: 522 exec/s 64297 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T05:24:54.484Z] elapsed=01:37:19 round_elapsed=00:00:55 #3723847: cov: 1285 ft: 1285 corp: 522 exec/s 75687 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T05:25:05.582Z] elapsed=01:37:30 round_elapsed=00:01:06 #4576466: cov: 1285 ft: 1285 corp: 522 exec/s 77510 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T05:25:17.682Z] elapsed=01:37:43 round_elapsed=00:01:18 #5511442: cov: 1285 ft: 1285 corp: 522 exec/s 77914 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T05:25:30.782Z] elapsed=01:37:56 round_elapsed=00:01:31 #6356131: cov: 1285 ft: 1285 corp: 522 exec/s 64976 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T05:25:44.881Z] elapsed=01:38:10 round_elapsed=00:01:45 #7321934: cov: 1285 ft: 1285 corp: 522 exec/s 68985 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T05:25:59.981Z] elapsed=01:38:25 round_elapsed=00:02:00 #8437140: cov: 1285 ft: 1285 corp: 522 exec/s 74347 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T05:26:16.085Z] elapsed=01:38:41 round_elapsed=00:02:16 #9607166: cov: 1285 ft: 1285 corp: 522 exec/s 73126 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T05:26:33.183Z] elapsed=01:38:58 round_elapsed=00:02:33 #10774248: cov: 1285 ft: 1285 corp: 522 exec/s 68651 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T05:26:51.292Z] elapsed=01:39:16 round_elapsed=00:02:51 #12059025: cov: 1285 ft: 1285 corp: 522 exec/s 71376 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T05:27:10.395Z] elapsed=01:39:35 round_elapsed=00:03:10 #13517995: cov: 1285 ft: 1285 corp: 522 exec/s 76787 oom/timeout/crash: 0/0/0 time: 190s job: 18 dft_time: 0
+[2026-10-07T05:27:30.500Z] elapsed=01:39:55 round_elapsed=00:03:31 #14812093: cov: 1285 ft: 1285 corp: 522 exec/s 64704 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T05:27:51.602Z] elapsed=01:40:16 round_elapsed=00:03:52 #16254120: cov: 1285 ft: 1285 corp: 522 exec/s 68667 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T05:28:13.704Z] elapsed=01:40:39 round_elapsed=00:04:14 #17740559: cov: 1285 ft: 1285 corp: 522 exec/s 67565 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T05:28:36.805Z] elapsed=01:41:02 round_elapsed=00:04:37 #19380151: cov: 1285 ft: 1285 corp: 522 exec/s 71286 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T05:29:00.905Z] elapsed=01:41:26 round_elapsed=00:05:01 #21061612: cov: 1285 ft: 1285 corp: 522 exec/s 70060 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T05:29:00.909Z] elapsed=01:41:26 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T05:29:00.922Z] elapsed=01:41:26 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T05:29:01.037Z] elapsed=01:41:26 no_coverage_growth=01:35:50 watchdog event=coverage_checkpoint round=20 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=5750.8 required_seconds=7200
+[2026-10-07T05:29:01.037Z] elapsed=01:41:26 no_coverage_growth=01:35:50 watchdog event=round_started round=21 round_limit_seconds=300 scope_lines=467
+[2026-10-07T05:29:01.070Z] elapsed=01:41:26 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T05:29:01.070Z] elapsed=01:41:26 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T05:29:01.070Z] elapsed=01:41:26 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T05:29:01.074Z] elapsed=01:41:26 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T05:29:01.074Z] elapsed=01:41:26 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T05:29:01.077Z] elapsed=01:41:26 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T05:29:01.209Z] elapsed=01:41:26 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork3438.dir
+[2026-10-07T05:29:03.308Z] elapsed=01:41:28 round_elapsed=00:00:02 #132980: cov: 1285 ft: 1285 corp: 522 exec/s 66490 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T05:29:06.405Z] elapsed=01:41:31 round_elapsed=00:00:05 #328892: cov: 1285 ft: 1285 corp: 522 exec/s 65304 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T05:29:10.502Z] elapsed=01:41:35 round_elapsed=00:00:09 #611155: cov: 1285 ft: 1285 corp: 522 exec/s 70565 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T05:29:15.602Z] elapsed=01:41:40 round_elapsed=00:00:14 #950081: cov: 1285 ft: 1285 corp: 522 exec/s 67785 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T05:29:21.700Z] elapsed=01:41:47 round_elapsed=00:00:20 #1403437: cov: 1285 ft: 1285 corp: 522 exec/s 75559 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T05:29:28.799Z] elapsed=01:41:54 round_elapsed=00:00:27 #1879255: cov: 1285 ft: 1285 corp: 522 exec/s 67974 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T05:29:36.898Z] elapsed=01:42:02 round_elapsed=00:00:35 #2404610: cov: 1285 ft: 1285 corp: 522 exec/s 65669 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T05:29:45.998Z] elapsed=01:42:11 round_elapsed=00:00:44 #2986261: cov: 1285 ft: 1285 corp: 522 exec/s 64627 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T05:29:56.096Z] elapsed=01:42:21 round_elapsed=00:00:55 #3745742: cov: 1285 ft: 1285 corp: 522 exec/s 75948 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T05:30:07.194Z] elapsed=01:42:32 round_elapsed=00:01:06 #4639430: cov: 1285 ft: 1285 corp: 522 exec/s 81244 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T05:30:19.293Z] elapsed=01:42:44 round_elapsed=00:01:18 #5571543: cov: 1285 ft: 1285 corp: 522 exec/s 77676 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T05:30:32.397Z] elapsed=01:42:57 round_elapsed=00:01:31 #6418722: cov: 1285 ft: 1285 corp: 522 exec/s 65167 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T05:30:46.497Z] elapsed=01:43:11 round_elapsed=00:01:45 #7381978: cov: 1285 ft: 1285 corp: 522 exec/s 68804 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T05:31:01.597Z] elapsed=01:43:26 round_elapsed=00:02:00 #8496811: cov: 1285 ft: 1285 corp: 522 exec/s 74322 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T05:31:17.697Z] elapsed=01:43:43 round_elapsed=00:02:16 #9656435: cov: 1285 ft: 1285 corp: 522 exec/s 72476 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T05:31:34.798Z] elapsed=01:44:00 round_elapsed=00:02:33 #10826747: cov: 1285 ft: 1285 corp: 522 exec/s 68841 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T05:31:52.900Z] elapsed=01:44:18 round_elapsed=00:02:51 #12165470: cov: 1285 ft: 1285 corp: 522 exec/s 74373 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T05:32:12.009Z] elapsed=01:44:37 round_elapsed=00:03:10 #13514376: cov: 1285 ft: 1285 corp: 522 exec/s 70995 oom/timeout/crash: 0/0/0 time: 190s job: 18 dft_time: 0
+[2026-10-07T05:32:32.115Z] elapsed=01:44:57 round_elapsed=00:03:31 #14801180: cov: 1285 ft: 1285 corp: 522 exec/s 64340 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T05:32:53.219Z] elapsed=01:45:18 round_elapsed=00:03:52 #16270206: cov: 1285 ft: 1285 corp: 522 exec/s 69953 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T05:33:15.322Z] elapsed=01:45:40 round_elapsed=00:04:14 #17819633: cov: 1285 ft: 1285 corp: 522 exec/s 70428 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T05:33:38.421Z] elapsed=01:46:03 round_elapsed=00:04:37 #19476604: cov: 1285 ft: 1285 corp: 522 exec/s 72042 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T05:34:02.525Z] elapsed=01:46:27 round_elapsed=00:05:01 #21134682: cov: 1285 ft: 1285 corp: 522 exec/s 69086 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T05:34:02.527Z] elapsed=01:46:27 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T05:34:02.541Z] elapsed=01:46:27 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T05:34:02.665Z] elapsed=01:46:28 no_coverage_growth=01:40:52 watchdog event=coverage_checkpoint round=21 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=6052.5 required_seconds=7200
+[2026-10-07T05:34:02.665Z] elapsed=01:46:28 no_coverage_growth=01:40:52 watchdog event=round_started round=22 round_limit_seconds=300 scope_lines=467
+[2026-10-07T05:34:02.696Z] elapsed=01:46:28 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T05:34:02.696Z] elapsed=01:46:28 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T05:34:02.696Z] elapsed=01:46:28 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T05:34:02.701Z] elapsed=01:46:28 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T05:34:02.701Z] elapsed=01:46:28 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T05:34:02.702Z] elapsed=01:46:28 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T05:34:02.843Z] elapsed=01:46:28 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork3539.dir
+[2026-10-07T05:34:04.943Z] elapsed=01:46:30 round_elapsed=00:00:02 #132102: cov: 1285 ft: 1285 corp: 522 exec/s 66051 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T05:34:08.044Z] elapsed=01:46:33 round_elapsed=00:00:05 #323338: cov: 1285 ft: 1285 corp: 522 exec/s 63745 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T05:34:12.145Z] elapsed=01:46:37 round_elapsed=00:00:09 #599117: cov: 1285 ft: 1285 corp: 522 exec/s 68944 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T05:34:17.245Z] elapsed=01:46:42 round_elapsed=00:00:14 #932429: cov: 1285 ft: 1285 corp: 522 exec/s 66662 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T05:34:23.346Z] elapsed=01:46:48 round_elapsed=00:00:20 #1376747: cov: 1285 ft: 1285 corp: 522 exec/s 74053 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T05:34:30.449Z] elapsed=01:46:55 round_elapsed=00:00:27 #1854032: cov: 1285 ft: 1285 corp: 522 exec/s 68183 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T05:34:38.549Z] elapsed=01:47:03 round_elapsed=00:00:35 #2392062: cov: 1285 ft: 1285 corp: 522 exec/s 67253 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T05:34:47.647Z] elapsed=01:47:13 round_elapsed=00:00:44 #2967753: cov: 1285 ft: 1285 corp: 522 exec/s 63965 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T05:34:57.746Z] elapsed=01:47:23 round_elapsed=00:00:55 #3719502: cov: 1285 ft: 1285 corp: 522 exec/s 75174 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T05:35:08.843Z] elapsed=01:47:34 round_elapsed=00:01:06 #4611840: cov: 1285 ft: 1285 corp: 522 exec/s 81121 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T05:35:20.943Z] elapsed=01:47:46 round_elapsed=00:01:18 #5545370: cov: 1285 ft: 1285 corp: 522 exec/s 77794 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T05:35:34.050Z] elapsed=01:47:59 round_elapsed=00:01:31 #6394937: cov: 1285 ft: 1285 corp: 522 exec/s 65351 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T05:35:48.150Z] elapsed=01:48:13 round_elapsed=00:01:45 #7364267: cov: 1285 ft: 1285 corp: 522 exec/s 69237 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T05:36:03.253Z] elapsed=01:48:28 round_elapsed=00:02:00 #8444232: cov: 1285 ft: 1285 corp: 522 exec/s 71997 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T05:36:19.354Z] elapsed=01:48:44 round_elapsed=00:02:16 #9593424: cov: 1285 ft: 1285 corp: 522 exec/s 71824 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T05:36:36.456Z] elapsed=01:49:01 round_elapsed=00:02:33 #10774005: cov: 1285 ft: 1285 corp: 522 exec/s 69445 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T05:36:54.557Z] elapsed=01:49:19 round_elapsed=00:02:51 #12116917: cov: 1285 ft: 1285 corp: 522 exec/s 74606 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T05:37:13.663Z] elapsed=01:49:39 round_elapsed=00:03:10 #13467073: cov: 1285 ft: 1285 corp: 522 exec/s 71060 oom/timeout/crash: 0/0/0 time: 190s job: 18 dft_time: 0
+[2026-10-07T05:37:33.766Z] elapsed=01:49:59 round_elapsed=00:03:31 #14757122: cov: 1285 ft: 1285 corp: 522 exec/s 64502 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T05:37:54.868Z] elapsed=01:50:20 round_elapsed=00:03:52 #16218828: cov: 1285 ft: 1285 corp: 522 exec/s 69605 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T05:38:16.973Z] elapsed=01:50:42 round_elapsed=00:04:14 #17778531: cov: 1285 ft: 1285 corp: 522 exec/s 70895 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T05:38:40.075Z] elapsed=01:51:05 round_elapsed=00:04:37 #19404763: cov: 1285 ft: 1285 corp: 522 exec/s 70705 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T05:39:04.179Z] elapsed=01:51:29 round_elapsed=00:05:01 #21050309: cov: 1285 ft: 1285 corp: 522 exec/s 68564 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T05:39:04.180Z] elapsed=01:51:29 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T05:39:04.195Z] elapsed=01:51:29 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T05:39:04.312Z] elapsed=01:51:29 no_coverage_growth=01:45:54 watchdog event=coverage_checkpoint round=22 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=6354.1 required_seconds=7200
+[2026-10-07T05:39:04.312Z] elapsed=01:51:29 no_coverage_growth=01:45:54 watchdog event=round_started round=23 round_limit_seconds=300 scope_lines=467
+[2026-10-07T05:39:04.343Z] elapsed=01:51:29 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T05:39:04.343Z] elapsed=01:51:29 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T05:39:04.343Z] elapsed=01:51:29 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T05:39:04.348Z] elapsed=01:51:29 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T05:39:04.358Z] elapsed=01:51:29 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T05:39:04.358Z] elapsed=01:51:29 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T05:39:04.486Z] elapsed=01:51:29 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork3640.dir
+[2026-10-07T05:39:06.588Z] elapsed=01:51:31 round_elapsed=00:00:02 #130138: cov: 1285 ft: 1285 corp: 522 exec/s 65069 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T05:39:09.688Z] elapsed=01:51:35 round_elapsed=00:00:05 #322123: cov: 1285 ft: 1285 corp: 522 exec/s 63995 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T05:39:13.788Z] elapsed=01:51:39 round_elapsed=00:00:09 #590398: cov: 1285 ft: 1285 corp: 522 exec/s 67068 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T05:39:18.890Z] elapsed=01:51:44 round_elapsed=00:00:14 #925930: cov: 1285 ft: 1285 corp: 522 exec/s 67106 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T05:39:24.996Z] elapsed=01:51:50 round_elapsed=00:00:20 #1364767: cov: 1285 ft: 1285 corp: 522 exec/s 73139 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T05:39:32.097Z] elapsed=01:51:57 round_elapsed=00:00:27 #1834302: cov: 1285 ft: 1285 corp: 522 exec/s 67076 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T05:39:40.200Z] elapsed=01:52:05 round_elapsed=00:00:35 #2359307: cov: 1285 ft: 1285 corp: 522 exec/s 65625 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T05:39:49.302Z] elapsed=01:52:14 round_elapsed=00:00:44 #2934673: cov: 1285 ft: 1285 corp: 522 exec/s 63929 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T05:39:59.406Z] elapsed=01:52:24 round_elapsed=00:00:55 #3682401: cov: 1285 ft: 1285 corp: 522 exec/s 74772 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T05:40:10.509Z] elapsed=01:52:35 round_elapsed=00:01:06 #4551280: cov: 1285 ft: 1285 corp: 522 exec/s 78989 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T05:40:22.612Z] elapsed=01:52:47 round_elapsed=00:01:18 #5443681: cov: 1285 ft: 1285 corp: 522 exec/s 74366 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T05:40:35.718Z] elapsed=01:53:01 round_elapsed=00:01:31 #6285106: cov: 1285 ft: 1285 corp: 522 exec/s 64725 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T05:40:49.819Z] elapsed=01:53:15 round_elapsed=00:01:45 #7241042: cov: 1285 ft: 1285 corp: 522 exec/s 68281 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T05:41:04.923Z] elapsed=01:53:30 round_elapsed=00:02:00 #8345885: cov: 1285 ft: 1285 corp: 522 exec/s 73656 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T05:41:21.026Z] elapsed=01:53:46 round_elapsed=00:02:16 #9488789: cov: 1285 ft: 1285 corp: 522 exec/s 71431 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T05:41:38.131Z] elapsed=01:54:03 round_elapsed=00:02:33 #10601153: cov: 1285 ft: 1285 corp: 522 exec/s 65433 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T05:41:56.233Z] elapsed=01:54:21 round_elapsed=00:02:51 #11924792: cov: 1285 ft: 1285 corp: 522 exec/s 73535 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T05:42:15.335Z] elapsed=01:54:40 round_elapsed=00:03:11 #13323021: cov: 1285 ft: 1285 corp: 522 exec/s 73591 oom/timeout/crash: 0/0/0 time: 190s job: 18 dft_time: 0
+[2026-10-07T05:42:35.456Z] elapsed=01:55:00 round_elapsed=00:03:31 #14560374: cov: 1285 ft: 1285 corp: 522 exec/s 61867 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T05:42:56.569Z] elapsed=01:55:21 round_elapsed=00:03:52 #15987319: cov: 1285 ft: 1285 corp: 522 exec/s 67949 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T05:43:18.677Z] elapsed=01:55:44 round_elapsed=00:04:14 #17518473: cov: 1285 ft: 1285 corp: 522 exec/s 69597 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T05:43:41.780Z] elapsed=01:56:07 round_elapsed=00:04:37 #19156231: cov: 1285 ft: 1285 corp: 522 exec/s 71206 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T05:44:05.884Z] elapsed=01:56:31 round_elapsed=00:05:01 #20806442: cov: 1285 ft: 1285 corp: 522 exec/s 68758 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T05:44:05.885Z] elapsed=01:56:31 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T05:44:05.900Z] elapsed=01:56:31 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T05:44:06.019Z] elapsed=01:56:31 no_coverage_growth=01:50:55 watchdog event=coverage_checkpoint round=23 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=6655.8 required_seconds=7200
+[2026-10-07T05:44:06.019Z] elapsed=01:56:31 no_coverage_growth=01:50:55 watchdog event=round_started round=24 round_limit_seconds=300 scope_lines=467
+[2026-10-07T05:44:06.051Z] elapsed=01:56:31 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T05:44:06.051Z] elapsed=01:56:31 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T05:44:06.051Z] elapsed=01:56:31 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T05:44:06.056Z] elapsed=01:56:31 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T05:44:06.056Z] elapsed=01:56:31 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T05:44:06.058Z] elapsed=01:56:31 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T05:44:06.194Z] elapsed=01:56:31 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork3741.dir
+[2026-10-07T05:44:08.296Z] elapsed=01:56:33 round_elapsed=00:00:02 #128111: cov: 1285 ft: 1285 corp: 522 exec/s 64055 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T05:44:11.396Z] elapsed=01:56:36 round_elapsed=00:00:05 #319705: cov: 1285 ft: 1285 corp: 522 exec/s 63864 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T05:44:15.498Z] elapsed=01:56:40 round_elapsed=00:00:09 #597487: cov: 1285 ft: 1285 corp: 522 exec/s 69445 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T05:44:20.601Z] elapsed=01:56:45 round_elapsed=00:00:14 #925090: cov: 1285 ft: 1285 corp: 522 exec/s 65520 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T05:44:26.702Z] elapsed=01:56:52 round_elapsed=00:00:20 #1364589: cov: 1285 ft: 1285 corp: 522 exec/s 73249 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T05:44:33.809Z] elapsed=01:56:59 round_elapsed=00:00:27 #1834119: cov: 1285 ft: 1285 corp: 522 exec/s 67075 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T05:44:41.911Z] elapsed=01:57:07 round_elapsed=00:00:35 #2355281: cov: 1285 ft: 1285 corp: 522 exec/s 65145 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T05:44:51.011Z] elapsed=01:57:16 round_elapsed=00:00:44 #2927279: cov: 1285 ft: 1285 corp: 522 exec/s 63555 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T05:45:01.112Z] elapsed=01:57:26 round_elapsed=00:00:55 #3678008: cov: 1285 ft: 1285 corp: 522 exec/s 75072 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T05:45:12.214Z] elapsed=01:57:37 round_elapsed=00:01:06 #4554945: cov: 1285 ft: 1285 corp: 522 exec/s 79721 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T05:45:24.315Z] elapsed=01:57:49 round_elapsed=00:01:18 #5472796: cov: 1285 ft: 1285 corp: 522 exec/s 76487 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T05:45:37.418Z] elapsed=01:58:02 round_elapsed=00:01:31 #6322728: cov: 1285 ft: 1285 corp: 522 exec/s 65379 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T05:45:51.520Z] elapsed=01:58:16 round_elapsed=00:01:45 #7277169: cov: 1285 ft: 1285 corp: 522 exec/s 68174 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T05:46:06.622Z] elapsed=01:58:31 round_elapsed=00:02:00 #8382232: cov: 1285 ft: 1285 corp: 522 exec/s 73670 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T05:46:22.725Z] elapsed=01:58:48 round_elapsed=00:02:16 #9528594: cov: 1285 ft: 1285 corp: 522 exec/s 71647 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T05:46:39.826Z] elapsed=01:59:05 round_elapsed=00:02:33 #10685474: cov: 1285 ft: 1285 corp: 522 exec/s 68051 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T05:46:57.929Z] elapsed=01:59:23 round_elapsed=00:02:51 #12002277: cov: 1285 ft: 1285 corp: 522 exec/s 73155 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T05:47:17.034Z] elapsed=01:59:42 round_elapsed=00:03:11 #13406710: cov: 1285 ft: 1285 corp: 522 exec/s 73917 oom/timeout/crash: 0/0/0 time: 190s job: 18 dft_time: 0
+[2026-10-07T05:47:37.182Z] elapsed=02:00:02 round_elapsed=00:03:31 #14654268: cov: 1285 ft: 1285 corp: 522 exec/s 62377 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T05:47:58.302Z] elapsed=02:00:23 round_elapsed=00:03:52 #16080178: cov: 1285 ft: 1285 corp: 522 exec/s 67900 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T05:48:20.408Z] elapsed=02:00:45 round_elapsed=00:04:14 #17610902: cov: 1285 ft: 1285 corp: 522 exec/s 69578 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T05:48:43.515Z] elapsed=02:01:08 round_elapsed=00:04:37 #19215946: cov: 1285 ft: 1285 corp: 522 exec/s 69784 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T05:49:07.623Z] elapsed=02:01:32 round_elapsed=00:05:01 #20863587: cov: 1285 ft: 1285 corp: 522 exec/s 68651 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T05:49:07.623Z] elapsed=02:01:32 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T05:49:07.640Z] elapsed=02:01:33 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T05:49:07.772Z] elapsed=02:01:33 no_coverage_growth=01:55:57 watchdog event=coverage_checkpoint round=24 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=6957.6 required_seconds=7200
+[2026-10-07T05:49:07.772Z] elapsed=02:01:33 no_coverage_growth=01:55:57 watchdog event=round_started round=25 round_limit_seconds=300 scope_lines=467
+[2026-10-07T05:49:07.806Z] elapsed=02:01:33 round_elapsed=00:00:00 Dictionary: 10 entries
+[2026-10-07T05:49:07.806Z] elapsed=02:01:33 round_elapsed=00:00:00 INFO: Running with entropic power schedule (0xFF, 100).
+[2026-10-07T05:49:07.806Z] elapsed=02:01:33 round_elapsed=00:00:00 INFO: Seed: 1
+[2026-10-07T05:49:07.811Z] elapsed=02:01:33 round_elapsed=00:00:00 INFO: Loaded 1 modules   (39572 inline 8-bit counters): 39572 [0x555555cbbc40, 0x555555cc56d4), 
+[2026-10-07T05:49:07.812Z] elapsed=02:01:33 round_elapsed=00:00:00 INFO: Loaded 1 PC tables (39572 PCs): 39572 [0x555555cc56d8,0x555555d60018), 
+[2026-10-07T05:49:07.813Z] elapsed=02:01:33 round_elapsed=00:00:00 INFO: -fork=1: fuzzing in separate process(s)
+[2026-10-07T05:49:07.961Z] elapsed=02:01:33 round_elapsed=00:00:00 INFO: -fork=1: 522 seed inputs, starting to fuzz in /tmp/libFuzzerTemp.FuzzWithFork3842.dir
+[2026-10-07T05:49:10.068Z] elapsed=02:01:35 round_elapsed=00:00:02 #126431: cov: 1285 ft: 1285 corp: 522 exec/s 63215 oom/timeout/crash: 0/0/0 time: 2s job: 1 dft_time: 0
+[2026-10-07T05:49:13.170Z] elapsed=02:01:38 round_elapsed=00:00:05 #316165: cov: 1285 ft: 1285 corp: 522 exec/s 63244 oom/timeout/crash: 0/0/0 time: 5s job: 2 dft_time: 0
+[2026-10-07T05:49:17.271Z] elapsed=02:01:42 round_elapsed=00:00:09 #591605: cov: 1285 ft: 1285 corp: 522 exec/s 68860 oom/timeout/crash: 0/0/0 time: 9s job: 3 dft_time: 0
+[2026-10-07T05:49:22.374Z] elapsed=02:01:47 round_elapsed=00:00:14 #924472: cov: 1285 ft: 1285 corp: 522 exec/s 66573 oom/timeout/crash: 0/0/0 time: 14s job: 4 dft_time: 0
+[2026-10-07T05:49:28.477Z] elapsed=02:01:53 round_elapsed=00:00:20 #1367106: cov: 1285 ft: 1285 corp: 522 exec/s 73772 oom/timeout/crash: 0/0/0 time: 20s job: 5 dft_time: 0
+[2026-10-07T05:49:35.577Z] elapsed=02:02:00 round_elapsed=00:00:27 #1836220: cov: 1285 ft: 1285 corp: 522 exec/s 67016 oom/timeout/crash: 0/0/0 time: 27s job: 6 dft_time: 0
+[2026-10-07T05:49:43.679Z] elapsed=02:02:09 round_elapsed=00:00:35 #2362860: cov: 1285 ft: 1285 corp: 522 exec/s 65830 oom/timeout/crash: 0/0/0 time: 35s job: 7 dft_time: 0
+[2026-10-07T05:49:52.781Z] elapsed=02:02:18 round_elapsed=00:00:45 #2928563: cov: 1285 ft: 1285 corp: 522 exec/s 62855 oom/timeout/crash: 0/0/0 time: 44s job: 8 dft_time: 0
+[2026-10-07T05:50:02.886Z] elapsed=02:02:28 round_elapsed=00:00:55 #3664016: cov: 1285 ft: 1285 corp: 522 exec/s 73545 oom/timeout/crash: 0/0/0 time: 55s job: 9 dft_time: 0
+[2026-10-07T05:50:13.990Z] elapsed=02:02:39 round_elapsed=00:01:06 #4542496: cov: 1285 ft: 1285 corp: 522 exec/s 79861 oom/timeout/crash: 0/0/0 time: 66s job: 10 dft_time: 0
+[2026-10-07T05:50:26.092Z] elapsed=02:02:51 round_elapsed=00:01:18 #5459926: cov: 1285 ft: 1285 corp: 522 exec/s 76452 oom/timeout/crash: 0/0/0 time: 78s job: 11 dft_time: 0
+[2026-10-07T05:50:39.196Z] elapsed=02:03:04 round_elapsed=00:01:31 #6296836: cov: 1285 ft: 1285 corp: 522 exec/s 64377 oom/timeout/crash: 0/0/0 time: 91s job: 12 dft_time: 0
+[2026-10-07T05:50:53.297Z] elapsed=02:03:18 round_elapsed=00:01:45 #7254074: cov: 1285 ft: 1285 corp: 522 exec/s 68374 oom/timeout/crash: 0/0/0 time: 105s job: 13 dft_time: 0
+[2026-10-07T05:51:08.399Z] elapsed=02:03:33 round_elapsed=00:02:00 #8351570: cov: 1285 ft: 1285 corp: 522 exec/s 73166 oom/timeout/crash: 0/0/0 time: 120s job: 14 dft_time: 0
+[2026-10-07T05:51:24.501Z] elapsed=02:03:49 round_elapsed=00:02:16 #9479609: cov: 1285 ft: 1285 corp: 522 exec/s 70502 oom/timeout/crash: 0/0/0 time: 136s job: 15 dft_time: 0
+[2026-10-07T05:51:41.607Z] elapsed=02:04:06 round_elapsed=00:02:33 #10635749: cov: 1285 ft: 1285 corp: 522 exec/s 68008 oom/timeout/crash: 0/0/0 time: 153s job: 16 dft_time: 0
+[2026-10-07T05:51:59.713Z] elapsed=02:04:25 round_elapsed=00:02:51 #11962553: cov: 1285 ft: 1285 corp: 522 exec/s 73711 oom/timeout/crash: 0/0/0 time: 171s job: 17 dft_time: 0
+[2026-10-07T05:52:18.818Z] elapsed=02:04:44 round_elapsed=00:03:11 #13426696: cov: 1285 ft: 1285 corp: 522 exec/s 77060 oom/timeout/crash: 0/0/0 time: 191s job: 18 dft_time: 0
+[2026-10-07T05:52:38.920Z] elapsed=02:05:04 round_elapsed=00:03:31 #14647031: cov: 1285 ft: 1285 corp: 522 exec/s 61016 oom/timeout/crash: 0/0/0 time: 211s job: 19 dft_time: 0
+[2026-10-07T05:53:00.043Z] elapsed=02:05:25 round_elapsed=00:03:52 #16024537: cov: 1285 ft: 1285 corp: 522 exec/s 65595 oom/timeout/crash: 0/0/0 time: 232s job: 20 dft_time: 0
+[2026-10-07T05:53:22.153Z] elapsed=02:05:47 round_elapsed=00:04:14 #17508670: cov: 1285 ft: 1285 corp: 522 exec/s 67460 oom/timeout/crash: 0/0/0 time: 254s job: 21 dft_time: 0
+[2026-10-07T05:53:45.259Z] elapsed=02:06:10 round_elapsed=00:04:37 #19147277: cov: 1285 ft: 1285 corp: 522 exec/s 71243 oom/timeout/crash: 0/0/0 time: 277s job: 22 dft_time: 0
+[2026-10-07T05:54:09.366Z] elapsed=02:06:34 round_elapsed=00:05:01 #20782950: cov: 1285 ft: 1285 corp: 522 exec/s 68153 oom/timeout/crash: 0/0/0 time: 301s job: 23 dft_time: 0
+[2026-10-07T05:54:09.367Z] elapsed=02:06:34 round_elapsed=00:05:01 INFO: fuzzed for 301 seconds, wrapping up soon
+[2026-10-07T05:54:09.379Z] elapsed=02:06:34 round_elapsed=00:05:01 INFO: exiting: 0 time: 301s
+[2026-10-07T05:54:09.499Z] elapsed=02:06:34 no_coverage_growth=02:00:59 watchdog event=coverage_checkpoint round=25 scope_lines=467 coverage_increased=false new_inputs=0 findings=0 idle_seconds=7259.3 required_seconds=7200
+[2026-10-07T05:54:34.127Z] elapsed=02:06:59 no_coverage_growth=02:01:23 watchdog event=stop_requested reason=coverage_stagnation idle_seconds=7259.3 required_seconds=7200
+[2026-10-07T05:54:58.644Z] elapsed=02:07:24 no_coverage_growth=02:01:48 watchdog event=finished status=passed termination=coverage_plateau exit=0 duration=02:07:24 required_seconds=7200

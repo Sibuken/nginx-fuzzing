@@ -1,0 +1,43 @@
+{
+  "id": "NGX-IF10",
+  "origin": "custom",
+  "binary": "hpack_fuzzer",
+  "input_format": "raw HPACK Huffman/integer bytes",
+  "mutator": "libFuzzer byte mutator",
+  "configuration_profile": "direct HPACK Huffman decoder plus a build-only wrapper for the static HPACK integer decoder",
+  "allocator_mode": "no heap allocation by nginx; harness-owned bounded output buffer",
+  "justification": "The existing HTTP/1 adapter never supplies HTTP/2 header blocks, so HPACK decoding was unreachable.",
+  "state": "Every input is decoded both in one shot and in input-controlled fragments; status, final state and decoded bytes must match. The same bytes are passed to the integer decoder with HPACK prefixes 4, 5, 6 and 7 bits.",
+  "known_limitations": [
+    "This target covers HPACK byte-level primitives, not the dynamic header table or request-header semantic validation.",
+    "HEADERS and CONTINUATION frame sequencing is outside this target.",
+    "The integer decoder exposure patch is applied only to the isolated instrumented build copy."
+  ],
+  "limits": {
+    "max_len": 65536,
+    "per_input_timeout_seconds": 10,
+    "rss_limit_mb": 2048
+  },
+  "scopes": [
+    {
+      "id": "NGX-IF10-huffman",
+      "file": "src/http/ngx_http_huff_decode.c",
+      "functions": ["ngx_http_huff_decode", "ngx_http_huff_decode_bits"],
+      "callers": ["ngx_http_v2_state_field_huff"],
+      "contract": "Decode HPACK Huffman bytes incrementally and reject invalid or incomplete encodings on the final fragment.",
+      "preconditions": "State starts at zero and the output capacity is at least twice the encoded length plus one byte.",
+      "testcase_fields": ["encoded bytes", "fragment size"],
+      "variants": ["empty", "valid RFC examples", "invalid EOS", "incomplete suffix", "fragmented input"]
+    },
+    {
+      "id": "NGX-IF10-integer",
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": ["ngx_http_v2_parse_int"],
+      "callers": ["ngx_http_v2_state_header_block", "ngx_http_v2_state_field_len"],
+      "contract": "Decode HPACK prefix integers with bounded continuation octets and input accounting.",
+      "preconditions": "At least one byte is available for non-empty calls; logical frame length is modeled separately.",
+      "testcase_fields": ["prefix bits", "continuation bytes", "logical remaining length"],
+      "variants": ["inline value", "multi-octet value", "truncated value", "too many octets", "logical length mismatch"]
+    }
+  ]
+}

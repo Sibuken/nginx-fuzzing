@@ -1,0 +1,2 @@
+request: "GET /a/../b/%1e%2e/c//d?q=%00 HTTP/1.1\r\nHost: [edgee$.$$$$$$$$$$$$$$$$$$$$$$$$$$&$$$$$$$$$$$$$m.url.co+$$$$$$ee$.$$$$$$$$$$$$$$$$$$$$$$$$$$&$$$$$$$$$$$$$m.url.co+$$$$$$$&$$$$$$$$$$$$$m.url.co+$$$$$$$Str$Strict-Transport-S$t-Transport-S$$$$$&$$$$$$$$$$$$$m\r\nX_Tes:t: value\r\n\r\n"
+reply: ""

@@ -1,0 +1,2 @@
+request: "GET /a/?q=%00 HTTP/1.1\r\nHost: edge.url.com\r\nX_Test: value\r\n\r\n"
+reply: "GET /a/?q=%00 HTTP/1.1\r\nHost: edge.url.com\r\nX_Test: value\r\n\r\n"

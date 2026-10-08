@@ -1,0 +1,2 @@
+request: "GET /a/._\n"
+reply: "HTTP/1.1 207\r\377\r\n"

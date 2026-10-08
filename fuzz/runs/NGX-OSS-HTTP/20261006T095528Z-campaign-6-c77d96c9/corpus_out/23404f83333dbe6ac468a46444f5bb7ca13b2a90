@@ -1,0 +1,2 @@
+request: "GET /a/aHttremrt\n"
+reply: "HTTP/1.1 200 Everything Fine\r\nTransfer-Encoding: chunked\r\n\r\n0;\377\377\377\377\377\377\377\377\377\377\377\377`\377\377\377\377\377\377\377\377\013\000\000\226ng: chunked\r\n\rContent-Location\nAccept-Language\377\377z=s-Control-Allow-Headers\n"

@@ -1,0 +1,2 @@
+request: "GET /a/.~/d?q=%00 HTTP/1.1\r\nHost: [ed\'X-UA-Compatible_http_v=_http_vionigrpc_Cont4+++++++\013+++is_e\r\n\r\n"
+reply: ""

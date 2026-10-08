@@ -1,0 +1,2 @@
+request: "GET /a/../b/%2e%2e/c//d?q=%00 HTTP/1.1\r\nHost: edge.url.co$$$$$$$\244$$$!$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$m\r\nAccept-Charset\n\r\n"
+reply: "GET /a/../b/%2ede.uuedge.url.com\r\nUPDATE: value\rt:\n"

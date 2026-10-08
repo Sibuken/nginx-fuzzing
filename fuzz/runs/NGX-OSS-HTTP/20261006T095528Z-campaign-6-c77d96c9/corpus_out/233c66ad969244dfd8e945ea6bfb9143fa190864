@@ -1,0 +1,2 @@
+request: "GET /a/../b/%3e%2e/c/3e%2e/c//d?q=%1.1\r\nHost: edge.url.cproxy_http_version\n\r\n"
+reply: ""

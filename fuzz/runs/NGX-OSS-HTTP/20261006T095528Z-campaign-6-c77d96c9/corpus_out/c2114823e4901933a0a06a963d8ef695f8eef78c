@@ -1,0 +1,2 @@
+request: "GET /a/../b/%2e%2e/c//d?q=%00 HTTP/1.1\r\nH\r\r\r\rrequest: \"GET /a/./.\\r\\n\"\nreply: \"HTTP/0.1 200 Everything Fine\\r\\nTra\r\r`\r\r\rproxy_internal_body_lengthdge.url.GE_XeT\n Tst: value\r\n\rnncodinis_reque_requestt\\nX\\r\\n0\\r\\n\\r\\n\"\n"
+reply: ""

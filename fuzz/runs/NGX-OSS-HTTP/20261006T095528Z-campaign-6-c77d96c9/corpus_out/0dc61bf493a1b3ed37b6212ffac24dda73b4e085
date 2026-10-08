@@ -1,0 +1,2 @@
+request: "GET /a/../b/%2e%2e/c//d?q=%00 HTTP/1.1\r\nHost: [edge+url.co$$$$$$$$Strict-Transuort-SeX-Wap-Profile$$$$$$$$$$$$$$\"\206\372\302\260\207U\232$$$$$$$$$$$$$$$$$$$m\r\nX_Tes:t: value\r\n\r\n"
+reply: "GET /a/../b/%2e%2e/c//d?q=%00 HTTP/1.1\r\nHost: [edge+url.co$$$$$$$$Strict-Transuort-SeX-Wap-Profile$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$m\r\nX_Tes:t: value\r\n\r\n"

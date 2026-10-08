@@ -1,0 +1,64 @@
+{
+  "id": "NGX-IF12",
+  "origin": "custom",
+  "binary": "http2_control_fuzzer",
+  "input_format": "raw sequence of HTTP/2 wire frames",
+  "mutator": "libFuzzer byte mutator",
+  "configuration_profile": "stateful SETTINGS, PING, GOAWAY and WINDOW_UPDATE handlers with fresh nginx pool, minimal HTTP/2 server configuration, one primary stream, a closed indexed node, and a second synthetic waiting stream",
+  "allocator_mode": "NGX_DEBUG_PALLOC=1 with a fresh nginx pool for each fragmentation replay",
+  "justification": "NGX-IF11 stops after frame-header dispatch and therefore cannot detect memory-safety or arithmetic defects in control-frame bodies and persistent connection state.",
+  "state": "Each input is parsed four times with identical bytes: contiguously, byte-by-byte, in three-byte fragments and with an input-selected fragment size. Concatenated frames share settings, flow-control and output-queue state within a replay.",
+  "known_limitations": [
+    "Only SETTINGS, PING, GOAWAY and WINDOW_UPDATE frames are accepted.",
+    "Only the primary stream is request-bearing; the second stream exists solely to model WINDOW_UPDATE waiting-queue traversal, while request parsing and the full stream lifecycle are not entered.",
+    "Generated ACK/PING frames are allocated and queued but not written to a socket.",
+    "The protocol-error teardown guard and synthetic connection driver are applied only to the isolated instrumented build copy."
+  ],
+  "limits": {
+    "max_len": 4096,
+    "per_input_timeout_seconds": 10,
+    "rss_limit_mb": 2048
+  },
+  "scopes": [
+    {
+      "id": "NGX-IF12-settings",
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": ["ngx_http_v2_state_settings", "ngx_http_v2_state_settings_params"],
+      "callers": ["ngx_http_v2_state_head"],
+      "contract": "Validate SETTINGS framing and values, update connection settings and queue an acknowledgement.",
+      "preconditions": "Fresh HTTP/2 connection with default windows/frame size and one minimal live stream.",
+      "testcase_fields": ["ACK flag", "stream ID", "setting IDs", "32-bit values", "parameter sequence"],
+      "variants": ["empty", "ACK", "unknown setting", "header table size", "enable push", "initial window", "maximum frame size", "invalid lengths and values"]
+    },
+    {
+      "id": "NGX-IF12-ping",
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": ["ngx_http_v2_state_ping"],
+      "callers": ["ngx_http_v2_state_head"],
+      "contract": "Validate eight-byte PING frames and queue echo acknowledgements.",
+      "preconditions": "Connection-level stream ID zero for accepted frames.",
+      "testcase_fields": ["length", "ACK flag", "stream ID", "opaque data"],
+      "variants": ["request", "ACK", "wrong length", "wrong stream", "fragmented body"]
+    },
+    {
+      "id": "NGX-IF12-goaway",
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": ["ngx_http_v2_state_goaway"],
+      "callers": ["ngx_http_v2_state_head"],
+      "contract": "Validate GOAWAY minimum length and connection-level stream ID, then skip optional debug data.",
+      "preconditions": "At least eight declared payload bytes for an accepted frame.",
+      "testcase_fields": ["length", "stream ID", "last stream ID", "error code", "debug data"],
+      "variants": ["minimum body", "debug data", "short body", "wrong stream", "fragmented body"]
+    },
+    {
+      "id": "NGX-IF12-window-update",
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": ["ngx_http_v2_state_window_update"],
+      "callers": ["ngx_http_v2_state_head"],
+      "contract": "Validate flow-control increments and update connection or stream windows, wake waiting/exhausted streams, and ignore unknown streams safely.",
+      "preconditions": "Default connection and stream send windows, one live exhausted/waiting stream at ID 1, a closed indexed node at ID 3, a second exhausted/waiting stream, and a callback that can optionally drain the connection window.",
+      "testcase_fields": ["length", "stream ID", "reserved bit", "31-bit increment"],
+      "variants": ["connection increment", "live stream increment", "unknown stream", "closed stream node", "zero increment", "connection overflow", "stream overflow", "waiting queue wakeup", "delayed write-event wakeup", "multiple waiting streams", "stop queue walk when callback drains connection window to zero", "wrong length", "fragmented body"]
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "duration_seconds": 11.539,
+  "inputs": 128,
+  "label": "final",
+  "nginx_source": {
+    "branches": {
+      "covered": 211,
+      "percent": 0.62,
+      "total": 34032
+    },
+    "lines": {
+      "covered": 712,
+      "percent": 0.92,
+      "total": 77576
+    }
+  },
+  "scopes": [
+    {
+      "branches": {
+        "covered": 129,
+        "percent": 52.87,
+        "total": 244
+      },
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": [
+        "ngx_http_v2_state_header_block",
+        "ngx_http_v2_state_field_len",
+        "ngx_http_v2_state_field_huff",
+        "ngx_http_v2_state_field_raw",
+        "ngx_http_v2_state_field_skip",
+        "ngx_http_v2_state_process_header",
+        "ngx_http_v2_state_header_complete",
+        "ngx_http_v2_handle_continuation",
+        "ngx_http_v2_parse_int"
+      ],
+      "id": "NGX-IF15-hpack-block",
+      "lines": {
+        "covered": 314,
+        "percent": 67.24,
+        "total": 467
+      }
+    },
+    {
+      "branches": {
+        "covered": 21,
+        "percent": 40.38,
+        "total": 52
+      },
+      "file": "src/http/v2/ngx_http_v2_table.c",
+      "functions": [
+        "ngx_http_v2_get_indexed_header",
+        "ngx_http_v2_add_header",
+        "ngx_http_v2_table_account",
+        "ngx_http_v2_table_size"
+      ],
+      "id": "NGX-IF15-hpack-table",
+      "lines": {
+        "covered": 94,
+        "percent": 50.81,
+        "total": 185
+      }
+    }
+  ],
+  "whole_instrumented_build": {
+    "branches": {
+      "count": 33826,
+      "covered": 211,
+      "notcovered": 33615,
+      "percent": 0.6237805238573878
+    },
+    "functions": {
+      "count": 1698,
+      "covered": 31,
+      "percent": 1.8256772673733805
+    },
+    "instantiations": {
+      "count": 3808,
+      "covered": 31,
+      "percent": 0.814075630252101
+    },
+    "lines": {
+      "count": 76679,
+      "covered": 677,
+      "percent": 0.8829014462890753
+    },
+    "regions": {
+      "count": 60396,
+      "covered": 485,
+      "notcovered": 59911,
+      "percent": 0.8030333134644678
+    }
+  }
+}

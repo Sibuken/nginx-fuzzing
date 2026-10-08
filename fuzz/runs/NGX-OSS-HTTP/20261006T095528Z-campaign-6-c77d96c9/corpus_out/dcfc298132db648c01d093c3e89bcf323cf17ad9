@@ -1,0 +1,2 @@
+request: "GET /a/../b/%3e%2e/c//d?q=%00 HTTP/1.1\r\nHost: edg\000\000\000Ml.com\r\r\n"
+reply: ""

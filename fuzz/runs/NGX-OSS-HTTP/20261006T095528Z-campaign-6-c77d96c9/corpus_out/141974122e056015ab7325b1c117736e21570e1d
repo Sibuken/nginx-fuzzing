@@ -1,0 +1,2 @@
+request: "GET /a/../b/%ee%22/c//d?q=%00Proxy-Connection HTTP/1.1\r\nHost: edge.url&com\r\nX_Test: value\r\n\r\n"
+reply: "HTTP/1.1 207 Muulti-Status\r\nCo\356tent-Lengt\r\nCo\356tent-Lelti-Statnt-Lengt\r\nCo\356tent-Length: 0\r\n\r\n"

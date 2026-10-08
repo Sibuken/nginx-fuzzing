@@ -1,0 +1,2 @@
+request: "HEAD /headers HTTP/1.1\r\nHost: hees\r\nFolded:adAccept-Patch\nX_Underscore: ys.url.com\r\nX_Underscore: yes\r\nFolded: ficore: yes\r\nFolded:ie: a=b; c=d\r\n\r\n c=d\r\n\r\n"
+reply: ""

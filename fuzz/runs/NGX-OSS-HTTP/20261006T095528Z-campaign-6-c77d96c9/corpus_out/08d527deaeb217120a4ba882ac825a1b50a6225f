@@ -1,0 +1,2 @@
+request: "POST /chu\253nks HTTP/1.1\r\nHost: chunks.urolcm.Expect\r\nTransfer-Encoding: chunked\r\n\r\nA;foo=request: \"POST /chu\\253nks HTTP/1.1\\r\\nHost: chunr\r\n0123456789\r\n0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF%23/c///a/../..r-EncoEHHHHHHHHHue\0002\000\000\000"
+reply: ""

@@ -1,0 +1,2 @@
+request: "GET /.1\r\nHost: ed\320T /.1\r\nHost: ed\320\320\320((((((((((((((((om\r\nX_"
+reply: "HTTP/1.0 404 Not Found\r\nContent-Lengthrequest: \"GET /a/../b/%2e%2e/c//d?q=%00 \000\000\000\000\000\000\000/../b/%2&e%2e/c//d?q=%X-Content-Duration\nnHost: edge.url.com\\r\\nX_Test: value\\r\\n\\r\\n\"\n"

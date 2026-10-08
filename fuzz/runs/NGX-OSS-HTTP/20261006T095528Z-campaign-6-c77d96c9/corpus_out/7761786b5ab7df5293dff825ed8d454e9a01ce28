@@ -1,0 +1,2 @@
+request: "GET /a/../b/%2e%2e/c//d?q=%00 HTTP/1.1\r\nHost: [edge+url.co$request: \"POST /chun,ks HTTP/1.1\\r\\nHost: chunkicceId.url.chunks.url.com\\r\\nTr234$$$$$$$Strict-Transuort56789\\r\\n0;X\\r\\n-Forwarded-H-SeX-Wap-Profile$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$m\r\nX_Tesost: e\\r\\n\\r\\n\"\nreply: \"\"\n:t: value\r\n\r\n"
+reply: ""

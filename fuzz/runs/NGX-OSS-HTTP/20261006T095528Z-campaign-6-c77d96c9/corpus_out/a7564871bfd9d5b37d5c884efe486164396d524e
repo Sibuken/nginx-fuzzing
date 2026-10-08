@@ -1,0 +1,2 @@
+request: "POST /khunks HTTP/1.1\r\nHost: chunks.url.com\r\nTr234567r: vlimit_conn_zonerer: value\r\n\r\n"
+reply: "HTTP/1.0 404  \nDATE\n\r\n"

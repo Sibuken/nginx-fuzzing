@@ -1,0 +1,2 @@
+request: "OPTIONS http://absolute.uAl.com:8080/a//b/../c?x=1 HTTP/1.1\r\nHost: aEmpty:\r\n\r\n"
+reply: ""

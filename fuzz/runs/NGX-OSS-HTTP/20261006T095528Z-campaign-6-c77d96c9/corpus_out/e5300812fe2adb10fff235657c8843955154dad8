@@ -1,0 +1,2 @@
+request: "GET /a/./b\r\n"
+reply: "HTTP/1.0 405 Not F\364\364\364\364%\364\364Upgrade: F\r\n\r\n"

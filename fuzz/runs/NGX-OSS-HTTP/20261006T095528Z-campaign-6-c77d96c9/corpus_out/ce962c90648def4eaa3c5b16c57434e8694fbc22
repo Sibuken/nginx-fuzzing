@@ -1,0 +1,2 @@
+request: "GET /a/r\\nH\n"
+reply: "HTTP/1.0 404 Not F\364\364\364\364\364\364\364\364\364\364\364\364\364\364\364ound\r\nCLOCKontent-Length: 0\r\n\r\n"

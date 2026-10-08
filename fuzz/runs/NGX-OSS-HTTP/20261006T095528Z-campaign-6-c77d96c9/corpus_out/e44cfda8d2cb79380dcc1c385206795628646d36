@@ -1,0 +1,2 @@
+request: "GET /a/../b/%2e%2e/c//d?q=%00 HTTP/1.1\r\nHost: ee.url.com\r\nX_Test: value\r\n\r\n"
+reply: ""

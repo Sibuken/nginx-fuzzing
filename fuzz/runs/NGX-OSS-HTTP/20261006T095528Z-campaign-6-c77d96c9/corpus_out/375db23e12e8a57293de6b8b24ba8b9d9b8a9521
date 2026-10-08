@@ -1,0 +1,2 @@
+request: "POST /chunks HTTP/1.1\r\nHosrequest: \"GET /Test: valut Fon\\r\\n\"\nreply: \"HTTPEncoding: chunkeked\\r\\n\\r\\n1;z=qTrailer:\\r\\nX\\r\\n 0value\r\n\r\\r\\n\n\"\n"
+reply: ""

@@ -1,0 +1,2 @@
+request: "GET /a/Link\n"
+reply: "HTTP/1.0 407 Not F\222\212\221\233\362req\"\nreply: \"\"\n\n"

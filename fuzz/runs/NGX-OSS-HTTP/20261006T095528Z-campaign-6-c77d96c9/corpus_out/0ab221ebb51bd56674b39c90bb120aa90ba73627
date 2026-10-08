@@ -1,0 +1,2 @@
+request: "GET /a/c//d?q//d?q=%00 HTTP/1.1     entica\000teecko/g)t\n"
+reply: ""

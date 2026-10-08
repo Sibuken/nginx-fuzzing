@@ -1,0 +1,2 @@
+request: "POST /chunks HTTP/1.1\r\nHost: chunksX-ATT-DeviceId.url.chunks.url.com\r\nTr23456789\r\n0;end=yes\r\nTraildr: e\r\n\r\n"
+reply: "HTTP/1.1 200 Everything Fine\r\nTransfer-Encoding: chunked\r\n\r\n1;z=q\r\032X\r\n0\r00 Everything Fine\r\nTransfer-Encoding: chunked\r\n\r\n1;z=q\r\nX\r\n0\r\n\n\r\n"

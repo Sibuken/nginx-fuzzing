@@ -1,0 +1,59 @@
+{
+  "id": "NGX-IF15",
+  "origin": "custom",
+  "binary": "http2_headers_fuzzer",
+  "input_format": "raw HPACK header-block bytes; harness wraps them in valid HEADERS/CONTINUATION frames",
+  "mutator": "libFuzzer byte mutator",
+  "configuration_profile": "direct real nginx HPACK header-block state machine with a fresh connection pool and dynamic table per input; no HTTP request or routing pipeline",
+  "allocator_mode": "nginx pools scoped to one parser invocation",
+  "justification": "NGX-IF10 covers Huffman/integer primitives and NGX-IF11 covers frame headers, but neither decodes HPACK blocks or exercises dynamic-table state and CONTINUATION sequencing.",
+  "state": "Each block is decoded in one HEADERS frame and with 1-byte, 3-byte, and input-selected frame payload splits. Every run gets a fresh nginx connection and HPACK table.",
+  "known_limitations": [
+    "The hook starts at ngx_http_v2_state_header_block; the initial HEADERS frame header is constructed by the harness and ngx_http_v2_state_headers is not in scope.",
+    "The stream is NULL, so decoded fields update HPACK state but bypass HTTP header validation, pseudo-header semantics, request construction, and routing.",
+    "The harness emits well-formed CONTINUATION frame headers with the matching stream ID; malformed frame sequencing and network-read fragmentation remain outside this target.",
+    "The fuzz-only connection-error guard captures protocol errors without running nginx output/finalization side effects; production parser code otherwise remains unchanged."
+  ],
+  "limits": {
+    "max_len": 4096,
+    "per_input_timeout_seconds": 10,
+    "rss_limit_mb": 2048
+  },
+  "scopes": [
+    {
+      "id": "NGX-IF15-hpack-block",
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": [
+        "ngx_http_v2_state_header_block",
+        "ngx_http_v2_state_field_len",
+        "ngx_http_v2_state_field_huff",
+        "ngx_http_v2_state_field_raw",
+        "ngx_http_v2_state_field_skip",
+        "ngx_http_v2_state_process_header",
+        "ngx_http_v2_state_header_complete",
+        "ngx_http_v2_handle_continuation",
+        "ngx_http_v2_parse_int"
+      ],
+      "callers": ["ngx_http_v2_state_headers", "ngx_http_v2_state_continuation"],
+      "contract": "Decode a bounded HPACK block across HEADERS and CONTINUATION payloads, update/retrieve dynamic entries, and stop cleanly on malformed or truncated blocks.",
+      "preconditions": "An odd nonzero stream ID, fresh connection/state pools, zero initial dynamic-table entries, valid frame envelopes, and a 65536-byte decoded-header budget.",
+      "testcase_fields": ["HPACK representation bytes", "frame payload split"],
+      "variants": ["indexed fields", "literal with incremental indexing", "literal without indexing", "dynamic table size update", "Huffman strings", "invalid indices", "truncated integers/strings", "single and multiple CONTINUATION frames"]
+    },
+    {
+      "id": "NGX-IF15-hpack-table",
+      "file": "src/http/v2/ngx_http_v2_table.c",
+      "functions": [
+        "ngx_http_v2_get_indexed_header",
+        "ngx_http_v2_add_header",
+        "ngx_http_v2_table_account",
+        "ngx_http_v2_table_size"
+      ],
+      "callers": ["ngx_http_v2_state_header_block", "ngx_http_v2_state_process_header"],
+      "contract": "Maintain nginx's bounded HPACK dynamic table, including insertion, lookup, resizing, and eviction.",
+      "preconditions": "A fresh connection pool; table storage is initialized by nginx on the first incremental-indexing literal.",
+      "testcase_fields": ["HPACK indexed representation", "insertion literal", "table-size update"],
+      "variants": ["valid dynamic index after insertion", "zero/out-of-range index", "oversized table update", "entry eviction and wraparound"]
+    }
+  ]
+}

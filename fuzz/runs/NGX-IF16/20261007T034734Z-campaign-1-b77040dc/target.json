@@ -1,0 +1,28 @@
+{
+  "id": "NGX-IF16",
+  "origin": "custom",
+  "binary": "http2_pseudo_headers_fuzzer",
+  "input_format": "sequence of one-byte name length, one-byte value length, name bytes, value bytes",
+  "mutator": "libFuzzer byte mutator",
+  "configuration_profile": "real nginx HTTP/2 header validation and pseudo-header parsers with a fresh minimal synthetic request and live stream",
+  "allocator_mode": "fresh nginx pool per input",
+  "justification": "NGX-IF15 decodes HPACK blocks but has no request stream, so it cannot reach pseudo-header semantics. This target isolates method, scheme, path, duplicate, and unknown pseudo-header handling.",
+  "state": "Each input is interpreted as an ordered sequence of pseudo-header fields and passed through ngx_http_v2_validate_header and ngx_http_v2_pseudo_header using one synthetic request/stream. Request execution and authority-based virtual-server selection are not entered.",
+  "known_limitations": [
+    "The adapter constructs decoded fields directly; HPACK encoding/decoding remains covered by NGX-IF10 and NGX-IF15.",
+    ":authority is excluded because it requires initialized virtual-server name hashes.",
+    "Path values capable of triggering request finalization are excluded; ordinary URI parsing, empty/duplicate paths, and safe path characters remain in scope.",
+    "The hook ends before ngx_http_v2_run_request and does not run routing or application phases."
+  ],
+  "limits": {"max_len": 4096, "per_input_timeout_seconds": 10, "rss_limit_mb": 2048},
+  "scopes": [{
+    "id": "NGX-IF16-pseudo-headers",
+    "file": "src/http/v2/ngx_http_v2.c",
+    "functions": ["ngx_http_v2_validate_header", "ngx_http_v2_pseudo_header", "ngx_http_v2_parse_method", "ngx_http_v2_parse_scheme", "ngx_http_v2_parse_path"],
+    "callers": ["ngx_http_v2_state_process_header"],
+    "contract": "Validate and interpret ordered HTTP/2 pseudo-header fields while preserving duplicate detection and request-local state.",
+    "preconditions": "A fresh pool, initialized nginx modules, core server conf with merge_slashes enabled, and a synthetic request attached to one stream.",
+    "testcase_fields": ["ordered field name/value pairs"],
+    "variants": ["known and unknown pseudo-header names", "valid and invalid methods", "valid and invalid schemes", "empty and duplicate method/scheme/path", "ordinary safe URI paths"]
+  }]
+}

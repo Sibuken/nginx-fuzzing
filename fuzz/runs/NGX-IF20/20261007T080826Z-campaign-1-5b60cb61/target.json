@@ -1,0 +1,37 @@
+{
+  "id": "NGX-IF20",
+  "origin": "custom",
+  "binary": "http2_response_trailers_fuzzer",
+  "input_format": "bounded count-prefixed trailer/control records (mode and two bytes), optional field bytes, or synthesized body, followed by optional body bytes",
+  "mutator": "libFuzzer byte mutator",
+  "configuration_profile": "real HTTP/2 response-body send chain, trailer HPACK serialization and queued DATA/HEADERS frames",
+  "allocator_mode": "fresh request pool, synthetic connection and HTTP/2 stream per input",
+  "justification": "Incoming trailer-shaped HEADERS are rejected before HPACK decoding in this nginx revision. This target covers the supported outgoing trailer serialization boundary instead.",
+  "state": "Fuzz fields populate headers_out.trailers; an END_STREAM body buffer enters ngx_http_v2_send_chain, which creates DATA output as needed, serializes trailers through ngx_http_v2_create_trailers_frame, queues terminal frames, then drains them through ngx_http_v2_send_output_queue and the real DATA/HEADERS handlers using a socket-free consuming send_chain stub.",
+  "known_limitations": [
+    "The hook invokes ngx_http_v2_send_chain with a synthetic connection and consumes its output in memory; no socket or operating-system send is used.",
+    "Mode 0 suppresses a field; modes 2 and 3 synthesize oversized key/value lengths; mode 4 creates 255-byte fields for CONTINUATION framing; modes 5/6 force stream/connection flow control; mode 7 synthesizes a body length from the two record length bytes; mode 8 sets an 8-byte stream window for partial sends.",
+    "The input is capped at 65536 bytes and uses a fresh pool for each invocation; frame handlers run synchronously while the stream is marked blocked to suppress posted events.",
+    "Modes 5–21 are control records and are active only when the declared record count is exactly one. Mode 9 starts with a non-ready parent write event so queued output remains pending; mode 10 makes the in-memory sink return NGX_CHAIN_ERROR with connection event posting suppressed; mode 11 retries a pending queue after making the parent write event ready; mode 12 begins with a pre-existing connection error; mode 13 drops write readiness after output, exercises timer insertion, then retries and removes the timer; mode 14 injects ngx_handle_write_event failure; mode 15 injects ngx_tcp_push failure; mode 16 injects a successful tcp_push; mode 17 activates only for the canonical zero-length record followed by body byte 'A', partially sends the first frame header, and verifies the frame remains queued; mode 18 posts and then removes the write event on the output error path; mode 19 begins with the write event already posted and verifies the already-posted event branch without leaving a dangling queue entry; modes 20/21 force tcp_nodelay after successful tcp_push and inject its success/failure result. Linker wrappers affect only their selected one-shot calls and otherwise delegate normally. For these modes the fuzzer treats a failed state assertion as a crash."
+  ],
+  "limits": {"max_len": 65536, "per_input_timeout_seconds": 10, "rss_limit_mb": 2048},
+  "scopes": [{
+    "id": "NGX-IF20-response-trailers",
+    "file": "src/http/v2/ngx_http_v2_filter_module.c",
+    "functions": ["ngx_http_v2_send_chain", "ngx_http_v2_filter_get_data_frame", "ngx_http_v2_create_trailers_frame", "ngx_http_v2_create_headers_frame"],
+    "callers": ["ngx_http_v2_init_stream (installs the send_chain callback)", "ngx_http_v2_filter_send"],
+    "contract": "Pass an END_STREAM body buffer through ngx_http_v2_send_chain, serialize response trailers, and queue bounded DATA and final HEADERS/CONTINUATION frames.",
+    "preconditions": "Synthetic request/stream connection, parent HTTP/2 connection with a ready output event and valid minimal HTTP core location configuration, and fresh pool per input.",
+    "testcase_fields": ["record count", "record mode", "key/value lengths or synthesized body length", "key bytes", "value bytes", "remaining body bytes", "flow-control window"],
+    "variants": ["empty body", "non-empty body", "empty trailer list", "valid active field", "hash-zero skipped field", "oversized key", "oversized value", "multiple fields", "truncated key/value bytes", "large trailer block requiring CONTINUATION", "stream window exhausted", "connection window exhausted", "partial DATA send with bytes remaining", "body split into multiple DATA frames", "parent write event not ready", "output sink error", "pending output queue retried after write readiness"]
+  }, {
+    "id": "NGX-IF20-output-queue",
+    "file": "src/http/v2/ngx_http_v2.c",
+    "functions": ["ngx_http_v2_send_output_queue"],
+    "callers": ["ngx_http_v2_filter_send"],
+    "contract": "Consume the queued frame chain in memory and process its real DATA/HEADERS completion handlers without using a socket.",
+    "preconditions": "Synthetic ready write event, valid minimal HTTP core loc_conf, socket-free chain sink and stream.blocked suppressing event posts.",
+    "testcase_fields": ["queued DATA/HEADERS/CONTINUATION frame types", "partial or exhausted flow-control modes"],
+    "variants": ["complete queue drain", "multiple DATA frames", "trailer HEADERS and CONTINUATION", "partial body remains after queue drain", "queue retained while parent write event is not ready", "send_chain error and pre-existing connection error paths", "queue drained on retry after write readiness", "timer inserted when write readiness drops after output", "timer removed after retry", "injected write-event registration failure", "injected tcp_push failure and success", "partially sent frame retained by its completion handler", "write event posted and cleaned after output error", "already-posted write event branch", "injected tcp_nodelay success and failure after tcp_push", "failed control-mode invariants become fuzz findings"]
+  }]
+}

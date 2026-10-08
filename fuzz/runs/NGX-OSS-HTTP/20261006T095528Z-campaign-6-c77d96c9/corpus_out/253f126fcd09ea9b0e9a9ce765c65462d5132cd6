@@ -1,0 +1,2 @@
+request: "HEAD /headers HTTP/1.1\r\nHost: heeom\r\nX_Underscore: yes\r\nFolded:  a=biie: a=b; c=d-\n\n\n"
+reply: "HTTP/1.1 200 EPro:kgd\r\n?\r\nConnection: keep-alive\r\n%4er\\n\"\nre\302ly: ion: kee\377\377\377\377live\r\n%4er\\n\"\nreply: ion: k------------------------------------------------------------------ coding:kgd\\r\\n?\\r\\nConnection: keep-alirequest: \\\nreply: coding:kgd\r\n?\r\n\r\n"

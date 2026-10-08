@@ -1,0 +1,2 @@
+request: "GET /a/a../b\r\n"
+reply: "HTTP/1.atuss\r\nContent-LengthContentfffffffffffffffffffffffffffffffffffffffffffffffff-Length: 0\n\r\n"

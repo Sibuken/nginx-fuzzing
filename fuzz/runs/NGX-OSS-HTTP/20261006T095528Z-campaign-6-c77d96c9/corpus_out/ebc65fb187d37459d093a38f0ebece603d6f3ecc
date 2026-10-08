@@ -1,0 +1,2 @@
+request: "PROPFIND /colLection/%t-LengtAlt-X-ATT-DeviceIdSvc\n"
+reply: "\177"

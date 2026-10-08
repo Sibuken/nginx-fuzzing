@@ -1,0 +1,2 @@
+request: "GET /a/../b/%2e%2co#\r\nX\377\377\377\000\000\000\000\000alue\r\n\r\n"
+reply: ""

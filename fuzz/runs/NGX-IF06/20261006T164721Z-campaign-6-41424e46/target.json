@@ -1,0 +1,29 @@
+{
+  "id": "NGX-IF06",
+  "origin": "custom",
+  "binary": "proxy_protocol_fuzzer",
+  "input_format": "raw, one contiguous PROXY protocol candidate header",
+  "mutator": "libFuzzer byte mutator",
+  "configuration_profile": "standalone core parser with a real nginx pool and suppressed expected-rejection logging",
+  "allocator_mode": "NGX_DEBUG_PALLOC=1",
+  "justification": "NGX-OSS-HTTP measured 0/76 scoped lines because its embedded listener does not enable proxy_protocol.",
+  "state": "A fresh connection and nginx pool are created and destroyed for every input; no state crosses testcases.",
+  "known_limitations": [
+    "The function contract takes one contiguous header; fragmentation is intentionally not invented.",
+    "This target checks parser memory safety and return bounds, not listener integration or post-parse variable lookup.",
+    "Only ngx_proxy_protocol_read is in the frozen percentage scope; helper execution remains visible in file coverage."
+  ],
+  "limits": {"max_len": 65536, "per_input_timeout_seconds": 10, "rss_limit_mb": 2048},
+  "scopes": [
+    {
+      "id": "NGX-IF06",
+      "file": "src/core/ngx_proxy_protocol.c",
+      "functions": ["ngx_proxy_protocol_read"],
+      "callers": ["ngx_event_recvmsg", "ngx_http_wait_request_handler", "ngx_stream_proxy_protocol_handler"],
+      "contract": "Returns the first byte after one complete v1/v2 header, or NULL on rejection, and stores parsed metadata on the connection.",
+      "preconditions": "Connection log and pool are valid; buf..last is contiguous and bounded.",
+      "testcase_fields": ["raw bytes"],
+      "variants": ["v1 TCP4/TCP6/UNKNOWN", "v2 IPv4/IPv6", "ports", "lengths", "TLVs"]
+    }
+  ]
+}

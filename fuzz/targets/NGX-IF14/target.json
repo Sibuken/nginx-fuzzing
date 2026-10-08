@@ -1,0 +1,33 @@
+{
+  "id": "NGX-IF14",
+  "origin": "custom",
+  "binary": "http2_data_fuzzer",
+  "input_format": "raw sequence of HTTP/2 wire DATA frames",
+  "mutator": "libFuzzer byte mutator",
+  "configuration_profile": "real DATA handlers with preread, no-buffering request-body, bounded body-filter, multi-frame body, Content-Length validation, and single-/multi-frame padded-body profiles including mixed and long alternating padding sequences",
+  "allocator_mode": "NGX_DEBUG_PALLOC=1 with a fresh nginx pool for each fragmentation replay",
+  "justification": "NGX-IF12/13 cover connection control and stream reset, but not DATA padding, preread payload accumulation and receive-window state.",
+  "state": "Each input is parsed eight times across four fragmentation schedules in preread and no-buffering profiles. Structurally valid unpadded single DATA frames on stream 1 are parsed through bounded body-filter profiles with chunked, matching Content-Length, and too-short Content-Length settings; the overrun result is captured before synthetic request finalization. END_STREAM frames also run a profile declaring one byte more than the body, simulating the body-read flush continuation and requiring ngx_http_v2_filter_request_body to return NGX_HTTP_BAD_REQUEST for the underrun. Structurally valid padded single DATA frames with more than 16 body bytes after padding are run through the real body filter with an exact Content-Length under four network-fragment schedules. Valid multi-frame DATA sequences are additionally run through a persistent request_body buffer and filter chain, ending with END_STREAM. Sequences where every DATA frame is validly padded and total unpadded body exceeds 16 bytes are parsed through the same shared request_body buffer and filter chain under four network-fragment schedules. Mixed-padding sequences with at least one padded and one unpadded DATA frame, valid final END_STREAM, and more than 16 unpadded body bytes use the same shared path and fragmentation schedules. A dedicated long-sequence profile requires at least six valid DATA frames, five padding-state transitions, and at least 48 unpadded body bytes; it reuses the shared request_body buffer and filter chain under the four fragmentation schedules.",
+  "known_limitations": [
+    "Only DATA frames are accepted and only stream ID 1 has a synthetic live request.",
+    "The request_body profiles exercise ngx_http_v2_process_request_body; gated body-filter profiles isolate structurally valid DATA and multi-frame sequences and exercise ngx_http_v2_filter_request_body with a consuming no-op sink. A fuzz-only guard captures body validation errors before synthetic request finalization. The underrun profile explicitly simulates the body-read flush continuation after END_STREAM. Matching-length and single-frame padded-body profiles simulate the body-read flush continuation; padded multi-frame inputs retain one shared request_body state across all frames. Downstream body filters, application processing and a full HEADERS-to-request path are not entered.",
+    "Inputs are capped at 4096 bytes, so large-frame receive-window exhaustion is not reachable."
+  ],
+  "limits": {
+    "max_len": 4096,
+    "per_input_timeout_seconds": 10,
+    "rss_limit_mb": 2048
+  },
+  "scopes": [
+    {
+      "id": "NGX-IF14-data-frame",
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": ["ngx_http_v2_state_data", "ngx_http_v2_state_read_data", "ngx_http_v2_process_request_body", "ngx_http_v2_filter_request_body"],
+      "callers": ["ngx_http_v2_state_head", "ngx_http_v2_state_read_data", "ngx_http_v2_process_request_body"],
+      "contract": "Validate DATA stream identifier, padding and receive windows; skip unknown or closed streams; consume payload through preread, request_body and bounded filter-chain paths; preserve request-body state across multiple DATA frames and honor final END_STREAM.",
+      "preconditions": "Fresh HTTP/2 connection with one active stream ID 1, a valid core location conf, an 8192-byte preread buffer or a 16-byte request_body buffer, and a consuming no-op top body filter.",
+      "testcase_fields": ["length", "flags", "stream ID", "pad length", "payload", "frame sequence"],
+      "variants": ["unpadded payload", "padded payload", "invalid padding", "minimum one-byte padded body", "zero padding", "one-byte padding", "maximum 255-byte padding", "minimum 17-byte body through filter", "END_STREAM", "unknown stream", "stream ID zero", "fragmented body", "multiple DATA frames", "request_body buffer", "full body buffer and chain flush", "body spanning DATA frames", "matching Content-Length", "body exceeding Content-Length", "body shorter than Content-Length at END_STREAM", "padded body through request-body filter", "padded intermediate and final frames", "padded multi-frame body through shared filter buffer", "mixed padded and unpadded multi-frame body through shared filter buffer", "unpadded then padded sequence", "15+1+2-byte body across the 16-byte shared-buffer boundary", "mixed padding with varied DATA frame payload lengths", "six-frame alternating padding with repeated shared-buffer flushes", "padded DATA after 15 accumulated body bytes", "padded DATA after 16 accumulated body bytes", "padded DATA after 17 accumulated body bytes", "padding lengths 0, 1 and 255 at each 15/16/17-byte body boundary"]
+    }
+  ]
+}

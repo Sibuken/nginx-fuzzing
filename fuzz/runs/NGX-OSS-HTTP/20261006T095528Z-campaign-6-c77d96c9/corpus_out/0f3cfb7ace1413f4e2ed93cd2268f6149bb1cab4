@@ -1,0 +1,2 @@
+request: "GET /a/./.\r\n"
+reply: "HTTP/1.1 200 Everything Fine\r\nTransfer-Encodingsent_http_content_type: cd\r\n\r\n1;z=q\r\nX\r\n0\r\n\n\r\n"

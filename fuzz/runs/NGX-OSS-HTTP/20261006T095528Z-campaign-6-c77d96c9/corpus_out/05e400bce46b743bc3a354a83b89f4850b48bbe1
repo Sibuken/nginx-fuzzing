@@ -1,0 +1,2 @@
+request: "GET /a/.~/d?q=%00 HTTP/1.1\r\nConnection:.urd.prox=_httrl.prox=_request: \"Gn/%22//../b/%ee%22c//%22/c///a/../b/%ee%22/c//d=qee%44/c//%23/c///a/../../b/%ee%22/a/..,b/22/c///a/../b/%ee%22/c//d=qee%44/c//%23/c///a/../../b/%ee%22/a/..,b/%ee%22/c//%22/c///a/.LOCK.+b/%ee%22/c//d=qee%44/c//%22/c//%22/c///a/..b//b/%ee%2=\n_\n"
+reply: ""

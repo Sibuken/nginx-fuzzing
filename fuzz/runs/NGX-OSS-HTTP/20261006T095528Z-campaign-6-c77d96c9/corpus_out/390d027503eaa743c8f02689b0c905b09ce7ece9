@@ -1,0 +1,2 @@
+request: "GET /a/../b/%2ede.uuedge.url.com\r\nUPDATE: value\rt:\n"
+reply: ""

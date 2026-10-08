@@ -1,0 +1,2 @@
+request: "GET /a/../b/%2evLOCK\r\n\r\n"
+reply: "HTTP/1.1 207 Multi-Status\r\nCo\356tent-Length: 0\r\n\r\n"

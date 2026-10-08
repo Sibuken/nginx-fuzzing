@@ -1,0 +1,2 @@
+request: "GET /a/../bd?q=%00 HTTP/1.10  H)r,,?"
+reply: ""

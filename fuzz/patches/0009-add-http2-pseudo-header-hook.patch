@@ -1,0 +1,146 @@
+--- a/src/http/v2/ngx_http_v2.c
++++ b/src/http/v2/ngx_http_v2.c
+@@ -3381,6 +3381,143 @@ ngx_http_v2_parse_path(ngx_http_request_t *r, ngx_str_t *value)
+     return NGX_OK;
+ }
++
++/* Build-only pseudo-header contract driver; no request lifecycle is entered. */
++ngx_int_t
++ngx_http_v2_fuzz_pseudo_headers(u_char *data, size_t len)
++{
++    size_t                    i, name_len, value_len;
++    ngx_int_t                 rc;
++    ngx_log_t                 log;
++    ngx_pool_t               *pool;
++    ngx_connection_t          connection;
++    ngx_http_connection_t     http_connection;
++    ngx_http_request_t        request;
++    ngx_http_v2_stream_t      stream;
++    ngx_http_conf_ctx_t       conf_ctx;
++    ngx_http_core_srv_conf_t  core_srv_conf;
++    ngx_http_request_body_t   request_body;
++    ngx_http_v2_header_t      header;
++    u_char                   *uri_copy;
++    void                    **srv_conf;
++    ngx_uint_t                core_ctx_index;
++
++    ngx_memzero(&log, sizeof(ngx_log_t));
++    ngx_memzero(&connection, sizeof(ngx_connection_t));
++    ngx_memzero(&http_connection, sizeof(ngx_http_connection_t));
++    ngx_memzero(&request, sizeof(ngx_http_request_t));
++    ngx_memzero(&stream, sizeof(ngx_http_v2_stream_t));
++    ngx_memzero(&conf_ctx, sizeof(ngx_http_conf_ctx_t));
++    ngx_memzero(&core_srv_conf, sizeof(ngx_http_core_srv_conf_t));
++    ngx_memzero(&request_body, sizeof(ngx_http_request_body_t));
++
++    log.log_level = NGX_LOG_EMERG;
++    pool = ngx_create_pool(4096, &log);
++    if (pool == NULL) {
++        return NGX_ERROR;
++    }
++
++    srv_conf = ngx_pcalloc(pool, sizeof(void *) * ngx_max_module);
++    if (srv_conf == NULL) {
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++
++    core_srv_conf.merge_slashes = 1;
++    srv_conf[ngx_http_core_module.ctx_index] = &core_srv_conf;
++    conf_ctx.srv_conf = srv_conf;
++    http_connection.conf_ctx = &conf_ctx;
++
++    connection.log = &log;
++    connection.pool = pool;
++    request.connection = &connection;
++    request.pool = pool;
++    request.http_connection = &http_connection;
++    request.srv_conf = srv_conf;
++    request.main = &request;
++    request.count = 1;
++    request.stream = &stream;
++    request.request_body = &request_body;
++    stream.request = &request;
++
++    core_ctx_index = ngx_http_core_module.ctx_index;
++    ngx_http_core_module.ctx_index = 0;
++    srv_conf[0] = &core_srv_conf;
++
++    i = 0;
++    while (i < len) {
++        if (len - i < 2) {
++            break;
++        }
++
++        name_len = data[i++];
++        value_len = data[i++];
++
++        if (name_len == 0 || name_len > len - i
++            || value_len > len - i - name_len)
++        {
++            break;
++        }
++
++        header.name.data = data + i;
++        header.name.len = name_len;
++        i += name_len;
++        header.value.data = data + i;
++        header.value.len = value_len;
++        i += value_len;
++
++        if (header.name.len < 2 || header.name.data[0] != ':') {
++            continue;
++        }
++
++        /* Authority selection needs a configured virtual-server hash. */
++        if (header.name.len == sizeof(":authority") - 1
++            && ngx_memcmp(header.name.data, ":authority",
++                          sizeof(":authority") - 1) == 0)
++        {
++            continue;
++        }
++
++        if (ngx_http_v2_validate_header(&request, &header) != NGX_OK) {
++            continue;
++        }
++
++        /* Keep URI handling on the non-finalizing normal-path branch. */
++        if (header.name.len == sizeof(":path") - 1
++            && ngx_memcmp(header.name.data, ":path", sizeof(":path") - 1) == 0)
++        {
++            size_t j;
++            for (j = 0; j < header.value.len; j++) {
++                u_char ch = header.value.data[j];
++                if (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')
++                      || (ch >= '0' && ch <= '9') || ch == '/' || ch == '-'
++                      || ch == '_' || ch == '?'))
++                {
++                    break;
++                }
++            }
++            if (j != header.value.len) {
++                continue;
++            }
++            uri_copy = ngx_pnalloc(pool, header.value.len + 1);
++            if (uri_copy == NULL) {
++                ngx_http_core_module.ctx_index = core_ctx_index;
++                ngx_destroy_pool(pool);
++                return NGX_ERROR;
++            }
++            ngx_memcpy(uri_copy, header.value.data, header.value.len);
++            uri_copy[header.value.len] = '\0';
++            header.value.data = uri_copy;
++        }
++
++        rc = ngx_http_v2_pseudo_header(&request, &header);
++        (void) rc;
++    }
++
++    ngx_http_core_module.ctx_index = core_ctx_index;
++    ngx_destroy_pool(pool);
++    return NGX_OK;
++}
+ 
+ 
+ static ngx_int_t
+ ngx_http_v2_parse_method(ngx_http_request_t *r, ngx_str_t *value)

@@ -1,0 +1,2 @@
+request: "GET /a/../b/%ee%22r\\nCont=%00 HTTP/1.1\r\nHost: edge.url.comH}stT2st: value\r\n\r\n"
+reply: ""

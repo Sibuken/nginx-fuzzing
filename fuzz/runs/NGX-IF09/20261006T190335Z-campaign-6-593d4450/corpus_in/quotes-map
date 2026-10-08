@@ -1,0 +1,2 @@
+log_format main '$remote_addr - $request';
+map $host $backend { default upstream; }

@@ -1,0 +1,2 @@
+request: "GET /a\n"
+reply: "HTTP/1.1 200\nTransfer-Encoding: X-Content-Durationchunkef\r\n\r\n0;z=q\rStrict-Transport-Securitye0\r\n\n\r\n"

@@ -1,0 +1,2 @@
+request: "POST /chunks HTTP/1.1\r\nHost: chunks.url.com\r\n.com\r\nTr2334\r\nTr23456789\r\n0;end=yes\r\nTraildr: valu: chunks.url.com\r\nTr233456789\r\n0;end=yes\r\nTraildr: valu: chunks.url.com\r\nTr23456789\r\n0nde=s;ye\r\nTraildr: e\r\n\r\n"
+reply: "GET /a/../b/%ee%22/c//d?q=.url./b/%ee%Test: value\r\n\r\n"

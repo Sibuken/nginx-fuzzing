@@ -1,0 +1,2 @@
+request: "GET /a/./.\r\n"
+reply: "HTTP/11Vary4 NoCKearly_hints\n\r\n"

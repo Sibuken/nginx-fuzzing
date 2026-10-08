@@ -1,0 +1,2 @@
+request: "GET /stream HTTP/1.1\r\nHost: radio.url.com\r\n\r\n"
+reply: "ICY 200 OK\r\nicy-name: station\r\n\r\nstream"

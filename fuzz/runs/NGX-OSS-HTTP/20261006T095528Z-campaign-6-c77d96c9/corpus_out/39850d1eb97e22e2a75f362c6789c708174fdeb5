@@ -1,0 +1,2 @@
+request: "GET /aX-Content-Type-Options\nX_Tes\np\n"
+reply: "HTTP/1.1 200 Everything Fine\r\nTransfer-Encoding: chunked\r\n\r\n1;\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\373\377\377\377\377\377\377\377\377z=qXversionansferX-Csrchunked\\r\\n\\r\\n\\377\\377_\\360sfer-EncodingAccess-Control-Allow-Headers\n"

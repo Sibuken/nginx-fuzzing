@@ -1,0 +1,3 @@
+request: "POST /upload?x=1 HTTP/1.1\r\nHost: api.url.com\r\nTransfer-Encoding: chunked\r\nContent-Type: text/plain\r\n\r\n4\r\ntest\r\n0\r\nX-Trailer: yes\r\n\r\n"
+reply: "HTTP/1.1 201 Created\r\nTransfer-Encoding: chunked\r\n\r\n2\r\nOK\r\n0\r\n\r\n"
+

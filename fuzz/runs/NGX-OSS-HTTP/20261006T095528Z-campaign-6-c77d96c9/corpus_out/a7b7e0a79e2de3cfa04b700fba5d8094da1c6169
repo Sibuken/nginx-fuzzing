@@ -1,0 +1,2 @@
+request: "GET /a/../b/%2e%2@/c//d?q=%00 HTTP/1.00000000000http_host00000000000000000000000000000000000000000000000000000000000200000000000000000001\r\nHost: edge.url.Fron-tproxy_buffering$$,,,,,,,,,,,,,,,,t: edge.url.Front-proxy_buffering$$,,,,,,,,,,,,,,,,,,,,,,$$$$$!$$$$$$$$$$$$$$$$,,,,,,$$$$$!$$$$$$$$$$$$$$$$$$$$$$$$$$$$$-$$$$$$Accol-Allow-\234Origin$$$$$$$$$$$$mlue\r\n\r\n%"
+reply: "proxy_pass"

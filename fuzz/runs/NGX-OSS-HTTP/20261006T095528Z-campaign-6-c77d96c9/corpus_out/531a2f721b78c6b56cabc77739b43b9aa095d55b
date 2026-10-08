@@ -1,0 +1,2 @@
+request: "GET /a/../b/%\n\r\n"
+reply: ""

@@ -1,0 +1,105 @@
+--- a/auto/make_fuzzers
++++ b/auto/make_fuzzers
+@@ -16,7 +16,7 @@ ngx_objs=`echo objs/src/fuzz/wrappers.o $ngx_all_objs $ngx_modules_obj \
+ 
+ cat << END                                                    >> $NGX_MAKEFILE
+ 
+-fuzzers: objs/http_request_fuzzer
++fuzzers: objs/http_request_fuzzer objs/proxy_protocol_fuzzer objs/dns_response_fuzzer objs/proxy_protocol_tlv_fuzzer objs/config_parser_fuzzer objs/hpack_fuzzer objs/http2_frame_fuzzer objs/http2_control_fuzzer objs/http2_rst_stream_fuzzer objs/http2_data_fuzzer objs/http2_headers_fuzzer objs/http2_pseudo_headers_fuzzer objs/http2_request_headers_fuzzer objs/http2_headers_state_fuzzer
+ 
+ objs/src/fuzz/wrappers.o:
+ 	\$(CC) $ngx_compile_opt \$(CFLAGS) -o objs/src/fuzz/wrappers.o src/fuzz/wrappers.c
+@@ -37,3 +37,93 @@
++objs/proxy_protocol_fuzzer: $ngx_deps_fuzz
++	 \$(CXX) \$(CXXFLAGS) -DNDEBUG src/fuzz/proxy_protocol_fuzzer.cc \
++	 -o objs/proxy_protocol_fuzzer \
++	 \$(CORE_INCS) \$(HTTP_INCS) \
++	 $ngx_binexit$ngx_long_cont$ngx_objs \
++   	 \$(LIB_FUZZING_ENGINE) $ngx_libs$ngx_link$ngx_main_link -lcrypt
++
++objs/dns_response_fuzzer: $ngx_deps_fuzz
++	 \$(CXX) \$(CXXFLAGS) -DNDEBUG src/fuzz/dns_response_fuzzer.cc \
++	 -o objs/dns_response_fuzzer \
++	 \$(CORE_INCS) \$(HTTP_INCS) \
++	 $ngx_binexit$ngx_long_cont$ngx_objs \
++   	 \$(LIB_FUZZING_ENGINE) $ngx_libs$ngx_link$ngx_main_link -lcrypt
++
++objs/proxy_protocol_tlv_fuzzer: $ngx_deps_fuzz
++	 \$(CXX) \$(CXXFLAGS) -DNDEBUG src/fuzz/proxy_protocol_tlv_fuzzer.cc \
++	 -o objs/proxy_protocol_tlv_fuzzer \
++	 \$(CORE_INCS) \$(HTTP_INCS) \
++	 $ngx_binexit$ngx_long_cont$ngx_objs \
++   	 \$(LIB_FUZZING_ENGINE) $ngx_libs$ngx_link$ngx_main_link -lcrypt
++
++objs/config_parser_fuzzer: $ngx_deps_fuzz
++	 \$(CXX) \$(CXXFLAGS) -DNDEBUG src/fuzz/config_parser_fuzzer.cc \
++	 -o objs/config_parser_fuzzer \
++	 \$(CORE_INCS) \$(HTTP_INCS) \
++	 $ngx_binexit$ngx_long_cont$ngx_objs \
++   	 \$(LIB_FUZZING_ENGINE) $ngx_libs$ngx_link$ngx_main_link -lcrypt
++
++objs/hpack_fuzzer: $ngx_deps_fuzz
++	 \$(CXX) \$(CXXFLAGS) -DNDEBUG src/fuzz/hpack_fuzzer.cc \
++	 -o objs/hpack_fuzzer \
++	 \$(CORE_INCS) \$(HTTP_INCS) \
++	 $ngx_binexit$ngx_long_cont$ngx_objs \
++   	 \$(LIB_FUZZING_ENGINE) $ngx_libs$ngx_link$ngx_main_link -lcrypt
++
++objs/http2_frame_fuzzer: $ngx_deps_fuzz
++	 \$(CXX) \$(CXXFLAGS) -DNDEBUG src/fuzz/http2_frame_fuzzer.cc \
++	 -o objs/http2_frame_fuzzer \
++	 \$(CORE_INCS) \$(HTTP_INCS) \
++	 $ngx_binexit$ngx_long_cont$ngx_objs \
++   	 \$(LIB_FUZZING_ENGINE) $ngx_libs$ngx_link$ngx_main_link -lcrypt
++
++objs/http2_control_fuzzer: $ngx_deps_fuzz
++	 \$(CXX) \$(CXXFLAGS) -DNDEBUG src/fuzz/http2_control_fuzzer.cc \
++	 -o objs/http2_control_fuzzer \
++	 \$(CORE_INCS) \$(HTTP_INCS) \
++	 $ngx_binexit$ngx_long_cont$ngx_objs \
++   	 \$(LIB_FUZZING_ENGINE) $ngx_libs$ngx_link$ngx_main_link -lcrypt
++
++objs/http2_rst_stream_fuzzer: $ngx_deps_fuzz
++	 \$(CXX) \$(CXXFLAGS) -DNDEBUG src/fuzz/http2_rst_stream_fuzzer.cc \\
++	 -o objs/http2_rst_stream_fuzzer \\
++	 \$(CORE_INCS) \$(HTTP_INCS) \\
++	 $ngx_binexit$ngx_long_cont$ngx_objs \\
++   	 \$(LIB_FUZZING_ENGINE) $ngx_libs$ngx_link$ngx_main_link -lcrypt
++
++objs/http2_data_fuzzer: $ngx_deps_fuzz
++	 \$(CXX) \$(CXXFLAGS) -DNDEBUG src/fuzz/http2_data_fuzzer.cc \\
++	 -o objs/http2_data_fuzzer \\
++	 \$(CORE_INCS) \$(HTTP_INCS) \\
++	 $ngx_binexit$ngx_long_cont$ngx_objs \\
++	 \$(LIB_FUZZING_ENGINE) $ngx_libs$ngx_link$ngx_main_link -lcrypt
++
++objs/http2_headers_fuzzer: $ngx_deps_fuzz
++	 \$(CXX) \$(CXXFLAGS) -DNDEBUG src/fuzz/http2_headers_fuzzer.cc \\
++	 -o objs/http2_headers_fuzzer \\
++	 \$(CORE_INCS) \$(HTTP_INCS) \\
++	 $ngx_binexit$ngx_long_cont$ngx_objs \\
++	 \$(LIB_FUZZING_ENGINE) $ngx_libs$ngx_link$ngx_main_link -lcrypt
++
++objs/http2_pseudo_headers_fuzzer: $ngx_deps_fuzz
++	 \$(CXX) \$(CXXFLAGS) -DNDEBUG src/fuzz/http2_pseudo_headers_fuzzer.cc \\
++	 -o objs/http2_pseudo_headers_fuzzer \\
++	 \$(CORE_INCS) \$(HTTP_INCS) \\
++	 $ngx_binexit$ngx_long_cont$ngx_objs \\
++	 \$(LIB_FUZZING_ENGINE) $ngx_libs$ngx_link$ngx_main_link -lcrypt
++
++objs/http2_request_headers_fuzzer: $ngx_deps_fuzz
++	 \$(CXX) \$(CXXFLAGS) -DNDEBUG src/fuzz/http2_request_headers_fuzzer.cc \\
++	 -o objs/http2_request_headers_fuzzer \\
++	 \$(CORE_INCS) \$(HTTP_INCS) \\
++	 $ngx_binexit$ngx_long_cont$ngx_objs \\
++	 \$(LIB_FUZZING_ENGINE) $ngx_libs$ngx_link$ngx_main_link -lcrypt
++
++objs/http2_headers_state_fuzzer: $ngx_deps_fuzz
++	 \$(CXX) \$(CXXFLAGS) -DNDEBUG src/fuzz/http2_headers_state_fuzzer.cc \\
++	 -o objs/http2_headers_state_fuzzer \\
++	 \$(CORE_INCS) \$(HTTP_INCS) \\
++	 $ngx_binexit$ngx_long_cont$ngx_objs \\
++	 \$(LIB_FUZZING_ENGINE) $ngx_libs$ngx_link$ngx_main_link -lcrypt
+ $ngx_long_end					    
+ 
+ END

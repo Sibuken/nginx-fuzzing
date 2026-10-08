@@ -1,0 +1,2 @@
+request: "GET /a/a\350/../..P3P\n"
+reply: "HTTP/1.0 404 gh0\r\n\rnd\r\nCLOCKontent-Len:t gh0\r\n\r\n"

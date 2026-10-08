@@ -1,0 +1,70 @@
+{
+  "id": "NGX-IF07",
+  "origin": "custom",
+  "binary": "dns_response_fuzzer",
+  "input_format": "raw: one control byte selecting UDP/TCP and an optional waiting callback, followed by one DNS wire-format response",
+  "mutator": "libFuzzer byte mutator",
+  "configuration_profile": "direct asynchronous resolver response parser with a fuzz-only pending-query setup hook",
+  "allocator_mode": "nginx resolver allocator plus a per-input nginx pool",
+  "justification": "DNS responses are untrusted network input and were explicitly left as a follow-up outside the original six scopes.",
+  "state": "A fresh resolver and matching pending A, AAAA, SRV, or IPv4 PTR query are created per input; mode bit 1 optionally attaches a self-freeing no-op waiter to exercise asynchronous completion, no sockets are opened and no state crosses inputs.",
+  "known_limitations": [
+    "The target parses one complete UDP or TCP DNS message, not TCP length framing or socket events.",
+    "Truncated UDP responses are parsed without installing a pending node so the harness never initiates TCP fallback.",
+    "IPv6 PTR pending-query setup is not modeled; its question parser remains reachable but a matching addr6 node is not installed.",
+    "The setup hook is applied only to the isolated instrumented build copy."
+  ],
+  "limits": {"max_len": 65536, "per_input_timeout_seconds": 10, "rss_limit_mb": 2048},
+  "scopes": [
+    {
+      "id": "NGX-IF07-response",
+      "file": "src/core/ngx_resolver.c",
+      "functions": ["ngx_resolver_process_response"],
+      "callers": ["ngx_resolver_udp_read", "ngx_resolver_tcp_read"],
+      "contract": "Validates and dispatches one DNS response or rejects malformed header/question data.",
+      "preconditions": "Initialized resolver trees/queues/log and a pending query whose ID, name and type match an uncompressed single-question response.",
+      "testcase_fields": ["UDP/TCP mode", "DNS header", "question", "answer records"],
+      "variants": ["A", "AAAA", "CNAME", "SRV", "IPv4 PTR", "DNS errors", "compression", "truncation", "malformed counts and lengths"]
+    },
+    {
+      "id": "NGX-IF07-address",
+      "file": "src/core/ngx_resolver.c",
+      "functions": ["ngx_resolver_process_a"],
+      "callers": ["ngx_resolver_process_response"],
+      "contract": "Correlates and parses A/AAAA/CNAME answers, updates the address cache and completes waiters.",
+      "preconditions": "A matching pending name node exists.",
+      "testcase_fields": ["A/AAAA question", "answer owner", "TTL", "RDLENGTH", "RDATA"],
+      "variants": ["single and multiple A", "single and multiple AAAA", "CNAME", "NXDOMAIN", "malformed records"]
+    },
+    {
+      "id": "NGX-IF07-srv",
+      "file": "src/core/ngx_resolver.c",
+      "functions": ["ngx_resolver_process_srv"],
+      "callers": ["ngx_resolver_process_response"],
+      "contract": "Parses SRV/CNAME answers and stores sorted service records.",
+      "preconditions": "A matching pending SRV node exists; success callbacks that would start child DNS queries are not installed.",
+      "testcase_fields": ["SRV priority", "weight", "port", "target name"],
+      "variants": ["SRV", "CNAME", "DNS errors", "malformed records"]
+    },
+    {
+      "id": "NGX-IF07-ptr",
+      "file": "src/core/ngx_resolver.c",
+      "functions": ["ngx_resolver_process_ptr"],
+      "callers": ["ngx_resolver_process_response"],
+      "contract": "Parses reverse lookup answers, caches the name and completes waiters.",
+      "preconditions": "A matching pending IPv4 address node exists.",
+      "testcase_fields": ["in-addr.arpa question", "PTR target", "TTL"],
+      "variants": ["IPv4 PTR", "CNAME", "DNS errors", "invalid reverse names"]
+    },
+    {
+      "id": "NGX-IF07-name-copy",
+      "file": "src/core/ngx_resolver.c",
+      "functions": ["ngx_resolver_copy"],
+      "callers": ["ngx_resolver_process_a", "ngx_resolver_process_srv", "ngx_resolver_process_ptr"],
+      "contract": "Decodes DNS labels and compression pointers with bounds and loop checks.",
+      "preconditions": "The source starts within a padded DNS packet and last marks its logical end.",
+      "testcase_fields": ["labels", "compression pointers"],
+      "variants": ["plain names", "compressed names", "pointer loops", "out-of-range pointers", "invalid label types"]
+    }
+  ]
+}

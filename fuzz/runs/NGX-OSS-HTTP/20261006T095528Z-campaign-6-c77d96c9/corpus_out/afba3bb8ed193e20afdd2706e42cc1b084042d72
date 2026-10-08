@@ -1,0 +1,2 @@
+request: "GET /a/a_\n"
+reply: "HTTP/1.1 200 EPro:kgd\r\n?\r\nConnection: keep-alive\r\n%4er\\n\"\nreply: ion: kee\377\377\377\377ive\r\n%4er\\n\"\nreply: coding:kgd\r\n?\r\nConnection: keep-alive\r\n%4er\\n\"\nrepkeep-alive\r\n%4er\\n\"\nreply: coding:kgd\r\n?\r\nConnection: keep-alive\r\n%4er\\n\"\nreply: coding:kgd\r\n?\r\n\r\n"

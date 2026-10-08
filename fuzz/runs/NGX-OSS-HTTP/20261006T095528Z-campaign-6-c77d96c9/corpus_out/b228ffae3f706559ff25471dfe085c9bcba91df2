@@ -1,0 +1,2 @@
+request: "GET /a/attremote_port\n"
+reply: "HTTP/1.1 200 Everything Fine\r\nTransfer-Encoding: chunked\r\n\r\n0;\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377312\\312\\312655+\\312\\312\\312\\312\\312\\312\\ionansferX-Csrchun12655+\\312\\n\\377\\377_\\360sfer-EncodingAccesked\\r\\n\\r\\377_\\360sfer-EncodingAccess-Control-Atrol-Allow-Header\215\354"

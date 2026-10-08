@@ -1,0 +1,2 @@
+request: "OPTIONS http://absolute.uAl.er-EncodingOPT?x=1 HTTP/1.1\r\nHost: aEmpty:\r\n\r\n"
+reply: "\364Set-Cookie\364\364\364\364"

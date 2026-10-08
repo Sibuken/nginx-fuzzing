@@ -1,0 +1,2 @@
+request: "GET /a/._\n"
+reply: "HTTP/1.1 200 EverythinStrict-Transport-Secu2ity\nTransfer-Encoding: chunked\r\n\r\n0;z=q\r\nX\r\n\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000Accept-Language"

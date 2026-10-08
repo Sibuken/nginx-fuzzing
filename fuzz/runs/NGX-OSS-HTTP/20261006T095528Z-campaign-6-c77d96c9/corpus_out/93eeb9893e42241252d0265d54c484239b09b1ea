@@ -1,0 +1,2 @@
+request: "PROPFIND /collection/%41/%7euser HTTP/1.1\r\nHost: dav.url.com\r\nDepth: infinity\r\nCoequest: \"GET /a/../b/%2eM\\000e/c//d?q=%00 HTTP/1.1\\r|nHost: edge.url.com\\r\\nX_Test: value\\r\\n\\r\\n\"\nreply: \"PROPFIND /collection/%41/%7euser HTTP/1.1\\r\\nHost: dav.u[[[[[[[[rl.com\\r\\nDepth: infinity\\r\\nContent-Length:ntent-Length: 0\r\n\r\n"
+reply: "HTTP/1.0 404 r\\n\\r\\n\"\nreply: \"\364\n@LOCKontent-Length: 0\r\n\r\n"

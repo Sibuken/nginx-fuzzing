@@ -1,0 +1,2 @@
+request: "GET /a/a3/.\377\377\377VAccess-Conproxy_protocol_server_porttrol-Expose-Head\345rs&&&../.b\r\n0"
+reply: "HTTP/1.1 200 OK\r\nContent-Length: 2\r\n\r\n\r\nOK"

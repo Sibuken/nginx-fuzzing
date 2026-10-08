@@ -1,0 +1,62 @@
+--- a/src/fuzz/http_request_fuzzer.cc
++++ b/src/fuzz/http_request_fuzzer.cc
+@@ -194,9 +194,16 @@
+ 
+   ngx_memzero(&init_cycle, sizeof(ngx_cycle_t));
+   init_cycle.log = log;
++  ngx_str_set(&init_cycle.conf_prefix, "/tmp/");
++  ngx_str_set(&init_cycle.prefix, "/tmp/");
++  ngx_str_set(&init_cycle.error_log, "");
++  ngx_str_set(&init_cycle.conf_param, "");
+   ngx_cycle = &init_cycle;
+ 
+   init_cycle.pool = ngx_create_pool(1024, log);
++  if (init_cycle.pool == NULL) {
++    return 1;
++  }
+ 
+   // Set custom argv/argc
+   my_argv[0] = arg1;
+@@ -217,12 +224,19 @@
+   ngx_preinit_modules();
+ 
+   FILE *fptr = fopen(config_file, "w");
++  if (fptr == NULL) {
++    return 2;
++  }
++
+   fprintf(fptr, "%s", configuration);
+   fclose(fptr);
+   init_cycle.conf_file.len = strlen(config_file);
+   init_cycle.conf_file.data = (unsigned char *) config_file;
+ 
+   cycle = ngx_init_cycle(&init_cycle);
++  if (cycle == NULL) {
++    return 3;
++  }
+ 
+   ngx_os_status(cycle->log);
+   ngx_cycle = cycle;
+@@ -245,7 +259,21 @@
+ 
+ DEFINE_PROTO_FUZZER(const HttpProto &input) {
+   static int init = InitializeNginx();
+-  assert(init == 0);
++  if (init != 0) {
++    fprintf(stderr, "InitializeNginx failed: %d\n", init);
++    abort();
++  }
++
++  // The adapter has no event loop and its events live on the stack. Start
++  // every testcase with empty timer and posted-event queues so no stack
++  // event can escape into the next testcase.
++  if (ngx_event_timer_init(ngx_cycle->log) != NGX_OK) {
++    abort();
++  }
++  ngx_queue_init(&ngx_posted_accept_events);
++  ngx_queue_init(&ngx_posted_next_events);
++  ngx_queue_init(&ngx_posted_events);
++  ngx_fuzz_reset_destroyed_pools();
+ 
+   // have two free connections, one for client, one for upstream
+   ngx_event_t read_event1 = {};

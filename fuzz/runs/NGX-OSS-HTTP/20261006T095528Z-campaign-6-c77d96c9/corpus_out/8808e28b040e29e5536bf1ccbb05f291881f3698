@@ -1,0 +1,2 @@
+request: "HTTP/1.1 200 Everything Fine\r\nTransfer-Encoding: chunkek\r\n\r\n1trol-Allow-Headers\n"
+reply: "HTTP/1.1 200 Everything Fiol-Allow-Header"

@@ -1,0 +1,2 @@
+request: "GET /a/../b/%2e%2e/c/2e%2e/c//d?q=%00 HTTP/1.1\r\nHost: [edge.ur$iceId.Access-Control-Allow-OriginunkiceId.uress-Control-Allow-OriginunkiceId.url.chrATT-DeviceId.Access-Control-AlloExpectw-OriginunkiceId.url.chrATT-Deue\r\n\r\n"
+reply: "GET /a/../b/%2e%2e/c/2e%2e/c//d?q=%00 HTTP/1.1\r\nHost: [edge.ur$$$$$$s:t: value\r\n\r\n"

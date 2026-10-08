@@ -1,0 +1,2 @@
+request: "DELETE /one/./two/../three/%2Ffour/%25?q=a%20b#fragment HTTP/1.1\r\nHost: uri.url.com\r\n\r\n"
+reply: "HTTP/1.1 202 Accepted\r\nContent-Length: 0\r\n\r\n"

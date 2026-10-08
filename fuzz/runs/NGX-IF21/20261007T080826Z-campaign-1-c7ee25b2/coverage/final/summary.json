@@ -1,0 +1,68 @@
+{
+  "duration_seconds": 15.671,
+  "inputs": 292,
+  "label": "final",
+  "nginx_source": {
+    "branches": {
+      "covered": 621,
+      "percent": 1.82,
+      "total": 34134
+    },
+    "lines": {
+      "covered": 1520,
+      "percent": 1.96,
+      "total": 77689
+    }
+  },
+  "scopes": [
+    {
+      "branches": {
+        "covered": 267,
+        "percent": 65.12,
+        "total": 410
+      },
+      "file": "src/http/modules/ngx_http_proxy_v2_module.c",
+      "functions": [
+        "ngx_http_proxy_v2_process_frames",
+        "ngx_http_proxy_v2_parse_frame",
+        "ngx_http_proxy_v2_parse_header",
+        "ngx_http_proxy_v2_parse_fragment"
+      ],
+      "id": "NGX-IF21-upstream-trailers",
+      "lines": {
+        "covered": 600,
+        "percent": 76.53,
+        "total": 784
+      }
+    }
+  ],
+  "whole_instrumented_build": {
+    "branches": {
+      "count": 33928,
+      "covered": 621,
+      "notcovered": 33307,
+      "percent": 1.8303466163640651
+    },
+    "functions": {
+      "count": 1697,
+      "covered": 40,
+      "percent": 2.357100766057749
+    },
+    "instantiations": {
+      "count": 3807,
+      "covered": 40,
+      "percent": 1.050696086157079
+    },
+    "lines": {
+      "count": 76792,
+      "covered": 1463,
+      "percent": 1.9051463694134807
+    },
+    "regions": {
+      "count": 60536,
+      "covered": 1113,
+      "notcovered": 59423,
+      "percent": 1.8385753931544866
+    }
+  }
+}

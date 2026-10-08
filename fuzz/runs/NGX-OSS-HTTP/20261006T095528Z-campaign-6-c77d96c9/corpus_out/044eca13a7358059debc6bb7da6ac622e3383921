@@ -1,0 +1,2 @@
+request: "GET /....................\r\n"
+reply: "HTTP/1.1 200 Everything Fine\r\nTransfer-Encoding: chunked\r\n\r\n1;\377\377\377\377\377\377\377\377\377\377\377\377\377http2_push\377\377\377\377\377\377\377\377\377\007\000ing: chunked\r\n(\r\n999Accept-Language\377\377z=qXversionansferX-Csrchunked\\r\\n\\r\\n\\377\\377_\\360sfer-EncodingAccess-Control-Allow-Head\313 ch"

@@ -1,0 +1,2 @@
+request: "PROPFIND /collection/%41/%7euser HTTP/1.1\r\nHost: dav.url.com\r\nDepth: infinity\r\nCoequest: \"GET /a/../b/%2eM\\000e/c//d?q=%00 HTTP/1.1fr\\nHost: edge.url.com\\r\\nX_Test: value\\r\\n\\r\\n\"\nreply: \"PROPFIND /collection/%41/%7euser HTTP/1.1\\r\\nHost: dav.url.com\\r\\nDepth: infinity\\r\\nContent-Length:ntent-Length: 0\r\n\r\n"
+reply: ""

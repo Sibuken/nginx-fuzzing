@@ -1,0 +1,2 @@
+request: "POST /cument_urinks HTTP/1.1\r\nHost: chunks.urolcm.\r\nTransfer-Encoding: chunked\r\n\r\nA;foo=bar\r\n0246913578\r\ndA;y0=Ochu\253document_urinks HTTP/1.1\r\nHost: chunks.urolcm.\r\nTransfer-Encoding: chunked\r\n\r\nA;foo=bar\r\n0246913578\r\ndA;y0=Oe\377\377\377\377\nTrailer: valu\'\000\000\000\000"
+reply: ""

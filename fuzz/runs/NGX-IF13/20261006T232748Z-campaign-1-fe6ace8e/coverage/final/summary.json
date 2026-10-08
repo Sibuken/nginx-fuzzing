@@ -1,0 +1,65 @@
+{
+  "duration_seconds": 15.245,
+  "inputs": 261,
+  "label": "final",
+  "nginx_source": {
+    "branches": {
+      "covered": 374,
+      "percent": 1.1,
+      "total": 34026
+    },
+    "lines": {
+      "covered": 1258,
+      "percent": 1.62,
+      "total": 77572
+    }
+  },
+  "scopes": [
+    {
+      "branches": {
+        "covered": 21,
+        "percent": 80.77,
+        "total": 26
+      },
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": [
+        "ngx_http_v2_state_rst_stream"
+      ],
+      "id": "NGX-IF13-rst-stream",
+      "lines": {
+        "covered": 57,
+        "percent": 100.0,
+        "total": 57
+      }
+    }
+  ],
+  "whole_instrumented_build": {
+    "branches": {
+      "count": 33820,
+      "covered": 374,
+      "notcovered": 33446,
+      "percent": 1.1058545239503252
+    },
+    "functions": {
+      "count": 1698,
+      "covered": 49,
+      "percent": 2.8857479387514724
+    },
+    "instantiations": {
+      "count": 3808,
+      "covered": 49,
+      "percent": 1.2867647058823528
+    },
+    "lines": {
+      "count": 76675,
+      "covered": 1171,
+      "percent": 1.5272253015976522
+    },
+    "regions": {
+      "count": 60392,
+      "covered": 795,
+      "notcovered": 59597,
+      "percent": 1.3163995231156445
+    }
+  }
+}

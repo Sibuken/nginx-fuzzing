@@ -1,0 +1,2 @@
+request: "GET /a/../0 HTTP/1.1\r\nHost: %dge%url.ctm\r\nX_Test: valueConnection\r\n\r\n"
+reply: "GET /a/../0 HTTP/1.1\r\nHost: edg^%url.ctm\r\nX_Test: valueConnection\r\n\r\n"

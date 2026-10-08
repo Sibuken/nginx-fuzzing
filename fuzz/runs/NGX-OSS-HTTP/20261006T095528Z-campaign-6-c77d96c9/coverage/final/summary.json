@@ -1,0 +1,150 @@
+{
+  "duration_seconds": 105.329,
+  "inputs": 1764,
+  "label": "final",
+  "nginx_source": {
+    "branches": {
+      "covered": 5896,
+      "percent": 17.3,
+      "total": 34076
+    },
+    "lines": {
+      "covered": 15719,
+      "percent": 20.14,
+      "total": 78039
+    }
+  },
+  "scopes": [
+    {
+      "branches": {
+        "covered": 412,
+        "percent": 99.04,
+        "total": 416
+      },
+      "file": "src/http/ngx_http_parse.c",
+      "functions": [
+        "ngx_http_parse_request_line"
+      ],
+      "id": "NGX-IF01",
+      "lines": {
+        "covered": 578,
+        "percent": 99.31,
+        "total": 582
+      }
+    },
+    {
+      "branches": {
+        "covered": 105,
+        "percent": 99.06,
+        "total": 106
+      },
+      "file": "src/http/ngx_http_parse.c",
+      "functions": [
+        "ngx_http_parse_header_line"
+      ],
+      "id": "NGX-IF02",
+      "lines": {
+        "covered": 221,
+        "percent": 100.0,
+        "total": 221
+      }
+    },
+    {
+      "branches": {
+        "covered": 134,
+        "percent": 98.53,
+        "total": 136
+      },
+      "file": "src/http/ngx_http_parse.c",
+      "functions": [
+        "ngx_http_parse_complex_uri"
+      ],
+      "id": "NGX-IF03",
+      "lines": {
+        "covered": 264,
+        "percent": 99.25,
+        "total": 266
+      }
+    },
+    {
+      "branches": {
+        "covered": 142,
+        "percent": 97.26,
+        "total": 146
+      },
+      "file": "src/http/ngx_http_parse.c",
+      "functions": [
+        "ngx_http_parse_chunked"
+      ],
+      "id": "NGX-IF04",
+      "lines": {
+        "covered": 219,
+        "percent": 98.21,
+        "total": 223
+      }
+    },
+    {
+      "branches": {
+        "covered": 103,
+        "percent": 99.04,
+        "total": 104
+      },
+      "file": "src/http/ngx_http_parse.c",
+      "functions": [
+        "ngx_http_parse_status_line"
+      ],
+      "id": "NGX-IF05",
+      "lines": {
+        "covered": 168,
+        "percent": 100.0,
+        "total": 168
+      }
+    },
+    {
+      "branches": {
+        "covered": 0,
+        "percent": 0.0,
+        "total": 50
+      },
+      "file": "src/core/ngx_proxy_protocol.c",
+      "functions": [
+        "ngx_proxy_protocol_read"
+      ],
+      "id": "NGX-IF06",
+      "lines": {
+        "covered": 0,
+        "percent": 0.0,
+        "total": 76
+      }
+    }
+  ],
+  "whole_instrumented_build": {
+    "branches": {
+      "count": 33952,
+      "covered": 5879,
+      "notcovered": 28073,
+      "percent": 17.31562205466541
+    },
+    "functions": {
+      "count": 6827,
+      "covered": 583,
+      "percent": 8.539622088765197
+    },
+    "instantiations": {
+      "count": 9895,
+      "covered": 605,
+      "percent": 6.114199090449722
+    },
+    "lines": {
+      "count": 99722,
+      "covered": 15349,
+      "percent": 15.391789173903453
+    },
+    "regions": {
+      "count": 65870,
+      "covered": 13231,
+      "notcovered": 52639,
+      "percent": 20.086534082283286
+    }
+  }
+}

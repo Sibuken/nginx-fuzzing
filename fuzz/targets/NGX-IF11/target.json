@@ -1,0 +1,33 @@
+{
+  "id": "NGX-IF11",
+  "origin": "custom",
+  "binary": "http2_frame_fuzzer",
+  "input_format": "raw HTTP/2 frame header bytes",
+  "mutator": "libFuzzer byte mutator",
+  "configuration_profile": "direct incremental ngx_http_v2_state_head with build-only side-effect-free body-handler substitution",
+  "allocator_mode": "stack-only synthetic frame-parser state",
+  "justification": "The existing HTTP/1 adapter builds the HTTP/2 module but never supplies HTTP/2 wire framing.",
+  "state": "Every prefix from zero through the complete nine-byte header is passed to a fresh nginx HTTP/2 parser state; complete headers retain nginx's real known/unknown type dispatch.",
+  "known_limitations": [
+    "Frame body handlers are replaced during the hook, so DATA flow control, stream lifecycle, SETTINGS effects and response frames are not covered.",
+    "HPACK primitives are covered separately by NGX-IF10; full HEADERS/CONTINUATION request construction remains out of scope.",
+    "The frame hook is applied only to the isolated instrumented build copy and assumes single-threaded libFuzzer execution."
+  ],
+  "limits": {
+    "max_len": 9,
+    "per_input_timeout_seconds": 10,
+    "rss_limit_mb": 2048
+  },
+  "scopes": [
+    {
+      "id": "NGX-IF11-frame-header",
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": ["ngx_http_v2_state_head"],
+      "callers": ["ngx_http_v2_state_preface_end", "ngx_http_v2_state_complete"],
+      "contract": "Incrementally collect a nine-byte HTTP/2 frame header, decode length/type/flags/stream ID and dispatch known types or skip unknown ones.",
+      "preconditions": "A fresh HTTP/2 connection state and at most nine visible input bytes.",
+      "testcase_fields": ["24-bit length", "type", "flags", "reserved bit", "31-bit stream ID"],
+      "variants": ["partial headers", "all standard frame types", "unknown type", "zero and maximum length", "connection and stream identifiers"]
+    }
+  ]
+}

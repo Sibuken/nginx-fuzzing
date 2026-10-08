@@ -1,0 +1,79 @@
+{
+  "id": "NGX-IF09",
+  "origin": "custom",
+  "binary": "config_parser_fuzzer",
+  "input_format": "raw nginx configuration text",
+  "mutator": "libFuzzer byte mutator",
+  "configuration_profile": "direct configuration tokenizer plus ngx_conf_param with an accept-all directive handler",
+  "allocator_mode": "NGX_DEBUG_PALLOC=1 with a fresh nginx pool per input",
+  "justification": "The broad HTTP target parses one fixed embedded configuration only during setup, so mutated configuration syntax never reaches ngx_conf_read_token.",
+  "state": "Each input gets a fresh pool, argument array, buffer and configuration context; the tokenizer is driven to a terminal result with a progress bound, then the public command-line parameter parser replays the same bytes.",
+  "known_limitations": [
+    "The accept-all handler tests lexical and parser control flow, not semantic validation by individual module directives.",
+    "ngx_conf_param intentionally rejects block directives; the direct tokenizer pass still exercises braces and block token return codes.",
+    "File refill, include/glob processing and the 4096-byte file-token limit are not modeled because the input is an in-memory command-line-style buffer.",
+    "The one-function exposure patch is applied only to the isolated instrumented build copy."
+  ],
+  "limits": {
+    "max_len": 65536,
+    "per_input_timeout_seconds": 10,
+    "rss_limit_mb": 2048
+  },
+  "scopes": [
+    {
+      "id": "NGX-IF09-tokenizer",
+      "file": "src/core/ngx_conf_file.c",
+      "functions": [
+        "ngx_conf_read_token"
+      ],
+      "callers": [
+        "ngx_conf_parse"
+      ],
+      "contract": "Splits configuration text into bounded arguments while handling comments, quotes, escapes, variables, statement terminators and braces.",
+      "preconditions": "Initialized configuration context, argument array, log, pool and an in-memory buffer whose logical end is bounded by last.",
+      "testcase_fields": [
+        "directive names",
+        "arguments",
+        "quotes and escapes",
+        "variables",
+        "comments",
+        "semicolons and braces"
+      ],
+      "variants": [
+        "empty input",
+        "simple directives",
+        "single and double quotes",
+        "escaped control characters",
+        "variable braces",
+        "comments and newlines",
+        "nested block tokens",
+        "unterminated values"
+      ]
+    },
+    {
+      "id": "NGX-IF09-param-parser",
+      "file": "src/core/ngx_conf_file.c",
+      "functions": [
+        "ngx_conf_parse"
+      ],
+      "callers": [
+        "ngx_conf_param"
+      ],
+      "contract": "Parses command-line configuration parameters and dispatches complete directives to a handler while rejecting blocks and malformed syntax.",
+      "preconditions": "The cycle contains an in-memory conf_param and the configuration context uses a side-effect-free accept-all handler.",
+      "testcase_fields": [
+        "complete directives",
+        "multiple statements",
+        "malformed endings",
+        "block delimiters"
+      ],
+      "variants": [
+        "accepted statements",
+        "unexpected block start",
+        "unexpected block end",
+        "missing semicolon",
+        "empty parameter"
+      ]
+    }
+  ]
+}

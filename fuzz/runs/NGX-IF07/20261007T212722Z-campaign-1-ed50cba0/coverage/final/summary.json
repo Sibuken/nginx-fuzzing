@@ -1,0 +1,133 @@
+{
+  "duration_seconds": 15.253,
+  "inputs": 220,
+  "label": "final",
+  "nginx_source": {
+    "branches": {
+      "covered": 663,
+      "percent": 1.95,
+      "total": 34022
+    },
+    "lines": {
+      "covered": 1910,
+      "percent": 2.46,
+      "total": 77571
+    }
+  },
+  "scopes": [
+    {
+      "branches": {
+        "covered": 47,
+        "percent": 75.81,
+        "total": 62
+      },
+      "file": "src/core/ngx_resolver.c",
+      "functions": [
+        "ngx_resolver_process_response"
+      ],
+      "id": "NGX-IF07-response",
+      "lines": {
+        "covered": 124,
+        "percent": 93.23,
+        "total": 133
+      }
+    },
+    {
+      "branches": {
+        "covered": 147,
+        "percent": 72.77,
+        "total": 202
+      },
+      "file": "src/core/ngx_resolver.c",
+      "functions": [
+        "ngx_resolver_process_a"
+      ],
+      "id": "NGX-IF07-address",
+      "lines": {
+        "covered": 356,
+        "percent": 79.46,
+        "total": 448
+      }
+    },
+    {
+      "branches": {
+        "covered": 73,
+        "percent": 68.87,
+        "total": 106
+      },
+      "file": "src/core/ngx_resolver.c",
+      "functions": [
+        "ngx_resolver_process_srv"
+      ],
+      "id": "NGX-IF07-srv",
+      "lines": {
+        "covered": 192,
+        "percent": 76.49,
+        "total": 251
+      }
+    },
+    {
+      "branches": {
+        "covered": 66,
+        "percent": 75.0,
+        "total": 88
+      },
+      "file": "src/core/ngx_resolver.c",
+      "functions": [
+        "ngx_resolver_process_ptr"
+      ],
+      "id": "NGX-IF07-ptr",
+      "lines": {
+        "covered": 187,
+        "percent": 89.05,
+        "total": 210
+      }
+    },
+    {
+      "branches": {
+        "covered": 22,
+        "percent": 91.67,
+        "total": 24
+      },
+      "file": "src/core/ngx_resolver.c",
+      "functions": [
+        "ngx_resolver_copy"
+      ],
+      "id": "NGX-IF07-name-copy",
+      "lines": {
+        "covered": 64,
+        "percent": 96.97,
+        "total": 66
+      }
+    }
+  ],
+  "whole_instrumented_build": {
+    "branches": {
+      "count": 33816,
+      "covered": 663,
+      "notcovered": 33153,
+      "percent": 1.960610361958836
+    },
+    "functions": {
+      "count": 1697,
+      "covered": 54,
+      "percent": 3.182086034177961
+    },
+    "instantiations": {
+      "count": 3801,
+      "covered": 54,
+      "percent": 1.420678768745067
+    },
+    "lines": {
+      "count": 76674,
+      "covered": 1847,
+      "percent": 2.408900018259123
+    },
+    "regions": {
+      "count": 60383,
+      "covered": 1238,
+      "notcovered": 59145,
+      "percent": 2.050245930145902
+    }
+  }
+}

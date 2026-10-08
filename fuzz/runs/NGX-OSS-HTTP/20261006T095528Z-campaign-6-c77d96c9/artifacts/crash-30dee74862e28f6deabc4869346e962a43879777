@@ -1,0 +1,2 @@
+request: "OPTIONS http://absolut?e.uAl/c?x=1 HTTP/1.1\r\nHost: aEmpty:\r\n\r\n"
+reply: "PSOT /chu\253nks HTTP/1.0\r\nHost: chunks.url.com\r\nTrane\r\n\r\n"

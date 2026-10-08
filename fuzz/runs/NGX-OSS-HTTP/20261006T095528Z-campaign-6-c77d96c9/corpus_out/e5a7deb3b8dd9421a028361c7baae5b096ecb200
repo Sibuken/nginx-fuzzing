@@ -1,0 +1,2 @@
+request: "PO-T /chunks HTTP/1.1\r\nHoMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMst: chunks.url.com\r\nTransfMMMMMMMMMMMst: ch0;end=yes\r\nTrailer: value\r\n\r\n"
+reply: ""

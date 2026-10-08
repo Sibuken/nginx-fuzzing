@@ -1,0 +1,2 @@
+request: "POST /chunks HTTP/1.1\r\nHost: chunks.url.com\r\nTransfer-Encoding: chunked\r\n\r\nA;foo=bar\r\n0123456789\r\n0;end=yes\r\nTrailer: value\r\n\r\n"
+reply: "HTTP/1.1 200 Everything Fine\r\nTransfer-Encoding: chunked\r\n\r\n1;z=q\r\nX\r\n0\r\n\r\n"

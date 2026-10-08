@@ -1,0 +1,1318 @@
+{
+  "adapter": {
+    "configuration_profile": "standalone PROXY v2 parser followed by public named, SSL-nested and numeric TLV lookups",
+    "input_format": "raw: one byte selecting a numeric TLV type, followed by one contiguous PROXY protocol candidate header",
+    "known_limitations": [
+      "The target uses one contiguous complete PROXY header, matching the core parser contract.",
+      "It checks parser and accessor memory safety, not nginx variable integration.",
+      "Queries are fixed public names plus one arbitrary one-byte numeric type; arbitrary textual names are not useful beyond the explicit unknown-name case."
+    ],
+    "mutator": "libFuzzer byte mutator",
+    "origin": "custom",
+    "state": "A fresh connection and pool are created per input; every public TLV name and one input-selected numeric type are queried after a successful parse."
+  },
+  "build": {
+    "coverage_binary_sha256": "59b3b8026bd6c163c36b4a0374b0c8de136e1ac6061bf01b0d543d39b05d0f95",
+    "coverage_compile_flags": "-O1 -g -fprofile-instr-generate -fcoverage-mapping",
+    "coverage_link_flags": "-fsanitize=fuzzer -fprofile-instr-generate",
+    "fuzz_binary_sha256": "ab4a8e2fda83f8a555d7a140d663b56adda18cc858da4997e863704db426b7ff",
+    "fuzz_compile_flags": "-O1 -gline-tables-only -fno-omit-frame-pointer -fsanitize=fuzzer-no-link,address,undefined -fno-sanitize=alignment -fno-sanitize-recover=undefined",
+    "fuzz_link_flags": "-fsanitize=fuzzer,address,undefined -fno-sanitize=alignment -fno-sanitize-recover=undefined"
+  },
+  "command": [
+    "/opt/fuzz/bin/fuzz/proxy_protocol_tlv_fuzzer",
+    "-fork=1",
+    "-ignore_crashes=1",
+    "-dict=/runs/NGX-IF08/20261006T185810Z-campaign-1-82238d22/dictionary.dict",
+    "-artifact_prefix=/runs/NGX-IF08/20261006T185810Z-campaign-1-82238d22/artifacts/",
+    "-max_len=65536",
+    "-timeout=10",
+    "-rss_limit_mb=2048",
+    "-print_final_stats=1",
+    "-seed=1",
+    "-max_total_time=300",
+    "/runs/NGX-IF08/20261006T185810Z-campaign-1-82238d22/corpus_out",
+    "/runs/NGX-IF08/20261006T185810Z-campaign-1-82238d22/corpus_in"
+  ],
+  "corpus": {
+    "corpus_in": {
+      "bytes": 282,
+      "files": 5
+    },
+    "corpus_out": {
+      "bytes": 11346,
+      "files": 196
+    }
+  },
+  "corpus_in": [
+    {
+      "name": "all-tlvs",
+      "sha256": "263ed03249a82d22d36668de264e16fd727463eb5121ba03291dde8875be3e7c",
+      "size": 113
+    },
+    {
+      "name": "broken-length",
+      "sha256": "e057333fe7fd14d8af90b184d7fe64075c7190fcfbd182e2322b6dd000090f39",
+      "size": 34
+    },
+    {
+      "name": "no-proxy",
+      "sha256": "49316d1e23d6b315351f93e64d93ce11821e95a51c19a3626d74fb77b5065271",
+      "size": 46
+    },
+    {
+      "name": "short-ssl",
+      "sha256": "47c1bcdb57e54961be4db5c80e0340f527406332df3fa7e3e18699988d9aa411",
+      "size": 36
+    },
+    {
+      "name": "v2-ipv6",
+      "sha256": "93da3d4064509c8f050c8526a06c518ccc663d3c8e51c4e2df81954c36f9ecf9",
+      "size": 53
+    }
+  ],
+  "coverage": {
+    "baseline": {
+      "duration_seconds": 9.524,
+      "inputs": 5,
+      "label": "baseline",
+      "nginx_source": {
+        "branches": {
+          "covered": 253,
+          "percent": 0.74,
+          "total": 34040
+        },
+        "lines": {
+          "covered": 798,
+          "percent": 1.03,
+          "total": 77597
+        }
+      },
+      "scopes": [
+        {
+          "branches": {
+            "covered": 29,
+            "percent": 72.5,
+            "total": 40
+          },
+          "file": "src/core/ngx_proxy_protocol.c",
+          "functions": [
+            "ngx_proxy_protocol_get_tlv"
+          ],
+          "id": "NGX-IF08-get-tlv",
+          "lines": {
+            "covered": 53,
+            "percent": 86.89,
+            "total": 61
+          }
+        },
+        {
+          "branches": {
+            "covered": 8,
+            "percent": 66.67,
+            "total": 12
+          },
+          "file": "src/core/ngx_proxy_protocol.c",
+          "functions": [
+            "ngx_proxy_protocol_lookup_tlv"
+          ],
+          "id": "NGX-IF08-lookup",
+          "lines": {
+            "covered": 28,
+            "percent": 90.32,
+            "total": 31
+          }
+        }
+      ],
+      "whole_instrumented_build": {
+        "branches": {
+          "count": 33834,
+          "covered": 253,
+          "notcovered": 33581,
+          "percent": 0.7477685168765147
+        },
+        "functions": {
+          "count": 1698,
+          "covered": 34,
+          "percent": 2.0023557126030624
+        },
+        "instantiations": {
+          "count": 3800,
+          "covered": 34,
+          "percent": 0.894736842105263
+        },
+        "lines": {
+          "count": 76700,
+          "covered": 748,
+          "percent": 0.9752281616688396
+        },
+        "regions": {
+          "count": 60411,
+          "covered": 504,
+          "notcovered": 59907,
+          "percent": 0.8342851467447981
+        }
+      }
+    },
+    "final": {
+      "duration_seconds": 14.058,
+      "inputs": 201,
+      "label": "final",
+      "nginx_source": {
+        "branches": {
+          "covered": 339,
+          "percent": 1.0,
+          "total": 34040
+        },
+        "lines": {
+          "covered": 902,
+          "percent": 1.16,
+          "total": 77597
+        }
+      },
+      "scopes": [
+        {
+          "branches": {
+            "covered": 30,
+            "percent": 75.0,
+            "total": 40
+          },
+          "file": "src/core/ngx_proxy_protocol.c",
+          "functions": [
+            "ngx_proxy_protocol_get_tlv"
+          ],
+          "id": "NGX-IF08-get-tlv",
+          "lines": {
+            "covered": 55,
+            "percent": 90.16,
+            "total": 61
+          }
+        },
+        {
+          "branches": {
+            "covered": 10,
+            "percent": 83.33,
+            "total": 12
+          },
+          "file": "src/core/ngx_proxy_protocol.c",
+          "functions": [
+            "ngx_proxy_protocol_lookup_tlv"
+          ],
+          "id": "NGX-IF08-lookup",
+          "lines": {
+            "covered": 31,
+            "percent": 100.0,
+            "total": 31
+          }
+        }
+      ],
+      "whole_instrumented_build": {
+        "branches": {
+          "count": 33834,
+          "covered": 339,
+          "notcovered": 33495,
+          "percent": 1.0019507004788084
+        },
+        "functions": {
+          "count": 1698,
+          "covered": 34,
+          "percent": 2.0023557126030624
+        },
+        "instantiations": {
+          "count": 3800,
+          "covered": 34,
+          "percent": 0.894736842105263
+        },
+        "lines": {
+          "count": 76700,
+          "covered": 852,
+          "percent": 1.1108213820078225
+        },
+        "regions": {
+          "count": 60411,
+          "covered": 593,
+          "notcovered": 59818,
+          "percent": 0.9816093095628279
+        }
+      }
+    },
+    "plateau_validation": {
+      "duration_seconds": 14.194,
+      "inputs": 201,
+      "label": "plateau-validation-0025",
+      "nginx_source": {
+        "branches": {
+          "covered": 339,
+          "percent": 1.0,
+          "total": 34040
+        },
+        "lines": {
+          "covered": 902,
+          "percent": 1.16,
+          "total": 77597
+        }
+      },
+      "scopes": [
+        {
+          "branches": {
+            "covered": 30,
+            "percent": 75.0,
+            "total": 40
+          },
+          "file": "src/core/ngx_proxy_protocol.c",
+          "functions": [
+            "ngx_proxy_protocol_get_tlv"
+          ],
+          "id": "NGX-IF08-get-tlv",
+          "lines": {
+            "covered": 55,
+            "percent": 90.16,
+            "total": 61
+          }
+        },
+        {
+          "branches": {
+            "covered": 10,
+            "percent": 83.33,
+            "total": 12
+          },
+          "file": "src/core/ngx_proxy_protocol.c",
+          "functions": [
+            "ngx_proxy_protocol_lookup_tlv"
+          ],
+          "id": "NGX-IF08-lookup",
+          "lines": {
+            "covered": 31,
+            "percent": 100.0,
+            "total": 31
+          }
+        }
+      ],
+      "whole_instrumented_build": {
+        "branches": {
+          "count": 33834,
+          "covered": 339,
+          "notcovered": 33495,
+          "percent": 1.0019507004788084
+        },
+        "functions": {
+          "count": 1698,
+          "covered": 34,
+          "percent": 2.0023557126030624
+        },
+        "instantiations": {
+          "count": 3800,
+          "covered": 34,
+          "percent": 0.894736842105263
+        },
+        "lines": {
+          "count": 76700,
+          "covered": 852,
+          "percent": 1.1108213820078225
+        },
+        "regions": {
+          "count": 60411,
+          "covered": 593,
+          "notcovered": 59818,
+          "percent": 0.9816093095628279
+        }
+      }
+    }
+  },
+  "coverage_checkpoints": [
+    {
+      "batch_seconds": 303.287,
+      "coverage_increased": true,
+      "elapsed_seconds": 315.458,
+      "new_corpus_inputs": 169,
+      "new_findings": 0,
+      "round": 1,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 0.0
+    },
+    {
+      "batch_seconds": 303.229,
+      "coverage_increased": false,
+      "elapsed_seconds": 627.398,
+      "new_corpus_inputs": 3,
+      "new_findings": 0,
+      "round": 2,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 311.94
+    },
+    {
+      "batch_seconds": 303.175,
+      "coverage_increased": false,
+      "elapsed_seconds": 939.849,
+      "new_corpus_inputs": 2,
+      "new_findings": 0,
+      "round": 3,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 624.391
+    },
+    {
+      "batch_seconds": 303.167,
+      "coverage_increased": false,
+      "elapsed_seconds": 1251.899,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 4,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 936.441
+    },
+    {
+      "batch_seconds": 303.149,
+      "coverage_increased": false,
+      "elapsed_seconds": 1563.924,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 5,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 1248.466
+    },
+    {
+      "batch_seconds": 303.161,
+      "coverage_increased": false,
+      "elapsed_seconds": 1875.585,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 6,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 1560.128
+    },
+    {
+      "batch_seconds": 303.18,
+      "coverage_increased": false,
+      "elapsed_seconds": 2187.931,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 7,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 1872.473
+    },
+    {
+      "batch_seconds": 303.194,
+      "coverage_increased": false,
+      "elapsed_seconds": 2491.148,
+      "new_corpus_inputs": 0,
+      "new_findings": 0,
+      "round": 8,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 2175.69
+    },
+    {
+      "batch_seconds": 303.164,
+      "coverage_increased": false,
+      "elapsed_seconds": 2803.242,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 9,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 2487.785
+    },
+    {
+      "batch_seconds": 303.146,
+      "coverage_increased": false,
+      "elapsed_seconds": 3115.281,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 10,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 2799.823
+    },
+    {
+      "batch_seconds": 303.217,
+      "coverage_increased": false,
+      "elapsed_seconds": 3427.551,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 11,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 3112.093
+    },
+    {
+      "batch_seconds": 303.254,
+      "coverage_increased": false,
+      "elapsed_seconds": 3739.645,
+      "new_corpus_inputs": 2,
+      "new_findings": 0,
+      "round": 12,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 3424.187
+    },
+    {
+      "batch_seconds": 303.163,
+      "coverage_increased": false,
+      "elapsed_seconds": 4052.779,
+      "new_corpus_inputs": 2,
+      "new_findings": 0,
+      "round": 13,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 3737.321
+    },
+    {
+      "batch_seconds": 303.248,
+      "coverage_increased": false,
+      "elapsed_seconds": 4364.612,
+      "new_corpus_inputs": 2,
+      "new_findings": 0,
+      "round": 14,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 4049.154
+    },
+    {
+      "batch_seconds": 303.31,
+      "coverage_increased": false,
+      "elapsed_seconds": 4676.819,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 15,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 4361.361
+    },
+    {
+      "batch_seconds": 303.205,
+      "coverage_increased": false,
+      "elapsed_seconds": 4989.317,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 16,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 4673.859
+    },
+    {
+      "batch_seconds": 303.236,
+      "coverage_increased": false,
+      "elapsed_seconds": 5292.581,
+      "new_corpus_inputs": 0,
+      "new_findings": 0,
+      "round": 17,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 4977.123
+    },
+    {
+      "batch_seconds": 303.247,
+      "coverage_increased": false,
+      "elapsed_seconds": 5595.858,
+      "new_corpus_inputs": 0,
+      "new_findings": 0,
+      "round": 18,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 5280.401
+    },
+    {
+      "batch_seconds": 303.235,
+      "coverage_increased": false,
+      "elapsed_seconds": 5899.122,
+      "new_corpus_inputs": 0,
+      "new_findings": 0,
+      "round": 19,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 5583.664
+    },
+    {
+      "batch_seconds": 303.247,
+      "coverage_increased": false,
+      "elapsed_seconds": 6202.397,
+      "new_corpus_inputs": 0,
+      "new_findings": 0,
+      "round": 20,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 5886.939
+    },
+    {
+      "batch_seconds": 303.193,
+      "coverage_increased": false,
+      "elapsed_seconds": 6505.619,
+      "new_corpus_inputs": 0,
+      "new_findings": 0,
+      "round": 21,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 6190.161
+    },
+    {
+      "batch_seconds": 303.239,
+      "coverage_increased": false,
+      "elapsed_seconds": 6818.264,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 22,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 6502.807
+    },
+    {
+      "batch_seconds": 303.217,
+      "coverage_increased": false,
+      "elapsed_seconds": 7131.281,
+      "new_corpus_inputs": 2,
+      "new_findings": 0,
+      "round": 23,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 6815.824
+    },
+    {
+      "batch_seconds": 303.286,
+      "coverage_increased": false,
+      "elapsed_seconds": 7443.026,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 24,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 7127.569
+    },
+    {
+      "batch_seconds": 303.369,
+      "coverage_increased": false,
+      "elapsed_seconds": 7755.161,
+      "new_corpus_inputs": 3,
+      "new_findings": 0,
+      "round": 25,
+      "scopes": [
+        {
+          "covered_branches": 30,
+          "covered_lines": 55,
+          "id": "NGX-IF08-get-tlv"
+        },
+        {
+          "covered_branches": 10,
+          "covered_lines": 31,
+          "id": "NGX-IF08-lookup"
+        }
+      ],
+      "seconds_since_growth": 7439.704
+    }
+  ],
+  "coverage_threshold_met": true,
+  "dictionary": {
+    "path": "dictionary.dict",
+    "sha256": "130acca531bd9a7aef51fde0117ac8db36e010e6b7a15b4b69a1a54d28cf121d"
+  },
+  "duration_seconds": 7793.002,
+  "environment": {
+    "allocator_mode": "NGX_DEBUG_PALLOC=1 with a fresh nginx pool per input",
+    "container_architecture": "x86_64",
+    "emulated": true,
+    "host_architecture": "arm64",
+    "image_id": "sha256:fc07f57d19d54f69d3d08d0b08adf6ab259222cc0bc79966927248b592dcf4d9",
+    "image_reference": "nginx-fuzz:1.30.5",
+    "platform": "linux/amd64",
+    "toolchain": [
+      "Debian clang version 14.0.6",
+      "Target: x86_64-pc-linux-gnu",
+      "Thread model: posix",
+      "InstalledDir: /usr/bin",
+      "Debian LLVM version 14.0.6",
+      "  Optimized build.",
+      "  Default target: x86_64-pc-linux-gnu",
+      "  Host CPU: westmere",
+      "libprotoc 29.3"
+    ]
+  },
+  "exit_code": 0,
+  "findings": [],
+  "finished_at_utc": "2026-10-06T21:08:03Z",
+  "fork_worker_counters": [
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 1,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 2,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 3,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 4,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 5,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 6,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 7,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 8,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 9,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 10,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 11,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 12,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 13,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 14,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 15,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 16,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 17,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 18,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 19,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 20,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 21,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 22,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 23,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 24,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 25,
+      "timeouts": 0
+    }
+  ],
+  "kind": "campaign",
+  "limits": {
+    "coverage_check_interval_seconds": 300,
+    "fuzzer_mode": "fork",
+    "max_len": 65536,
+    "max_seconds": 0,
+    "random_seed": 1,
+    "rss_limit_mb": 2048,
+    "seconds": null,
+    "single_process": false,
+    "timeout_seconds": 10
+  },
+  "nginx": {
+    "revision": "4556c714d1cfa587f92c7c0365c09209d42d148b",
+    "source_sha256": "b13133a91e035cbfebdbe3474988d691e8870f87e5864befde7ec21b7635a8d9",
+    "version": "1.30.5"
+  },
+  "patches": [
+    {
+      "name": "._0001-nginx-1.30-setup-checks.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0002-add-proxy-protocol-target.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0003-nginx-per-input-cleanup.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0004-add-dns-response-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0005-expose-config-tokenizer.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0006-expose-http2-parser-hooks.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0007-add-http2-control-frame-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0008-add-http2-header-block-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0009-add-http2-pseudo-header-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0010-add-http2-live-header-block-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0011-add-http2-live-headers-frame-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0012-add-http2-response-trailers-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0013-add-http2-response-trailers-target.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0014-add-http2-upstream-trailers-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0015-add-http2-upstream-trailers-target.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "0001-nginx-1.30-setup-checks.patch",
+      "sha256": "6678efa2e6e083b2aef145ec205eaa97a474127f4473d89b6344d02a73e60b3d",
+      "size": 1758
+    },
+    {
+      "name": "0002-add-proxy-protocol-target.patch",
+      "sha256": "b6a3b06f94c2ada9ae2d23a05e77fa81ac825bf44ce86ad8645fe33f80448e9a",
+      "size": 5258
+    },
+    {
+      "name": "0003-nginx-per-input-cleanup.patch",
+      "sha256": "a365d349453fd1b3a35ae0dcd580fb7aa8d2e5d7ed5fa61cb78089064232ffd9",
+      "size": 1914
+    },
+    {
+      "name": "0004-add-dns-response-hook.patch",
+      "sha256": "4adc724bac16bcbb528c61753e287c4f776fc72fb91bf54b9bcc6a181a404e24",
+      "size": 5217
+    },
+    {
+      "name": "0005-expose-config-tokenizer.patch",
+      "sha256": "64a6e481579bd9706ab919e3bd0b17bd3241c027f01974c7cf15cfbdf56f0bc6",
+      "size": 441
+    },
+    {
+      "name": "0006-expose-http2-parser-hooks.patch",
+      "sha256": "2f605b4c4b0c6b9f28637962bdf7a483b5ddd48f003316c5c209536f42fcc946",
+      "size": 2634
+    },
+    {
+      "name": "0007-add-http2-control-frame-hook.patch",
+      "sha256": "31338194116592bccb641b4a190ec54580927d260af6bbc390e5cbf69de81273",
+      "size": 19179
+    },
+    {
+      "name": "0008-add-http2-header-block-hook.patch",
+      "sha256": "6d5dc3d32def018e140f71bb492af21d9d76e2a9091dbd0c67fac0e7768e2435",
+      "size": 3355
+    },
+    {
+      "name": "0009-add-http2-pseudo-header-hook.patch",
+      "sha256": "0d19ca454e9ad334a44cb2ab7565648123f7675a5f176ba4bdc489c0173c9d21",
+      "size": 4875
+    },
+    {
+      "name": "0010-add-http2-live-header-block-hook.patch",
+      "sha256": "6f0ffe9632e3762cab1bcea1db3d79e1b9a6cd318aef5c96692b2a4aa3bbd1eb",
+      "size": 10147
+    },
+    {
+      "name": "0011-add-http2-live-headers-frame-hook.patch",
+      "sha256": "afc4e89ee29d2a3887d27fe104343386ea63efaf7c9aad451cda8cd28bd0165d",
+      "size": 9777
+    },
+    {
+      "name": "0012-add-http2-response-trailers-hook.patch",
+      "sha256": "ebdf6efe4e673006b30b4cbe38c86563265ae1982b80070394fdad98b4585baa",
+      "size": 23226
+    },
+    {
+      "name": "0013-add-http2-response-trailers-target.patch",
+      "sha256": "b914cb3a30a7e035a44034f1d7776716e455e7055bc03dcd198f8cee027b75f0",
+      "size": 1842
+    },
+    {
+      "name": "0014-add-http2-upstream-trailers-hook.patch",
+      "sha256": "32fd997ba6f10c044ae7fe28ace7bf3fcbee819e1396431174facdd5e7306108",
+      "size": 7988
+    },
+    {
+      "name": "0015-add-http2-upstream-trailers-target.patch",
+      "sha256": "fb5b523e30159f4d3ed5e51a26a8d7f8f542388fac1e5bcb010c500c2af70aa2",
+      "size": 388
+    }
+  ],
+  "regression_check": {
+    "cases": [],
+    "passed": true,
+    "target": "NGX-IF08"
+  },
+  "run_id": "20261006T185810Z-campaign-1-82238d22",
+  "schema_version": 1,
+  "scope": [
+    {
+      "callers": [
+        "ngx_http_proxy_protocol_variable",
+        "ngx_stream_proxy_protocol_variable"
+      ],
+      "contract": "Maps a public or numeric TLV name, validates SSL metadata and returns a bounded value, decline, or error.",
+      "file": "src/core/ngx_proxy_protocol.c",
+      "functions": [
+        "ngx_proxy_protocol_get_tlv"
+      ],
+      "id": "NGX-IF08-get-tlv",
+      "preconditions": "The connection is initialized; proxy metadata is absent or was produced by ngx_proxy_protocol_read.",
+      "testcase_fields": [
+        "numeric TLV selector",
+        "PROXY v2 header",
+        "top-level TLVs",
+        "SSL nested TLVs"
+      ],
+      "variants": [
+        "named TLVs",
+        "numeric TLVs",
+        "ssl_verify",
+        "nested SSL names",
+        "unknown names",
+        "short SSL payloads"
+      ]
+    },
+    {
+      "callers": [
+        "ngx_proxy_protocol_get_tlv"
+      ],
+      "contract": "Walks length-prefixed TLVs without reading past their enclosing buffer.",
+      "file": "src/core/ngx_proxy_protocol.c",
+      "functions": [
+        "ngx_proxy_protocol_lookup_tlv"
+      ],
+      "id": "NGX-IF08-lookup",
+      "preconditions": "The TLV slice and requested one-byte type are initialized.",
+      "testcase_fields": [
+        "type",
+        "length",
+        "value",
+        "remaining TLVs"
+      ],
+      "variants": [
+        "match",
+        "miss",
+        "truncated header",
+        "oversized length",
+        "nested sequence"
+      ]
+    }
+  ],
+  "signal": null,
+  "started_at_utc": "2026-10-06T18:58:10Z",
+  "status": "passed",
+  "stop_policy": {
+    "continue_after_finding": true,
+    "coverage_metric": "cumulative LLVM scope lines and branches",
+    "fuzzer_fork_mode": true,
+    "ignore_crashes": true,
+    "plateau_seconds": 7200,
+    "scope_threshold_percent": 90,
+    "stop_on_coverage": true,
+    "stop_on_first_finding": false
+  },
+  "stop_reason": "coverage_plateau",
+  "target": "NGX-IF08",
+  "upstream": {
+    "libprotobuf_mutator": {
+      "archive_sha256": "260408230cbb08009da01fb2445ac75e08576d85b57da47ad0a794b91429803f",
+      "archive_url": "https://github.com/google/libprotobuf-mutator/archive/c1c950eae0440c3808f2b8bd7c57d0c6a42c1a90.tar.gz",
+      "repository": "https://github.com/google/libprotobuf-mutator.git",
+      "revision": "c1c950eae0440c3808f2b8bd7c57d0c6a42c1a90"
+    },
+    "oss_fuzz": {
+      "archive_sha256": "07dc5e75c112d4a0855122f1fee3bd15f15a97c8220f39857f328640940c15db",
+      "archive_url": "https://github.com/google/oss-fuzz/archive/2cc3fa481cbf724c0091fd3c75fdd4142e698409.tar.gz",
+      "files": {
+        "Dockerfile": "be2203b67cae6995866695f090bd717b8e69bc1755a0f29ccf0c955f7fb9d111",
+        "add_fuzzers.diff": "2c5b5b6450aefe525babc51e0989b0748b91a09a69095e8f3d4c94872106582a",
+        "build.sh": "373fd963367f994c2febde8e6093eb78e7b37d460cc2a385dc5daa6870c29167",
+        "fuzz/http_request_fuzzer.cc": "b61888048a3db1d38c56b5d1ba1aa1523ba9f2d02151f38b07a82b509cdcdd99",
+        "fuzz/http_request_fuzzer.dict": "543d68c43d13decb3749d9fff0a09a0f495cf993c4d8d4b1fcc5f0e742dd83e1",
+        "fuzz/http_request_proto.proto": "7066b8670dff7f90e7a0367b561876eb3d37bb8eb0ebff9a80901f5d007532be",
+        "fuzz/wrappers.c": "e46d489120acef1a90bdf9364ebbd53a23cfc64494158e4fd6ddfddb1dcb914c",
+        "make_fuzzers": "139d9238f1dd127b3d972bb92b2a3abe9918c3624f40787cd49af6efe9f521f9",
+        "project.yaml": "391e5aacd69ed5b8382b68cda1f985f77a0c707b6d131ecca06b32e08da09553"
+      },
+      "project_path": "projects/nginx",
+      "repository": "https://github.com/google/oss-fuzz.git",
+      "revision": "2cc3fa481cbf724c0091fd3c75fdd4142e698409"
+    },
+    "protobuf": {
+      "revision": "b407e8416e3893036aee5af9a12bd9b6a0e2b2e6",
+      "source": "libprotobuf-mutator/cmake/external/protobuf.cmake",
+      "version": "29.3"
+    },
+    "toolchain": {
+      "base_image": "debian:bookworm-slim@sha256:3783cc01769c7b2b1b83a5c5ad96c815348e28ed7da68e2e3687004faa906251",
+      "clang": "14",
+      "fuzzing_engine": "libFuzzer",
+      "llvm_cov": "14",
+      "platform": "linux/amd64",
+      "sanitizers": [
+        "address",
+        "undefined"
+      ]
+    }
+  },
+  "upstream_target": null
+}

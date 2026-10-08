@@ -1,0 +1,2 @@
+request: "GET /......proxy_cache......\r\n"
+reply: "HTTP/1.1 200 Everything Fine\r\nTransfer-Encoding: chunked\r\n\r\n1;\377\377\377\377\377\377\377\377\377\377\377\377\377http2_push\377\377\377\377\377\377\377\377\377\007\000ing: chunked\r\n(\r\nAcc!!requcodingAccess-Control-Allow-Head\313 ch"

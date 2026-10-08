@@ -1,0 +1,2 @@
+request: "GET /a/5_\n"
+reply: "HTTP/1.1 200 EverythinStrict-Transport-Secu2ity\nTransfer-Encoding: chunked\r\n\r\n0;z\000\000\000\000\000\000\000000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\./?%2e/../b/%2e%2e/c//d?q=%00 HTTP/1.1\\\\r\\\\../b/%2eM\\\\000e/c//d?q=%00 HTTP/1.1\\\\rength:ntent\377pstream_response_time0\r\n\n\r\n"

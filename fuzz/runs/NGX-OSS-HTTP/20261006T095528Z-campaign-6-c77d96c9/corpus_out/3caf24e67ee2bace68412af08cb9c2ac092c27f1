@@ -1,0 +1,2 @@
+request: "GET / HTTP/1.1\r\nHost: www.url.l.com\r\nConnection:com\r\nConnection: close\r\n\r\n"
+reply: ""

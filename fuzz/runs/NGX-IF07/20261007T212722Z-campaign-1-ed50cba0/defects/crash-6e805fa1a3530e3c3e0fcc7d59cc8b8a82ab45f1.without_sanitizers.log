@@ -1,0 +1,11 @@
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2531219588
+INFO: Loaded 1 modules   (27 inline 8-bit counters): 27 [0x555555755df0, 0x555555755e0b), 
+INFO: Loaded 1 PC tables (27 PCs): 27 [0x555555755e10,0x555555755fc0), 
+/opt/fuzz/bin/coverage/dns_response_fuzzer: Running 1 inputs 1 time(s) each.
+Running: /runs/NGX-IF07/20261007T212722Z-campaign-1-ed50cba0/artifacts/crash-6e805fa1a3530e3c3e0fcc7d59cc8b8a82ab45f1
+Executed /runs/NGX-IF07/20261007T212722Z-campaign-1-ed50cba0/artifacts/crash-6e805fa1a3530e3c3e0fcc7d59cc8b8a82ab45f1 in 4 ms
+***
+*** NOTE: fuzzing was not performed, you have only
+***       executed the target code on a fixed set of inputs.
+***

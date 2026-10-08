@@ -1,0 +1,2 @@
+request: "LOCK a\020"
+reply: ""

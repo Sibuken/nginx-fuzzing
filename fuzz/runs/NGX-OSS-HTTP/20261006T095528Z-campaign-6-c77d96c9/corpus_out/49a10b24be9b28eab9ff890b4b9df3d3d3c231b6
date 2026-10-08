@@ -1,0 +1,2 @@
+request: "GET /a/..2e%2e/c//d?q=%X-Content-Security-Policyrl.cnm\r\nX_Test: avlu  \n\rP"
+reply: "HTTP/1.1 103 Mulremerge_slashesa/../b/%.(;((((((urldge.uti-Status\r\nest:Last-Modified \"GET /ate./+../+.&/bs\\r\\n\"\nreply:C\nContent-Lntrl.ctm\\r-Length|nt-Lntrl.ctm\\r-Length|nX_Test: val(e\\r\\n\\r\\n\236\nrldge.uti-Wtatus\r\nConteMulti-atus\r\nConteti-Status\r\nConteMulti-atus\r\nContent-LntrlAccetime_iso8601-Lntrl.ctm\\r-Leth|nX_Test: valueCOPY\\r]n\236\nreply: \"\" :\n0\r\n\r\nH#TP"

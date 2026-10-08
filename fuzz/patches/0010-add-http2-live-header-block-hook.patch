@@ -1,0 +1,252 @@
+--- a/src/http/v2/ngx_http_v2.c
++++ b/src/http/v2/ngx_http_v2.c
+@@ -1709,5 +1709,6 @@ ngx_http_v2_state_process_header(ngx_http_v2_connection_t *h2c, u_char *pos,
+ {
+-    size_t                      len;
++    size_t                      len;
++    ngx_uint_t                  i;
+     ngx_int_t                   rc;
+     ngx_table_elt_t            *h;
+     ngx_connection_t           *fc;
+@@ -1773,6 +1774,8 @@ ngx_http_v2_state_process_header(ngx_http_v2_connection_t *h2c, u_char *pos,
+     /* TODO Optimization: validate headers while parsing. */
+     if (ngx_http_v2_validate_header(r, header) != NGX_OK) {
+-        ngx_http_finalize_request(r, NGX_HTTP_BAD_REQUEST);
++        if (!ngx_http_v2_fuzz_control_active) {
++            ngx_http_finalize_request(r, NGX_HTTP_BAD_REQUEST);
++        }
+         goto error;
+     }
+ 
+@@ -1785,2 +1785,18 @@ ngx_http_v2_state_process_header(ngx_http_v2_connection_t *h2c, u_char *pos,
+     if (header->name.data[0] == ':') {
++        if (ngx_http_v2_fuzz_control_active
++            && header->name.len == sizeof(":path") - 1
++            && ngx_memcmp(header->name.data, ":path", sizeof(":path") - 1) == 0)
++        {
++            for (i = 0; i < header->value.len; i++) {
++                u_char ch = header->value.data[i];
++                if (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')
++                      || (ch >= '0' && ch <= '9') || ch == '/' || ch == '-'
++                      || ch == '_' || ch == '?'))
++                {
++                    h2c->state.stream = NULL;
++                    return ngx_http_v2_state_header_complete(h2c, pos, end);
++                }
++            }
++        }
++
+         rc = ngx_http_v2_pseudo_header(r, header);
+@@ -1815,3 +1815,5 @@ ngx_http_v2_state_process_header(ngx_http_v2_connection_t *h2c, u_char *pos,
+         if (rc == NGX_DECLINED) {
+-            ngx_http_finalize_request(r, NGX_HTTP_BAD_REQUEST);
++            if (!ngx_http_v2_fuzz_control_active) {
++                ngx_http_finalize_request(r, NGX_HTTP_BAD_REQUEST);
++            }
+             goto error;
+@@ -1914,1 +1914,3 @@ error:
+-    ngx_http_run_posted_requests(fc);
++    if (!ngx_http_v2_fuzz_control_active) {
++        ngx_http_run_posted_requests(fc);
++    }
+@@ -1902,5 +1928,5 @@ ngx_http_v2_state_header_complete(ngx_http_v2_connection_t *h2c, u_char *pos,
+     stream = h2c->state.stream;
+ 
+-    if (stream) {
++    if (stream && !ngx_http_v2_fuzz_control_active) {
+         ngx_http_v2_run_request(stream->request);
+     }
+@@ -3523,2 +3523,193 @@ ngx_http_v2_parse_method(ngx_http_request_t *r, ngx_str_t *value)
++/* HPACK block -> real HTTP/2 request-header parser, without request execution. */
++ngx_int_t
++ngx_http_v2_fuzz_live_header_block(u_char *data, size_t len)
++{
++    ngx_uint_t                  core_index, v2_index;
++    ngx_pool_t                 *pool, *state_pool;
++    ngx_log_t                   log;
++    ngx_event_t                 read_event, write_event;
++    ngx_connection_t            connection;
++    ngx_http_connection_t       http_connection;
++    ngx_http_conf_ctx_t         conf_ctx, virtual_ctx;
++    ngx_http_core_main_conf_t   core_main_conf;
++    ngx_http_core_srv_conf_t    core_srv_conf, virtual_srv_conf;
++    ngx_http_core_loc_conf_t    core_loc_conf, virtual_loc_conf;
++    ngx_http_v2_srv_conf_t      v2_srv_conf;
++    ngx_http_v2_stream_t        stream;
++    ngx_http_v2_connection_t    h2c;
++    ngx_http_request_t         *request;
++    ngx_http_addr_conf_t        addr_conf;
++    ngx_http_virtual_names_t    virtual_names;
++    ngx_hash_key_t              hash_key;
++    ngx_hash_elt_t             *host_elt;
++    ngx_hash_elt_t            **host_buckets;
++    ngx_hash_elt_t             *empty_headers[1];
++    void                      **main_conf, **srv_conf, **loc_conf;
++    void                      **v_srv_conf, **v_loc_conf;
++    u_char                     *p;
++
++    if (len > 4096) {
++        return NGX_DECLINED;
++    }
++
++    ngx_memzero(&log, sizeof(ngx_log_t));
++    ngx_memzero(&connection, sizeof(ngx_connection_t));
++    ngx_memzero(&http_connection, sizeof(ngx_http_connection_t));
++    ngx_memzero(&conf_ctx, sizeof(ngx_http_conf_ctx_t));
++    ngx_memzero(&virtual_ctx, sizeof(ngx_http_conf_ctx_t));
++    ngx_memzero(&core_main_conf, sizeof(ngx_http_core_main_conf_t));
++    ngx_memzero(&core_srv_conf, sizeof(ngx_http_core_srv_conf_t));
++    ngx_memzero(&virtual_srv_conf, sizeof(ngx_http_core_srv_conf_t));
++    ngx_memzero(&core_loc_conf, sizeof(ngx_http_core_loc_conf_t));
++    ngx_memzero(&virtual_loc_conf, sizeof(ngx_http_core_loc_conf_t));
++    ngx_memzero(&v2_srv_conf, sizeof(ngx_http_v2_srv_conf_t));
++    ngx_memzero(&stream, sizeof(ngx_http_v2_stream_t));
++    ngx_memzero(&h2c, sizeof(ngx_http_v2_connection_t));
++    ngx_memzero(&addr_conf, sizeof(ngx_http_addr_conf_t));
++    ngx_memzero(&virtual_names, sizeof(ngx_http_virtual_names_t));
++    ngx_memzero(&read_event, sizeof(ngx_event_t));
++    ngx_memzero(&write_event, sizeof(ngx_event_t));
++    empty_headers[0] = NULL;
++
++    log.log_level = NGX_LOG_EMERG;
++    pool = ngx_create_pool(8192, &log);
++    if (pool == NULL) {
++        return NGX_ERROR;
++    }
++
++    state_pool = ngx_create_pool(4096, &log);
++    if (state_pool == NULL) {
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++
++    main_conf = ngx_pcalloc(pool, sizeof(void *) * ngx_max_module);
++    srv_conf = ngx_pcalloc(pool, sizeof(void *) * ngx_max_module);
++    loc_conf = ngx_pcalloc(pool, sizeof(void *) * ngx_max_module);
++    v_srv_conf = ngx_pcalloc(pool, sizeof(void *) * ngx_max_module);
++    v_loc_conf = ngx_pcalloc(pool, sizeof(void *) * ngx_max_module);
++    request = ngx_pcalloc(pool, sizeof(ngx_http_request_t));
++
++    if (main_conf == NULL || srv_conf == NULL || loc_conf == NULL
++        || v_srv_conf == NULL || v_loc_conf == NULL
++        || request == NULL)
++    {
++        ngx_destroy_pool(state_pool);
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++
++    core_index = ngx_http_core_module.ctx_index;
++    v2_index = ngx_http_v2_module.ctx_index;
++    core_loc_conf.error_log = &log;
++    virtual_loc_conf.error_log = &log;
++    core_srv_conf.merge_slashes = 1;
++    virtual_srv_conf.merge_slashes = 1;
++    core_srv_conf.large_client_header_buffers.num = 4;
++    core_srv_conf.large_client_header_buffers.size = 8192;
++    virtual_srv_conf.large_client_header_buffers =
++        core_srv_conf.large_client_header_buffers;
++    core_srv_conf.ignore_invalid_headers = 1;
++    virtual_srv_conf.ignore_invalid_headers = 1;
++    core_srv_conf.max_headers = 100;
++    virtual_srv_conf.max_headers = 100;
++    v2_srv_conf.concurrent_streams = 100;
++    v2_srv_conf.preread_size = NGX_HTTP_V2_DEFAULT_WINDOW;
++
++    main_conf[core_index] = &core_main_conf;
++    srv_conf[core_index] = &core_srv_conf;
++    srv_conf[v2_index] = &v2_srv_conf;
++    loc_conf[core_index] = &core_loc_conf;
++    core_main_conf.headers_in_hash.buckets = empty_headers;
++    core_main_conf.headers_in_hash.size = 1;
++    conf_ctx.main_conf = main_conf;
++    conf_ctx.srv_conf = srv_conf;
++    conf_ctx.loc_conf = loc_conf;
++    core_srv_conf.ctx = &conf_ctx;
++
++    v_srv_conf[core_index] = &virtual_srv_conf;
++    v_srv_conf[v2_index] = &v2_srv_conf;
++    v_loc_conf[core_index] = &virtual_loc_conf;
++    virtual_ctx.main_conf = main_conf;
++    virtual_ctx.srv_conf = v_srv_conf;
++    virtual_ctx.loc_conf = v_loc_conf;
++    virtual_srv_conf.ctx = &virtual_ctx;
++
++    host_buckets = ngx_pcalloc(pool, sizeof(ngx_hash_elt_t *));
++    host_elt = ngx_pcalloc(pool, sizeof(ngx_hash_elt_t) + 32);
++    if (host_buckets == NULL || host_elt == NULL) {
++        ngx_destroy_pool(state_pool);
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++    host_elt->value = &virtual_srv_conf;
++    host_elt->len = sizeof("fuzz.test") - 1;
++    ngx_strlow(host_elt->name, (u_char *) "fuzz.test", host_elt->len);
++    host_buckets[0] = host_elt;
++    virtual_names.names.hash.buckets = host_buckets;
++    virtual_names.names.hash.size = 1;
++
++    addr_conf.virtual_names = &virtual_names;
++    http_connection.conf_ctx = &conf_ctx;
++    http_connection.addr_conf = &addr_conf;
++    connection.log = &log;
++    connection.pool = pool;
++    connection.data = &http_connection;
++    connection.read = &read_event;
++    connection.write = &write_event;
++    read_event.data = &connection;
++    read_event.log = &log;
++    read_event.timer_set = 1;
++    write_event.data = &connection;
++    write_event.log = &log;
++
++    request->connection = &connection;
++    request->pool = pool;
++    request->http_connection = &http_connection;
++    request->main_conf = main_conf;
++    request->srv_conf = srv_conf;
++    request->loc_conf = loc_conf;
++    request->main = request;
++    request->count = 1;
++    request->stream = &stream;
++    request->http_version = NGX_HTTP_VERSION_20;
++    request->headers_in.content_length_n = -1;
++    request->headers_in.keep_alive_n = -1;
++    if (ngx_list_init(&request->headers_in.headers, pool, 20,
++                      sizeof(ngx_table_elt_t)) != NGX_OK)
++    {
++        ngx_destroy_pool(state_pool);
++        ngx_destroy_pool(pool);
++        return NGX_ERROR;
++    }
++
++    stream.request = request;
++    stream.connection = &h2c;
++    stream.in_closed = 1;
++    h2c.pool = pool;
++    h2c.connection = &connection;
++    h2c.http_connection = &http_connection;
++    h2c.state.pool = state_pool;
++    h2c.state.stream = &stream;
++    h2c.state.sid = 1;
++    h2c.state.flags = NGX_HTTP_V2_END_HEADERS_FLAG;
++    h2c.state.length = len;
++    h2c.state.header_limit = 65536;
++    h2c.state.keep_pool = 1;
++    h2c.state.handler = ngx_http_v2_state_header_block;
++
++    ngx_http_v2_fuzz_control_active = 1;
++    p = ngx_http_v2_state_header_block(&h2c, data, data + len);
++    ngx_http_v2_fuzz_control_active = 0;
++    (void) p;
++
++    if (h2c.state.pool != NULL) {
++        ngx_destroy_pool(h2c.state.pool);
++    } else {
++        ngx_destroy_pool(state_pool);
++    }
++    ngx_destroy_pool(pool);
++    return NGX_OK;
++}
+ static ngx_int_t
+ ngx_http_v2_parse_method(ngx_http_request_t *r, ngx_str_t *value)

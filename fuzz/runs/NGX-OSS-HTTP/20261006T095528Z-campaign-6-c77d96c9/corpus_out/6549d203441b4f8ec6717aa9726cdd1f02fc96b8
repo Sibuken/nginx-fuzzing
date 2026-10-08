@@ -1,0 +1,2 @@
+request: "GET /a/../b/%2e%2e\362c//d?q=%00 HTTP/1.1\r\nHost: [edge.ut-Tgrpc_internal_trailersle$$$$$$$$$$$$$$$$$$$$$$$$]%00 HTTP/1.1\r\nHost: [edge/u$$$$$$ value-\n\r\n"
+reply: "Link<"

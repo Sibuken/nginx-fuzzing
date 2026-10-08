@@ -1,0 +1,2 @@
+request: "GETGET \333\236\320\321\r\nHost: edge.ur%2fl.ost:  \333\236\320\321\r\nHost: edge.ur%2fl.ost: e_"
+reply: "GET /a/../b/%2e%2com\r\nX_Test: vLOCK\r\n\r\n"

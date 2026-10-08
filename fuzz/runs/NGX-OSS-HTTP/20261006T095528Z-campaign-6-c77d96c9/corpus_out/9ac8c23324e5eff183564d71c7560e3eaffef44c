@@ -1,0 +1,2 @@
+request: "GET /a/../b/%ee%22/c//d?q=m\r\nX_Test: valHost: edge.url.com\r\nX_Test: t-Length\n"
+reply: "HTAccess-Control-Expose-HeaExpirestio\n\r\n"

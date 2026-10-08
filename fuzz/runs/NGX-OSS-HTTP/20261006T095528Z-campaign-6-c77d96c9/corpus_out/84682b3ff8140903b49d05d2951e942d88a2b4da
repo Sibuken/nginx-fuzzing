@@ -1,0 +1,2 @@
+request: "GET //amr\n"
+reply: "HTTP/1.1 103 H.1 103 \nrequest: \"GET /a/c//d?q=%00 HTTP/1.1\\r\\nHost: [edgFrome.url.co$$$~$$$$$Sco$$$~$$$$$S~trict-TForMax-For_________________________________________________________Contet___\n_____________________________________wardswar~trict-TForMax-Forwardswarded)t\\n\"\nreply: \"\"\n"

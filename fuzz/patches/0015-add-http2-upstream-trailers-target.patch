@@ -1,0 +1,10 @@
+--- a/auto/make_fuzzers
++++ b/auto/make_fuzzers
+@@ -150,1 +150,7 @@
++objs/http2_upstream_trailers_fuzzer: $ngx_deps_fuzz
++	\$(CXX) \$(CXXFLAGS) -DNDEBUG src/fuzz/http2_upstream_trailers_fuzzer.cc \\
++	-o objs/http2_upstream_trailers_fuzzer \\
++	\$(CORE_INCS) \$(HTTP_INCS) \\
++	$ngx_binexit$ngx_long_cont$ngx_objs \\
++	\$(LIB_FUZZING_ENGINE) $ngx_libs$ngx_link$ngx_main_link -lcrypt
+ END

@@ -1,0 +1,2 @@
+request: "OPTIONS http://aWWW-Authentecc?x=1 HTTP/1.1\r\nHost: absoluMe.url.com\r\nX-Empty:\r\n\r\n"
+reply: ""

@@ -1,0 +1,2 @@
+request: "GET /A/../b/%2e?sery\r\nX_inCP\n"
+reply: "HTTP/1.1 200 EProxy- EProxy-Connection: keep-alive\r\n%4er\\n\"\nreply: coding:kgd\r\n?\r\nConnection: keep-alive\r\n%4er\\n\"\nreply: coding:kgd\r\n?\r\n\r\n"

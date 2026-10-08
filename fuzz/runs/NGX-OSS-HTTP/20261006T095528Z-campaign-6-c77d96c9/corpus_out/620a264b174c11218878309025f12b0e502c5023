@@ -1,0 +1,2 @@
+request: "GET /a/a\350/../../b\r\n"
+reply: "HTTP/1.1 200 Everything Fine\r\nTransfer-Encoding: chunked\r\n\r\n0;z=q\r\nX\r\n0\r00 Everything Fine\r\nTransfer-Encoding: chunked\r\n\r\n1;z=q\r\nX\r\n0\r\n\n\r\n"

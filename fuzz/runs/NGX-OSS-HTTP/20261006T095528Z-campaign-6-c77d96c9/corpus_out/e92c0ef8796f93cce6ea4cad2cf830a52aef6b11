@@ -1,0 +1,2 @@
+request: "GET /a/../b/%2e%2e/c//d?q=%00###Access-Control-Expose-Headera/../b/Referer%2e%2e/c//d?q=%00###Access-Control-Expose-Headersnsp$$$$$$$$$$$$$$$$m\r\nX_Tes:t: vsnsp$$$$$$$$$$$$$$$$m\r\nX_Tes:t: value\r\n\r\n"
+reply: "HTTP/1.1 9 0 E-TraX-Content-Securi]\n-Policyy\nTransfer-Enc: chnuked\r\n\r\n0;z=\213\362\365\'\362\365\212\217sMtre0\r\n\ne\n"

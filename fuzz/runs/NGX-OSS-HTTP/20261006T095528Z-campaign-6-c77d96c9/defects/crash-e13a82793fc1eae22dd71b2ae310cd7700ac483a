@@ -1,0 +1,2 @@
+request: "OPTIOS thNtp://abPROPPATCH?x=1 HTTP/1.1\r\nHost: aEmpty:\r\n\r\n"
+reply: "OPTIOS thNtp://absolute./c?x=1 HTTP/1.1\r\nHost: aEmpty:\r\n\r\n"

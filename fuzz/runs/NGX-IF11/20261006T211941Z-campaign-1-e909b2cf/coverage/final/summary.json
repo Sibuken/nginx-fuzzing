@@ -1,0 +1,65 @@
+{
+  "duration_seconds": 9.581,
+  "inputs": 16,
+  "label": "final",
+  "nginx_source": {
+    "branches": {
+      "covered": 20,
+      "percent": 0.06,
+      "total": 34020
+    },
+    "lines": {
+      "covered": 104,
+      "percent": 0.13,
+      "total": 77541
+    }
+  },
+  "scopes": [
+    {
+      "branches": {
+        "covered": 5,
+        "percent": 83.33,
+        "total": 6
+      },
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": [
+        "ngx_http_v2_state_head"
+      ],
+      "id": "NGX-IF11-frame-header",
+      "lines": {
+        "covered": 22,
+        "percent": 100.0,
+        "total": 22
+      }
+    }
+  ],
+  "whole_instrumented_build": {
+    "branches": {
+      "count": 33814,
+      "covered": 20,
+      "notcovered": 33794,
+      "percent": 0.05914709883480215
+    },
+    "functions": {
+      "count": 1696,
+      "covered": 7,
+      "percent": 0.41273584905660377
+    },
+    "instantiations": {
+      "count": 3806,
+      "covered": 7,
+      "percent": 0.18392012611665792
+    },
+    "lines": {
+      "count": 76644,
+      "covered": 93,
+      "percent": 0.12134022232660091
+    },
+    "regions": {
+      "count": 60379,
+      "covered": 57,
+      "notcovered": 60322,
+      "percent": 0.09440368339985757
+    }
+  }
+}

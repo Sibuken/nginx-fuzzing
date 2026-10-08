@@ -1,0 +1,2 @@
+request: "GET /a/.~/d?q=%00 HTTP/1.1\r\nConnection:.uContent-Type\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377/ontont1.1\r\nUser-Agent:.u=_httrl.prox=_ContoCCCCCCCCCCCCCCCCCCCCCCCCCCl.prox=_\n"
+reply: ""

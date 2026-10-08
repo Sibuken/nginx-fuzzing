@@ -1,0 +1,2 @@
+request: "GET /a/.LOCK\r\n\r\n"
+reply: "HTTP/1.1 207 Multi-StatusMulti-Status\r\nCo\356tent-Lengt\r\nCo\356tent-Length: 0\r\n\r\n"

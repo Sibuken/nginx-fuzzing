@@ -1,0 +1,2 @@
+request: "GET /a/._\n"
+reply: "HTTP/1.207 Multi-Fromus\r\n1 207 Multi-Fromus\r\nCon\350tet\n"

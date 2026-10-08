@@ -1,0 +1,2 @@
+request: "PROPFIND /collection/%41/%7euser HTTP/1.1\r\nHost: dav.url.com\r\nDepth: infinity\r\nContent-Length: 0\r\n\r\n"
+reply: "HTTP/1.1 207 Multi-Status\r\nContent-Length: 0\r\n\r\n"

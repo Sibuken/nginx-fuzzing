@@ -1,0 +1,2 @@
+request: "GET /a/.~/d?q=%00 HTTP/1.1\r\nHost: [edge.url.prox=_httrl.prox=_http_v=_httpReferer=rpc_CoPORT\r\n"
+reply: ""

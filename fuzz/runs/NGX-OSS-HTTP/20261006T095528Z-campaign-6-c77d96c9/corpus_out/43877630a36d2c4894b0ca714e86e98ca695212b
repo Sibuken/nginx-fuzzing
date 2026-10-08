@@ -1,0 +1,2 @@
+request: "GET /=a/co\n"
+reply: "HTTP/1.1 200 `verything Fine\r\necko/Tra\nAccept-Ranges\r\nnsfer-Encodne\r\nTra\r\nAccept-Ranges\r\nnsfer-Esfer-Encodne\r\nTra\r\nAccept-Ranges\r\nnsfer-En\343oding: chqnked\r\n\r\n1;z=q\377\377n\343oding: chqnked\r\n\r\n1;z=q\377\377\377\377O\033\000\000\377\377\377\rCl.pro\n\r\n"

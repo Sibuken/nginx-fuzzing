@@ -1,0 +1,1786 @@
+{
+  "adapter": {
+    "configuration_profile": "stateful SETTINGS, PING, GOAWAY and WINDOW_UPDATE handlers with fresh nginx pool, minimal HTTP/2 server configuration, one primary stream, a closed indexed node, and a second synthetic waiting stream",
+    "input_format": "raw sequence of HTTP/2 wire frames",
+    "known_limitations": [
+      "Only SETTINGS, PING, GOAWAY and WINDOW_UPDATE frames are accepted.",
+      "Only the primary stream is request-bearing; the second stream exists solely to model WINDOW_UPDATE waiting-queue traversal, while request parsing and the full stream lifecycle are not entered.",
+      "Generated ACK/PING frames are allocated and queued but not written to a socket.",
+      "The protocol-error teardown guard and synthetic connection driver are applied only to the isolated instrumented build copy."
+    ],
+    "mutator": "libFuzzer byte mutator",
+    "origin": "custom",
+    "state": "Each input is parsed four times with identical bytes: contiguously, byte-by-byte, in three-byte fragments and with an input-selected fragment size. Concatenated frames share settings, flow-control and output-queue state within a replay."
+  },
+  "build": {
+    "coverage_binary_sha256": "2c474d7efa036b7930ab9f736680be532c625b72b4fac9a3da93306efe5c25c4",
+    "coverage_compile_flags": "-O1 -g -fprofile-instr-generate -fcoverage-mapping",
+    "coverage_link_flags": "-fsanitize=fuzzer -fprofile-instr-generate",
+    "fuzz_binary_sha256": "7ab6484c604741b835732314c0fce15d90c55770d52a46792421def2d3bd716b",
+    "fuzz_compile_flags": "-O1 -gline-tables-only -fno-omit-frame-pointer -fsanitize=fuzzer-no-link,address,undefined -fno-sanitize=alignment -fno-sanitize-recover=undefined",
+    "fuzz_link_flags": "-fsanitize=fuzzer,address,undefined -fno-sanitize=alignment -fno-sanitize-recover=undefined"
+  },
+  "command": [
+    "/opt/fuzz/bin/fuzz/http2_control_fuzzer",
+    "-fork=1",
+    "-ignore_crashes=1",
+    "-dict=/runs/NGX-IF12/20261006T232748Z-campaign-1-8d23d6a3/dictionary.dict",
+    "-artifact_prefix=/runs/NGX-IF12/20261006T232748Z-campaign-1-8d23d6a3/artifacts/",
+    "-max_len=65536",
+    "-timeout=10",
+    "-rss_limit_mb=2048",
+    "-print_final_stats=1",
+    "-seed=1",
+    "-max_total_time=300",
+    "/runs/NGX-IF12/20261006T232748Z-campaign-1-8d23d6a3/corpus_out",
+    "/runs/NGX-IF12/20261006T232748Z-campaign-1-8d23d6a3/corpus_in"
+  ],
+  "corpus": {
+    "corpus_in": {
+      "bytes": 279,
+      "files": 15
+    },
+    "corpus_out": {
+      "bytes": 110068,
+      "files": 240
+    }
+  },
+  "corpus_in": [
+    {
+      "name": "goaway",
+      "sha256": "e044260fab636873196b632b6f376a7dbe400de509bded06fca9bfea44bb2eb2",
+      "size": 21
+    },
+    {
+      "name": "ping",
+      "sha256": "3f68487c23c3703c1e9c2dcc559fba939546a1c53492203d512a73685e1ff915",
+      "size": 17
+    },
+    {
+      "name": "ping-ack",
+      "sha256": "7b2dcdeaa634147bc68ff6a7c935b13a16b8067aa425f8c136e9ef5bf569013a",
+      "size": 17
+    },
+    {
+      "name": "sequence",
+      "sha256": "84a81f1119f32b275135f389f6cc246661bd04d8490a1229f1dab6060cc9b5a7",
+      "size": 62
+    },
+    {
+      "name": "settings-ack",
+      "sha256": "a9fd441cc14ae4b467f3ea0a0ed70de71bb5834db34815eca9cceb70017adfd6",
+      "size": 9
+    },
+    {
+      "name": "settings-empty",
+      "sha256": "5ceac9f2d246f5485cc5d0db7cef01a9dd10bc5e1826ca37ad43cddded957053",
+      "size": 9
+    },
+    {
+      "name": "settings-invalid",
+      "sha256": "a38fc044da875f7586c04591ac250fe3706a46c2b8a4f9fe0cec450f2843912d",
+      "size": 21
+    },
+    {
+      "name": "settings-valid",
+      "sha256": "589162f1fc08ec855c4ebf9cc484436b7731350470c2e3fb866e9d0fb24f2b7a",
+      "size": 33
+    },
+    {
+      "name": "truncated",
+      "sha256": "ec7012d364df425676d3ce3e3da67e2e70d4e58840ad4e0b9246fc0f1381100f",
+      "size": 12
+    },
+    {
+      "name": "window-closed-stream",
+      "sha256": "b7b74a6d7f0742d651693316f4190b71badf2c38b68d10ad920acecbb1fe5711",
+      "size": 13
+    },
+    {
+      "name": "window-queue-drain",
+      "sha256": "223305d5919e4bfb27883f8f6b72de0813e978f8fd8223db5588e5ddbe1b3f61",
+      "size": 13
+    },
+    {
+      "name": "window-stream",
+      "sha256": "0a2a0e3e4794205143dd6117290dcd8d82737e5a51be99b327279def58ff7821",
+      "size": 13
+    },
+    {
+      "name": "window-stream-overflow",
+      "sha256": "2987b68d9328d335979a6bf355efd59cb317bc9508edefd65e478c054ff0678e",
+      "size": 13
+    },
+    {
+      "name": "window-valid",
+      "sha256": "223305d5919e4bfb27883f8f6b72de0813e978f8fd8223db5588e5ddbe1b3f61",
+      "size": 13
+    },
+    {
+      "name": "window-zero",
+      "sha256": "c58176c3b0bfe789c0c1ed3e414b8b84772b173e29cd217eec612489359a0e3a",
+      "size": 13
+    }
+  ],
+  "coverage": {
+    "baseline": {
+      "duration_seconds": 9.422,
+      "inputs": 14,
+      "label": "baseline",
+      "nginx_source": {
+        "branches": {
+          "covered": 282,
+          "percent": 0.83,
+          "total": 34026
+        },
+        "lines": {
+          "covered": 1060,
+          "percent": 1.37,
+          "total": 77572
+        }
+      },
+      "scopes": [
+        {
+          "branches": {
+            "covered": 26,
+            "percent": 54.17,
+            "total": 48
+          },
+          "file": "src/http/v2/ngx_http_v2.c",
+          "functions": [
+            "ngx_http_v2_state_settings",
+            "ngx_http_v2_state_settings_params"
+          ],
+          "id": "NGX-IF12-settings",
+          "lines": {
+            "covered": 60,
+            "percent": 61.86,
+            "total": 97
+          }
+        },
+        {
+          "branches": {
+            "covered": 7,
+            "percent": 50.0,
+            "total": 14
+          },
+          "file": "src/http/v2/ngx_http_v2.c",
+          "functions": [
+            "ngx_http_v2_state_ping"
+          ],
+          "id": "NGX-IF12-ping",
+          "lines": {
+            "covered": 22,
+            "percent": 66.67,
+            "total": 33
+          }
+        },
+        {
+          "branches": {
+            "covered": 4,
+            "percent": 40.0,
+            "total": 10
+          },
+          "file": "src/http/v2/ngx_http_v2.c",
+          "functions": [
+            "ngx_http_v2_state_goaway"
+          ],
+          "id": "NGX-IF12-goaway",
+          "lines": {
+            "covered": 8,
+            "percent": 47.06,
+            "total": 17
+          }
+        },
+        {
+          "branches": {
+            "covered": 25,
+            "percent": 69.44,
+            "total": 36
+          },
+          "file": "src/http/v2/ngx_http_v2.c",
+          "functions": [
+            "ngx_http_v2_state_window_update"
+          ],
+          "id": "NGX-IF12-window-update",
+          "lines": {
+            "covered": 73,
+            "percent": 81.11,
+            "total": 90
+          }
+        }
+      ],
+      "whole_instrumented_build": {
+        "branches": {
+          "count": 33820,
+          "covered": 282,
+          "notcovered": 33538,
+          "percent": 0.833826138379657
+        },
+        "functions": {
+          "count": 1698,
+          "covered": 46,
+          "percent": 2.7090694935217905
+        },
+        "instantiations": {
+          "count": 3808,
+          "covered": 46,
+          "percent": 1.207983193277311
+        },
+        "lines": {
+          "count": 76675,
+          "covered": 977,
+          "percent": 1.2742093250733615
+        },
+        "regions": {
+          "count": 60392,
+          "covered": 657,
+          "notcovered": 59735,
+          "percent": 1.0878924360842497
+        }
+      }
+    },
+    "final": {
+      "duration_seconds": 14.614,
+      "inputs": 254,
+      "label": "final",
+      "nginx_source": {
+        "branches": {
+          "covered": 352,
+          "percent": 1.03,
+          "total": 34026
+        },
+        "lines": {
+          "covered": 1199,
+          "percent": 1.55,
+          "total": 77572
+        }
+      },
+      "scopes": [
+        {
+          "branches": {
+            "covered": 40,
+            "percent": 83.33,
+            "total": 48
+          },
+          "file": "src/http/v2/ngx_http_v2.c",
+          "functions": [
+            "ngx_http_v2_state_settings",
+            "ngx_http_v2_state_settings_params"
+          ],
+          "id": "NGX-IF12-settings",
+          "lines": {
+            "covered": 92,
+            "percent": 94.85,
+            "total": 97
+          }
+        },
+        {
+          "branches": {
+            "covered": 11,
+            "percent": 78.57,
+            "total": 14
+          },
+          "file": "src/http/v2/ngx_http_v2.c",
+          "functions": [
+            "ngx_http_v2_state_ping"
+          ],
+          "id": "NGX-IF12-ping",
+          "lines": {
+            "covered": 31,
+            "percent": 93.94,
+            "total": 33
+          }
+        },
+        {
+          "branches": {
+            "covered": 8,
+            "percent": 80.0,
+            "total": 10
+          },
+          "file": "src/http/v2/ngx_http_v2.c",
+          "functions": [
+            "ngx_http_v2_state_goaway"
+          ],
+          "id": "NGX-IF12-goaway",
+          "lines": {
+            "covered": 17,
+            "percent": 100.0,
+            "total": 17
+          }
+        },
+        {
+          "branches": {
+            "covered": 31,
+            "percent": 86.11,
+            "total": 36
+          },
+          "file": "src/http/v2/ngx_http_v2.c",
+          "functions": [
+            "ngx_http_v2_state_window_update"
+          ],
+          "id": "NGX-IF12-window-update",
+          "lines": {
+            "covered": 86,
+            "percent": 95.56,
+            "total": 90
+          }
+        }
+      ],
+      "whole_instrumented_build": {
+        "branches": {
+          "count": 33820,
+          "covered": 352,
+          "notcovered": 33468,
+          "percent": 1.0408042578356003
+        },
+        "functions": {
+          "count": 1698,
+          "covered": 48,
+          "percent": 2.8268551236749118
+        },
+        "instantiations": {
+          "count": 3808,
+          "covered": 48,
+          "percent": 1.2605042016806722
+        },
+        "lines": {
+          "count": 76675,
+          "covered": 1114,
+          "percent": 1.452885555917835
+        },
+        "regions": {
+          "count": 60392,
+          "covered": 758,
+          "notcovered": 59634,
+          "percent": 1.2551331302159228
+        }
+      }
+    },
+    "plateau_validation": {
+      "duration_seconds": 14.92,
+      "inputs": 254,
+      "label": "plateau-validation-0025",
+      "nginx_source": {
+        "branches": {
+          "covered": 352,
+          "percent": 1.03,
+          "total": 34026
+        },
+        "lines": {
+          "covered": 1199,
+          "percent": 1.55,
+          "total": 77572
+        }
+      },
+      "scopes": [
+        {
+          "branches": {
+            "covered": 40,
+            "percent": 83.33,
+            "total": 48
+          },
+          "file": "src/http/v2/ngx_http_v2.c",
+          "functions": [
+            "ngx_http_v2_state_settings",
+            "ngx_http_v2_state_settings_params"
+          ],
+          "id": "NGX-IF12-settings",
+          "lines": {
+            "covered": 92,
+            "percent": 94.85,
+            "total": 97
+          }
+        },
+        {
+          "branches": {
+            "covered": 11,
+            "percent": 78.57,
+            "total": 14
+          },
+          "file": "src/http/v2/ngx_http_v2.c",
+          "functions": [
+            "ngx_http_v2_state_ping"
+          ],
+          "id": "NGX-IF12-ping",
+          "lines": {
+            "covered": 31,
+            "percent": 93.94,
+            "total": 33
+          }
+        },
+        {
+          "branches": {
+            "covered": 8,
+            "percent": 80.0,
+            "total": 10
+          },
+          "file": "src/http/v2/ngx_http_v2.c",
+          "functions": [
+            "ngx_http_v2_state_goaway"
+          ],
+          "id": "NGX-IF12-goaway",
+          "lines": {
+            "covered": 17,
+            "percent": 100.0,
+            "total": 17
+          }
+        },
+        {
+          "branches": {
+            "covered": 31,
+            "percent": 86.11,
+            "total": 36
+          },
+          "file": "src/http/v2/ngx_http_v2.c",
+          "functions": [
+            "ngx_http_v2_state_window_update"
+          ],
+          "id": "NGX-IF12-window-update",
+          "lines": {
+            "covered": 86,
+            "percent": 95.56,
+            "total": 90
+          }
+        }
+      ],
+      "whole_instrumented_build": {
+        "branches": {
+          "count": 33820,
+          "covered": 352,
+          "notcovered": 33468,
+          "percent": 1.0408042578356003
+        },
+        "functions": {
+          "count": 1698,
+          "covered": 48,
+          "percent": 2.8268551236749118
+        },
+        "instantiations": {
+          "count": 3808,
+          "covered": 48,
+          "percent": 1.2605042016806722
+        },
+        "lines": {
+          "count": 76675,
+          "covered": 1114,
+          "percent": 1.452885555917835
+        },
+        "regions": {
+          "count": 60392,
+          "covered": 758,
+          "notcovered": 59634,
+          "percent": 1.2551331302159228
+        }
+      }
+    }
+  },
+  "coverage_checkpoints": [
+    {
+      "batch_seconds": 302.873,
+      "coverage_increased": true,
+      "elapsed_seconds": 317.392,
+      "new_corpus_inputs": 196,
+      "new_findings": 0,
+      "round": 1,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 0.0
+    },
+    {
+      "batch_seconds": 303.061,
+      "coverage_increased": false,
+      "elapsed_seconds": 629.926,
+      "new_corpus_inputs": 9,
+      "new_findings": 0,
+      "round": 2,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 312.534
+    },
+    {
+      "batch_seconds": 303.011,
+      "coverage_increased": false,
+      "elapsed_seconds": 942.088,
+      "new_corpus_inputs": 3,
+      "new_findings": 0,
+      "round": 3,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 624.696
+    },
+    {
+      "batch_seconds": 302.944,
+      "coverage_increased": false,
+      "elapsed_seconds": 1254.221,
+      "new_corpus_inputs": 2,
+      "new_findings": 0,
+      "round": 4,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 936.829
+    },
+    {
+      "batch_seconds": 303.011,
+      "coverage_increased": false,
+      "elapsed_seconds": 1566.506,
+      "new_corpus_inputs": 3,
+      "new_findings": 0,
+      "round": 5,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 1249.114
+    },
+    {
+      "batch_seconds": 303.036,
+      "coverage_increased": false,
+      "elapsed_seconds": 1878.396,
+      "new_corpus_inputs": 3,
+      "new_findings": 0,
+      "round": 6,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 1561.004
+    },
+    {
+      "batch_seconds": 302.992,
+      "coverage_increased": false,
+      "elapsed_seconds": 2190.057,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 7,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 1872.665
+    },
+    {
+      "batch_seconds": 303.032,
+      "coverage_increased": false,
+      "elapsed_seconds": 2493.12,
+      "new_corpus_inputs": 0,
+      "new_findings": 0,
+      "round": 8,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 2175.728
+    },
+    {
+      "batch_seconds": 302.98,
+      "coverage_increased": false,
+      "elapsed_seconds": 2805.01,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 9,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 2487.617
+    },
+    {
+      "batch_seconds": 302.849,
+      "coverage_increased": false,
+      "elapsed_seconds": 3116.858,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 10,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 2799.466
+    },
+    {
+      "batch_seconds": 303.084,
+      "coverage_increased": false,
+      "elapsed_seconds": 3428.949,
+      "new_corpus_inputs": 2,
+      "new_findings": 0,
+      "round": 11,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 3111.557
+    },
+    {
+      "batch_seconds": 302.902,
+      "coverage_increased": false,
+      "elapsed_seconds": 3740.46,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 12,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 3423.068
+    },
+    {
+      "batch_seconds": 302.98,
+      "coverage_increased": false,
+      "elapsed_seconds": 4052.294,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 13,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 3734.902
+    },
+    {
+      "batch_seconds": 303.021,
+      "coverage_increased": false,
+      "elapsed_seconds": 4355.343,
+      "new_corpus_inputs": 0,
+      "new_findings": 0,
+      "round": 14,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 4037.951
+    },
+    {
+      "batch_seconds": 302.981,
+      "coverage_increased": false,
+      "elapsed_seconds": 4667.316,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 15,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 4349.924
+    },
+    {
+      "batch_seconds": 303.031,
+      "coverage_increased": false,
+      "elapsed_seconds": 4978.972,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 16,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 4661.58
+    },
+    {
+      "batch_seconds": 302.992,
+      "coverage_increased": false,
+      "elapsed_seconds": 5291.105,
+      "new_corpus_inputs": 3,
+      "new_findings": 0,
+      "round": 17,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 4973.713
+    },
+    {
+      "batch_seconds": 303.057,
+      "coverage_increased": false,
+      "elapsed_seconds": 5602.922,
+      "new_corpus_inputs": 2,
+      "new_findings": 0,
+      "round": 18,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 5285.529
+    },
+    {
+      "batch_seconds": 303.079,
+      "coverage_increased": false,
+      "elapsed_seconds": 5914.713,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 19,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 5597.321
+    },
+    {
+      "batch_seconds": 303.035,
+      "coverage_increased": false,
+      "elapsed_seconds": 6226.998,
+      "new_corpus_inputs": 3,
+      "new_findings": 0,
+      "round": 20,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 5909.606
+    },
+    {
+      "batch_seconds": 303.018,
+      "coverage_increased": false,
+      "elapsed_seconds": 6538.853,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 21,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 6221.461
+    },
+    {
+      "batch_seconds": 302.967,
+      "coverage_increased": false,
+      "elapsed_seconds": 6841.852,
+      "new_corpus_inputs": 0,
+      "new_findings": 0,
+      "round": 22,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 6524.46
+    },
+    {
+      "batch_seconds": 302.999,
+      "coverage_increased": false,
+      "elapsed_seconds": 7154.028,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 23,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 6836.636
+    },
+    {
+      "batch_seconds": 302.935,
+      "coverage_increased": false,
+      "elapsed_seconds": 7465.874,
+      "new_corpus_inputs": 1,
+      "new_findings": 0,
+      "round": 24,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 7148.482
+    },
+    {
+      "batch_seconds": 302.956,
+      "coverage_increased": false,
+      "elapsed_seconds": 7777.25,
+      "new_corpus_inputs": 3,
+      "new_findings": 0,
+      "round": 25,
+      "scopes": [
+        {
+          "covered_branches": 40,
+          "covered_lines": 92,
+          "id": "NGX-IF12-settings"
+        },
+        {
+          "covered_branches": 11,
+          "covered_lines": 31,
+          "id": "NGX-IF12-ping"
+        },
+        {
+          "covered_branches": 8,
+          "covered_lines": 17,
+          "id": "NGX-IF12-goaway"
+        },
+        {
+          "covered_branches": 31,
+          "covered_lines": 86,
+          "id": "NGX-IF12-window-update"
+        }
+      ],
+      "seconds_since_growth": 7459.858
+    }
+  ],
+  "coverage_threshold_met": true,
+  "dictionary": {
+    "path": "dictionary.dict",
+    "sha256": "14f73b4ae36dc271b8309f67cd4e2496eba7c4dfae996bf9183febc4842f0b00"
+  },
+  "duration_seconds": 7816.276,
+  "environment": {
+    "allocator_mode": "NGX_DEBUG_PALLOC=1 with a fresh nginx pool for each fragmentation replay",
+    "container_architecture": "x86_64",
+    "emulated": true,
+    "host_architecture": "arm64",
+    "image_id": "sha256:fc07f57d19d54f69d3d08d0b08adf6ab259222cc0bc79966927248b592dcf4d9",
+    "image_reference": "nginx-fuzz:1.30.5",
+    "platform": "linux/amd64",
+    "toolchain": [
+      "Debian clang version 14.0.6",
+      "Target: x86_64-pc-linux-gnu",
+      "Thread model: posix",
+      "InstalledDir: /usr/bin",
+      "Debian LLVM version 14.0.6",
+      "  Optimized build.",
+      "  Default target: x86_64-pc-linux-gnu",
+      "  Host CPU: westmere",
+      "libprotoc 29.3"
+    ]
+  },
+  "exit_code": 0,
+  "findings": [],
+  "finished_at_utc": "2026-10-07T01:38:05Z",
+  "fork_worker_counters": [
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 1,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 2,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 3,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 4,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 5,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 6,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 7,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 8,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 9,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 10,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 11,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 12,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 13,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 14,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 15,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 16,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 17,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 18,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 19,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 20,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 21,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 22,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 23,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 24,
+      "timeouts": 0
+    },
+    {
+      "crashes": 0,
+      "oom": 0,
+      "round": 25,
+      "timeouts": 0
+    }
+  ],
+  "kind": "campaign",
+  "limits": {
+    "coverage_check_interval_seconds": 300,
+    "fuzzer_mode": "fork",
+    "max_len": 65536,
+    "max_seconds": 0,
+    "random_seed": 1,
+    "rss_limit_mb": 2048,
+    "seconds": null,
+    "single_process": false,
+    "timeout_seconds": 10
+  },
+  "nginx": {
+    "revision": "4556c714d1cfa587f92c7c0365c09209d42d148b",
+    "source_sha256": "b13133a91e035cbfebdbe3474988d691e8870f87e5864befde7ec21b7635a8d9",
+    "version": "1.30.5"
+  },
+  "patches": [
+    {
+      "name": "._0001-nginx-1.30-setup-checks.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0002-add-proxy-protocol-target.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0003-nginx-per-input-cleanup.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0004-add-dns-response-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0005-expose-config-tokenizer.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0006-expose-http2-parser-hooks.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0007-add-http2-control-frame-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0008-add-http2-header-block-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0009-add-http2-pseudo-header-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0010-add-http2-live-header-block-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0011-add-http2-live-headers-frame-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0012-add-http2-response-trailers-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0013-add-http2-response-trailers-target.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0014-add-http2-upstream-trailers-hook.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "._0015-add-http2-upstream-trailers-target.patch",
+      "sha256": "b80b5bb427e787d5607c4f27cbda5ed6902d21912a1aea966232f8cb061b182c",
+      "size": 163
+    },
+    {
+      "name": "0001-nginx-1.30-setup-checks.patch",
+      "sha256": "6678efa2e6e083b2aef145ec205eaa97a474127f4473d89b6344d02a73e60b3d",
+      "size": 1758
+    },
+    {
+      "name": "0002-add-proxy-protocol-target.patch",
+      "sha256": "b6a3b06f94c2ada9ae2d23a05e77fa81ac825bf44ce86ad8645fe33f80448e9a",
+      "size": 5258
+    },
+    {
+      "name": "0003-nginx-per-input-cleanup.patch",
+      "sha256": "a365d349453fd1b3a35ae0dcd580fb7aa8d2e5d7ed5fa61cb78089064232ffd9",
+      "size": 1914
+    },
+    {
+      "name": "0004-add-dns-response-hook.patch",
+      "sha256": "4adc724bac16bcbb528c61753e287c4f776fc72fb91bf54b9bcc6a181a404e24",
+      "size": 5217
+    },
+    {
+      "name": "0005-expose-config-tokenizer.patch",
+      "sha256": "64a6e481579bd9706ab919e3bd0b17bd3241c027f01974c7cf15cfbdf56f0bc6",
+      "size": 441
+    },
+    {
+      "name": "0006-expose-http2-parser-hooks.patch",
+      "sha256": "2f605b4c4b0c6b9f28637962bdf7a483b5ddd48f003316c5c209536f42fcc946",
+      "size": 2634
+    },
+    {
+      "name": "0007-add-http2-control-frame-hook.patch",
+      "sha256": "31338194116592bccb641b4a190ec54580927d260af6bbc390e5cbf69de81273",
+      "size": 19179
+    },
+    {
+      "name": "0008-add-http2-header-block-hook.patch",
+      "sha256": "6d5dc3d32def018e140f71bb492af21d9d76e2a9091dbd0c67fac0e7768e2435",
+      "size": 3355
+    },
+    {
+      "name": "0009-add-http2-pseudo-header-hook.patch",
+      "sha256": "0d19ca454e9ad334a44cb2ab7565648123f7675a5f176ba4bdc489c0173c9d21",
+      "size": 4875
+    },
+    {
+      "name": "0010-add-http2-live-header-block-hook.patch",
+      "sha256": "6f0ffe9632e3762cab1bcea1db3d79e1b9a6cd318aef5c96692b2a4aa3bbd1eb",
+      "size": 10147
+    },
+    {
+      "name": "0011-add-http2-live-headers-frame-hook.patch",
+      "sha256": "afc4e89ee29d2a3887d27fe104343386ea63efaf7c9aad451cda8cd28bd0165d",
+      "size": 9777
+    },
+    {
+      "name": "0012-add-http2-response-trailers-hook.patch",
+      "sha256": "ebdf6efe4e673006b30b4cbe38c86563265ae1982b80070394fdad98b4585baa",
+      "size": 23226
+    },
+    {
+      "name": "0013-add-http2-response-trailers-target.patch",
+      "sha256": "b914cb3a30a7e035a44034f1d7776716e455e7055bc03dcd198f8cee027b75f0",
+      "size": 1842
+    },
+    {
+      "name": "0014-add-http2-upstream-trailers-hook.patch",
+      "sha256": "32fd997ba6f10c044ae7fe28ace7bf3fcbee819e1396431174facdd5e7306108",
+      "size": 7988
+    },
+    {
+      "name": "0015-add-http2-upstream-trailers-target.patch",
+      "sha256": "fb5b523e30159f4d3ed5e51a26a8d7f8f542388fac1e5bcb010c500c2af70aa2",
+      "size": 388
+    }
+  ],
+  "regression_check": {
+    "cases": [],
+    "passed": true,
+    "target": "NGX-IF12"
+  },
+  "run_id": "20261006T232748Z-campaign-1-8d23d6a3",
+  "schema_version": 1,
+  "scope": [
+    {
+      "callers": [
+        "ngx_http_v2_state_head"
+      ],
+      "contract": "Validate SETTINGS framing and values, update connection settings and queue an acknowledgement.",
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": [
+        "ngx_http_v2_state_settings",
+        "ngx_http_v2_state_settings_params"
+      ],
+      "id": "NGX-IF12-settings",
+      "preconditions": "Fresh HTTP/2 connection with default windows/frame size and one minimal live stream.",
+      "testcase_fields": [
+        "ACK flag",
+        "stream ID",
+        "setting IDs",
+        "32-bit values",
+        "parameter sequence"
+      ],
+      "variants": [
+        "empty",
+        "ACK",
+        "unknown setting",
+        "header table size",
+        "enable push",
+        "initial window",
+        "maximum frame size",
+        "invalid lengths and values"
+      ]
+    },
+    {
+      "callers": [
+        "ngx_http_v2_state_head"
+      ],
+      "contract": "Validate eight-byte PING frames and queue echo acknowledgements.",
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": [
+        "ngx_http_v2_state_ping"
+      ],
+      "id": "NGX-IF12-ping",
+      "preconditions": "Connection-level stream ID zero for accepted frames.",
+      "testcase_fields": [
+        "length",
+        "ACK flag",
+        "stream ID",
+        "opaque data"
+      ],
+      "variants": [
+        "request",
+        "ACK",
+        "wrong length",
+        "wrong stream",
+        "fragmented body"
+      ]
+    },
+    {
+      "callers": [
+        "ngx_http_v2_state_head"
+      ],
+      "contract": "Validate GOAWAY minimum length and connection-level stream ID, then skip optional debug data.",
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": [
+        "ngx_http_v2_state_goaway"
+      ],
+      "id": "NGX-IF12-goaway",
+      "preconditions": "At least eight declared payload bytes for an accepted frame.",
+      "testcase_fields": [
+        "length",
+        "stream ID",
+        "last stream ID",
+        "error code",
+        "debug data"
+      ],
+      "variants": [
+        "minimum body",
+        "debug data",
+        "short body",
+        "wrong stream",
+        "fragmented body"
+      ]
+    },
+    {
+      "callers": [
+        "ngx_http_v2_state_head"
+      ],
+      "contract": "Validate flow-control increments and update connection or stream windows, wake waiting/exhausted streams, and ignore unknown streams safely.",
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": [
+        "ngx_http_v2_state_window_update"
+      ],
+      "id": "NGX-IF12-window-update",
+      "preconditions": "Default connection and stream send windows, one live exhausted/waiting stream at ID 1, a closed indexed node at ID 3, a second exhausted/waiting stream, and a callback that can optionally drain the connection window.",
+      "testcase_fields": [
+        "length",
+        "stream ID",
+        "reserved bit",
+        "31-bit increment"
+      ],
+      "variants": [
+        "connection increment",
+        "live stream increment",
+        "unknown stream",
+        "closed stream node",
+        "zero increment",
+        "connection overflow",
+        "stream overflow",
+        "waiting queue wakeup",
+        "delayed write-event wakeup",
+        "multiple waiting streams",
+        "stop queue walk when callback drains connection window to zero",
+        "wrong length",
+        "fragmented body"
+      ]
+    }
+  ],
+  "signal": null,
+  "started_at_utc": "2026-10-06T23:27:48Z",
+  "status": "passed",
+  "stop_policy": {
+    "continue_after_finding": true,
+    "coverage_metric": "cumulative LLVM scope lines and branches",
+    "fuzzer_fork_mode": true,
+    "ignore_crashes": true,
+    "plateau_seconds": 7200,
+    "scope_threshold_percent": 90,
+    "stop_on_coverage": true,
+    "stop_on_first_finding": false
+  },
+  "stop_reason": "coverage_plateau",
+  "target": "NGX-IF12",
+  "upstream": {
+    "libprotobuf_mutator": {
+      "archive_sha256": "260408230cbb08009da01fb2445ac75e08576d85b57da47ad0a794b91429803f",
+      "archive_url": "https://github.com/google/libprotobuf-mutator/archive/c1c950eae0440c3808f2b8bd7c57d0c6a42c1a90.tar.gz",
+      "repository": "https://github.com/google/libprotobuf-mutator.git",
+      "revision": "c1c950eae0440c3808f2b8bd7c57d0c6a42c1a90"
+    },
+    "oss_fuzz": {
+      "archive_sha256": "07dc5e75c112d4a0855122f1fee3bd15f15a97c8220f39857f328640940c15db",
+      "archive_url": "https://github.com/google/oss-fuzz/archive/2cc3fa481cbf724c0091fd3c75fdd4142e698409.tar.gz",
+      "files": {
+        "Dockerfile": "be2203b67cae6995866695f090bd717b8e69bc1755a0f29ccf0c955f7fb9d111",
+        "add_fuzzers.diff": "2c5b5b6450aefe525babc51e0989b0748b91a09a69095e8f3d4c94872106582a",
+        "build.sh": "373fd963367f994c2febde8e6093eb78e7b37d460cc2a385dc5daa6870c29167",
+        "fuzz/http_request_fuzzer.cc": "b61888048a3db1d38c56b5d1ba1aa1523ba9f2d02151f38b07a82b509cdcdd99",
+        "fuzz/http_request_fuzzer.dict": "543d68c43d13decb3749d9fff0a09a0f495cf993c4d8d4b1fcc5f0e742dd83e1",
+        "fuzz/http_request_proto.proto": "7066b8670dff7f90e7a0367b561876eb3d37bb8eb0ebff9a80901f5d007532be",
+        "fuzz/wrappers.c": "e46d489120acef1a90bdf9364ebbd53a23cfc64494158e4fd6ddfddb1dcb914c",
+        "make_fuzzers": "139d9238f1dd127b3d972bb92b2a3abe9918c3624f40787cd49af6efe9f521f9",
+        "project.yaml": "391e5aacd69ed5b8382b68cda1f985f77a0c707b6d131ecca06b32e08da09553"
+      },
+      "project_path": "projects/nginx",
+      "repository": "https://github.com/google/oss-fuzz.git",
+      "revision": "2cc3fa481cbf724c0091fd3c75fdd4142e698409"
+    },
+    "protobuf": {
+      "revision": "b407e8416e3893036aee5af9a12bd9b6a0e2b2e6",
+      "source": "libprotobuf-mutator/cmake/external/protobuf.cmake",
+      "version": "29.3"
+    },
+    "toolchain": {
+      "base_image": "debian:bookworm-slim@sha256:3783cc01769c7b2b1b83a5c5ad96c815348e28ed7da68e2e3687004faa906251",
+      "clang": "14",
+      "fuzzing_engine": "libFuzzer",
+      "llvm_cov": "14",
+      "platform": "linux/amd64",
+      "sanitizers": [
+        "address",
+        "undefined"
+      ]
+    }
+  },
+  "upstream_target": null
+}

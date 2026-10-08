@@ -1,0 +1,2 @@
+request: "GET /a/._\n"
+reply: "HTTP/1.1 20                                                       7u Muulti-\356tent-Lelti-Statnt-Lengt\r\nCo\356tent-Lenlth: 0\r\n\r\n"

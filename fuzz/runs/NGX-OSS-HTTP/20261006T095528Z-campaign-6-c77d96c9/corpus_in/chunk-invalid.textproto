@@ -1,0 +1,2 @@
+request: "POST /bad HTTP/1.1\r\nHost: bad.url.com\r\nTransfer-Encoding: chunked\r\n\r\nFFFFFFFFFFFFFFFFF\r\nx\r\n"
+reply: "HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\nZ\r\nbad\r\n"

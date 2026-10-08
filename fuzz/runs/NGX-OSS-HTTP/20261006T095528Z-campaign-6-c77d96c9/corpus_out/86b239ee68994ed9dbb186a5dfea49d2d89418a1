@@ -1,0 +1,2 @@
+request: "GET /a/.~/d?q=%00 HTTP/1.1\r\nConnection:_,Cont4++++++++reply.u_\n"
+reply: ""

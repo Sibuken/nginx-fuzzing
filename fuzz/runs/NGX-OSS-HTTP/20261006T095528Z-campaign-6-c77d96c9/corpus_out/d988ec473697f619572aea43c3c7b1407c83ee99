@@ -1,0 +1,2 @@
+request: "GET /A/../b/%2e%2e/c//d?q=%00 HTTP/1.1\r\nHost: edge.url.com\r\nX_Test: value\r\n\r\n"
+reply: "HTTP/1.1 200 Everythin;z=q\330\006\000\000Encoding:ked\r\nContent-Type\n0\r\n\n\r\n"

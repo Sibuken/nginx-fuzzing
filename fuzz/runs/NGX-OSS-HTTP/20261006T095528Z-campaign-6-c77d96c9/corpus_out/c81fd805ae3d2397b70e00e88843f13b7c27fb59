@@ -1,0 +1,2 @@
+request: "PROPFIND /collection/%20/%7euser HTTP/1.1\r\nHost: dav.url.com\r\nDepth: infifity\r\nTransfer-Encoding: chunked\r\nCoequest: \"GET /a/../b/%1eM\\000e/c//d?q=%00 HT41/%7euser HTTP/1.1\\r\\nHost: dav.u[[[[[[[[rl.com]r\\nDepth: infinity\\0e/c//d?q=%Length:ntent-Length: 0\r\n\r\n"
+reply: ""

@@ -1,0 +1,2 @@
+request: "GET /a/../b/%2evLOCK\r\n\r\n"
+reply: "HTTP/1.0 404 r\\n\\r\\n\"\nreply: \"\364\n@LOCKontent-Length: 0\r\n\r\n"

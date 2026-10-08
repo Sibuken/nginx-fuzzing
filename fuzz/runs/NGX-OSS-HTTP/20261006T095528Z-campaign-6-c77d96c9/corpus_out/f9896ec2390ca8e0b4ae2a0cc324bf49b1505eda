@@ -1,0 +1,2 @@
+request: "GET /a/..%/2b%/2 HTTP/1.1\r\nATst: \373\362\n"
+reply: ""

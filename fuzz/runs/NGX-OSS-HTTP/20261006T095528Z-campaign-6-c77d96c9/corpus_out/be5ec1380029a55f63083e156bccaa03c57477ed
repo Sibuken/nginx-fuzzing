@@ -1,0 +1,2 @@
+request: "GET /a/a\350/../..#b\r\n"
+reply: ""

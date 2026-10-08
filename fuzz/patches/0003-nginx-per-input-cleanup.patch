@@ -1,0 +1,62 @@
+--- a/src/fuzz/http_request_fuzzer.cc
++++ b/src/fuzz/http_request_fuzzer.cc
+@@ -28,6 +28,9 @@
+ #include "http_request_proto.pb.h"
+ #include "libprotobuf-mutator/src/libfuzzer/libfuzzer_macro.h"
+ 
++extern "C" void ngx_fuzz_reset_destroyed_pools(void);
++extern "C" int ngx_fuzz_pool_was_destroyed(void *pool);
++
+ static char configuration[] =
+ "error_log stderr emerg;\n"
+ "worker_rlimit_nofile 8192;\n"
+@@ -350,9 +353,14 @@
+     if (c->read->data != NULL) {
+       ngx_connection_t *c2 = (ngx_connection_t*)c->read->data;
+         ngx_http_request_t *req_tmp = (ngx_http_request_t*)c2->data;
++        c2->read->eof = 1;
+         req_tmp->cleanup = NULL;
+         ngx_http_finalize_request(req_tmp, NGX_DONE);
+     }
++    if (local2.pool != NULL && !ngx_fuzz_pool_was_destroyed(local2.pool)) {
++      ngx_destroy_pool(local2.pool);
++      local2.pool = NULL;
++    }
+     ngx_close_connection(c);
+   }
+ }
+--- a/src/fuzz/wrappers.c
++++ b/src/fuzz/wrappers.c
+@@ -18,6 +18,32 @@
+ #include <grp.h>
+ #include <pwd.h>
+ 
++/* Track pool destruction without dereferencing stale nginx objects. */
++#define NGX_FUZZ_DESTROYED_POOL_CAPACITY 1024
++
++static void *ngx_fuzz_destroyed_pools[NGX_FUZZ_DESTROYED_POOL_CAPACITY];
++static size_t ngx_fuzz_destroyed_pool_count;
++
++void ngx_fuzz_reset_destroyed_pools(void) {
++  ngx_fuzz_destroyed_pool_count = 0;
++}
++
++int ngx_fuzz_pool_was_destroyed(void *pool) {
++  size_t i;
++  for (i = 0; i < ngx_fuzz_destroyed_pool_count; i++) {
++    if (ngx_fuzz_destroyed_pools[i] == pool) return 1;
++  }
++  return 0;
++}
++
++void __real_ngx_destroy_pool(void *pool);
++void __wrap_ngx_destroy_pool(void *pool) {
++  if (ngx_fuzz_destroyed_pool_count < NGX_FUZZ_DESTROYED_POOL_CAPACITY) {
++    ngx_fuzz_destroyed_pools[ngx_fuzz_destroyed_pool_count++] = pool;
++  }
++  __real_ngx_destroy_pool(pool);
++}
++
+ int __wrap_connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen) {
+   return 0;
+ }

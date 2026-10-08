@@ -1,0 +1,2 @@
+request: "GET /a/../b/%1e/c//d?q=%00 HTTP/1.1 \nos\rt:HedgDELETE\nX_Test: valuMOVE]\n"
+reply: ""

@@ -1,0 +1,2 @@
+request: "GET /a/aSlt\207-Cookie\n"
+reply: "HTTP/1.1 200 Everything Fine\r\nTransfer-Encoding: chunked\r\n\r\n1trol-Allow-Headers\n"

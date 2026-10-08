@@ -1,0 +1,100 @@
+--- a/src/http/v2/ngx_http_v2.c
++++ b/src/http/v2/ngx_http_v2.c
+@@ -1,3 +1,97 @@
+     ngx_queue_init(&ngx_posted_events);
+     return drain_window_ok ? NGX_OK : NGX_ERROR;
+ }
++
++/* Fuzz-only real HPACK block decoder; no request pipeline is initialized. */
++ngx_int_t
++ngx_http_v2_fuzz_header_block(u_char *data, size_t len, size_t *consumed)
++{
++    u_char                    *p;
++    ngx_log_t                   log;
++    ngx_connection_t            connection;
++    ngx_http_connection_t       http_connection;
++    ngx_http_conf_ctx_t         conf_ctx;
++    ngx_http_core_srv_conf_t    core_srv_conf;
++    ngx_http_v2_connection_t    h2c;
++    void                      **srv_conf;
++    ngx_uint_t                  core_ctx_index;
++    ngx_uint_t                  declared;
++
++    *consumed = 0;
++
++    if (len < NGX_HTTP_V2_FRAME_HEADER_SIZE
++        || ngx_http_v2_parse_type(ngx_http_v2_parse_uint32(data))
++           != NGX_HTTP_V2_HEADERS_FRAME
++        || (data[4] & (NGX_HTTP_V2_PADDED_FLAG | NGX_HTTP_V2_PRIORITY_FLAG)))
++    {
++        return NGX_DECLINED;
++    }
++
++    declared = ngx_http_v2_parse_length(ngx_http_v2_parse_uint32(data));
++
++    if (declared > len - NGX_HTTP_V2_FRAME_HEADER_SIZE
++        || ngx_http_v2_parse_sid(data + 5) == 0
++        || (ngx_http_v2_parse_sid(data + 5) & 1) == 0)
++    {
++        return NGX_DECLINED;
++    }
++
++    ngx_memzero(&log, sizeof(ngx_log_t));
++    ngx_memzero(&connection, sizeof(ngx_connection_t));
++    ngx_memzero(&http_connection, sizeof(ngx_http_connection_t));
++    ngx_memzero(&conf_ctx, sizeof(ngx_http_conf_ctx_t));
++    ngx_memzero(&core_srv_conf, sizeof(ngx_http_core_srv_conf_t));
++    ngx_memzero(&h2c, sizeof(ngx_http_v2_connection_t));
++
++    log.log_level = NGX_LOG_EMERG;
++    h2c.pool = ngx_create_pool(4096, &log);
++    if (h2c.pool == NULL) {
++        return NGX_ERROR;
++    }
++
++    connection.log = &log;
++    connection.pool = h2c.pool;
++    srv_conf = ngx_pcalloc(h2c.pool, sizeof(void *));
++    if (srv_conf == NULL) {
++        ngx_destroy_pool(h2c.pool);
++        return NGX_ERROR;
++    }
++
++    core_srv_conf.large_client_header_buffers.num = 4;
++    core_srv_conf.large_client_header_buffers.size = 8192;
++    srv_conf[0] = &core_srv_conf;
++    conf_ctx.srv_conf = srv_conf;
++    http_connection.conf_ctx = &conf_ctx;
++
++    h2c.connection = &connection;
++    h2c.http_connection = &http_connection;
++    h2c.state.pool = ngx_create_pool(1024, &log);
++    if (h2c.state.pool == NULL) {
++        ngx_destroy_pool(h2c.pool);
++        return NGX_ERROR;
++    }
++
++    h2c.state.sid = ngx_http_v2_parse_sid(data + 5);
++    h2c.state.flags = data[4] & NGX_HTTP_V2_END_HEADERS_FLAG;
++    h2c.state.length = declared;
++    h2c.state.header_limit = 65536;
++    h2c.state.handler = ngx_http_v2_state_header_block;
++
++    core_ctx_index = ngx_http_core_module.ctx_index;
++    ngx_http_core_module.ctx_index = 0;
++    ngx_http_v2_fuzz_control_active = 1;
++    p = ngx_http_v2_state_header_block(&h2c,
++                       data + NGX_HTTP_V2_FRAME_HEADER_SIZE, data + len);
++    ngx_http_v2_fuzz_control_active = 0;
++    ngx_http_core_module.ctx_index = core_ctx_index;
++
++    *consumed = p == NULL ? len : (size_t) (p - data);
++
++    if (h2c.state.pool != NULL) {
++        ngx_destroy_pool(h2c.state.pool);
++    }
++
++    ngx_destroy_pool(h2c.pool);
++
++    return NGX_OK;
++}

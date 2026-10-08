@@ -1,0 +1,2 @@
+request: "GET /a/+.\n"
+reply: "HTTP/1.1 200 EProxy- EProxy-ConnectProxy- EProxy-Connection: keep-alive\r\n%4er\\n\"\nreply: coding:kgd\r\n?\r\nConnection: keep-alive\r\n%4er\\n\"\nreply: ion: keep-alive\r\n%Refererreply: coding:kgd\r\n?\r\nConnection: keep-alive\r\n%4er\\n\"\nreply: coding:kgd\r\n?\r\n\r\n"

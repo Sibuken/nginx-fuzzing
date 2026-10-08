@@ -1,0 +1,93 @@
+--- a/src/http/v2/ngx_http_v2.c
++++ b/src/http/v2/ngx_http_v2.c
+@@ -2691,6 +2691,90 @@ ngx_http_v2_parse_int(ngx_http_v2_connection_t *h2c, u_char **pos, u_char *end,
+ }
+ 
+ 
++/*
++ * Fuzz-only entry points.  This patch is applied only to the isolated
++ * instrumented build copy.  The frame hook keeps nginx's real header parser
++ * and dispatch table, while replacing body handlers for the duration of the
++ * call so no synthetic request/configuration graph is required.
++ */
++static volatile ngx_uint_t  ngx_http_v2_fuzz_sink;
++
++
++static u_char *
++ngx_http_v2_fuzz_capture_frame(ngx_http_v2_connection_t *h2c, u_char *pos,
++    u_char *end)
++{
++    ngx_http_v2_fuzz_sink ^= h2c->state.length;
++    ngx_http_v2_fuzz_sink ^= h2c->state.flags;
++    ngx_http_v2_fuzz_sink ^= h2c->state.sid;
++
++    return end;
++}
++
++
++ngx_int_t
++ngx_http_v2_fuzz_frame_header(u_char *data, size_t len)
++{
++    u_char                         *p;
++    ngx_uint_t                      i;
++    ngx_log_t                       log;
++    ngx_connection_t                connection;
++    ngx_http_v2_connection_t        h2c;
++    ngx_http_v2_handler_pt           saved[NGX_HTTP_V2_FRAME_STATES];
++
++    ngx_memzero(&log, sizeof(ngx_log_t));
++    ngx_memzero(&connection, sizeof(ngx_connection_t));
++    ngx_memzero(&h2c, sizeof(ngx_http_v2_connection_t));
++
++    connection.log = &log;
++    h2c.connection = &connection;
++
++    if (len > NGX_HTTP_V2_FRAME_HEADER_SIZE) {
++        len = NGX_HTTP_V2_FRAME_HEADER_SIZE;
++    }
++
++    for (i = 0; i < NGX_HTTP_V2_FRAME_STATES; i++) {
++        saved[i] = ngx_http_v2_frame_states[i];
++        ngx_http_v2_frame_states[i] = ngx_http_v2_fuzz_capture_frame;
++    }
++
++    p = ngx_http_v2_state_head(&h2c, data, data + len);
++
++    for (i = 0; i < NGX_HTTP_V2_FRAME_STATES; i++) {
++        ngx_http_v2_frame_states[i] = saved[i];
++    }
++
++    return p == NULL ? NGX_ERROR : NGX_OK;
++}
++
++
++ngx_int_t
++ngx_http_v2_fuzz_parse_int(u_char *data, size_t len, ngx_uint_t prefix,
++    size_t logical_length, size_t *consumed, size_t *remaining)
++{
++    u_char                    *p;
++    ngx_int_t                  rc;
++    ngx_http_v2_connection_t   h2c;
++
++    if (len == 0) {
++        *consumed = 0;
++        *remaining = logical_length;
++        return NGX_AGAIN;
++    }
++
++    ngx_memzero(&h2c, sizeof(ngx_http_v2_connection_t));
++    h2c.state.length = logical_length;
++    p = data;
++
++    rc = ngx_http_v2_parse_int(&h2c, &p, data + len, prefix);
++
++    *consumed = p - data;
++    *remaining = h2c.state.length;
++
++    return rc;
++}
++
++
+ static ngx_int_t
+ ngx_http_v2_send_settings(ngx_http_v2_connection_t *h2c)
+ {

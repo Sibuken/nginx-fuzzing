@@ -1,0 +1,86 @@
+{
+  "id": "NGX-OSS-HTTP",
+  "origin": "adapted",
+  "binary": "http_request_fuzzer",
+  "upstream_target": "http_request_fuzzer",
+  "upstream_revision": "2cc3fa481cbf724c0091fd3c75fdd4142e698409",
+  "input_format": "protobuf text format, proto2 HttpProto with required string fields request and reply",
+  "mutator": "libprotobuf-mutator DEFINE_PROTO_FUZZER",
+  "configuration_profile": "upstream embedded HTTP reverse proxy configuration",
+  "allocator_mode": "NGX_DEBUG_PALLOC=1",
+  "limits": {
+    "max_len": 65536,
+    "per_input_timeout_seconds": 10,
+    "rss_limit_mb": 2048
+  },
+  "scopes": [
+    {
+      "id": "NGX-IF01",
+      "file": "src/http/ngx_http_parse.c",
+      "functions": ["ngx_http_parse_request_line"],
+      "callers": ["ngx_http_process_request_line"],
+      "contract": "Incremental request-line parser over r->header_in; returns NGX_OK, NGX_AGAIN, or an NGX_HTTP_PARSE_* rejection and retains r->state between calls.",
+      "preconditions": "An nginx HTTP request and input buffer created by ngx_http_init_connection.",
+      "testcase_fields": ["request"],
+      "variants": ["methods", "origin/absolute/authority targets", "HTTP versions", "CR/LF", "truncation"]
+    },
+    {
+      "id": "NGX-IF02",
+      "file": "src/http/ngx_http_parse.c",
+      "functions": ["ngx_http_parse_header_line"],
+      "callers": ["ngx_http_process_request_headers", "upstream protocol modules"],
+      "contract": "Incremental single-header parser using r->state; returns NGX_OK, NGX_AGAIN, NGX_HTTP_PARSE_HEADER_DONE, or an invalid-header code.",
+      "preconditions": "A parsed request line or an upstream header buffer and configured underscore policy.",
+      "testcase_fields": ["request", "reply"],
+      "variants": ["empty/value headers", "underscores", "control bytes", "long and truncated fields"]
+    },
+    {
+      "id": "NGX-IF03",
+      "file": "src/http/ngx_http_parse.c",
+      "functions": ["ngx_http_parse_complex_uri"],
+      "callers": ["ngx_http_process_request_uri"],
+      "contract": "Normalizes a previously parsed complex URI into r->uri; returns NGX_OK or NGX_ERROR.",
+      "preconditions": "Request-line parser populated uri_start/uri_end and flags; request pool and output URI storage are valid.",
+      "testcase_fields": ["request"],
+      "variants": ["percent escapes", "dot segments", "adjacent slashes", "query delimiter"]
+    },
+    {
+      "id": "NGX-IF04",
+      "file": "src/http/ngx_http_parse.c",
+      "functions": ["ngx_http_parse_chunked"],
+      "callers": ["ngx_http_request_body_chunked_filter", "ngx_http_upstream_process_non_buffered_request"],
+      "contract": "Stateful chunk framing parser; updates ngx_http_chunked_t and returns NGX_OK, NGX_AGAIN, or NGX_ERROR while callers consume payload.",
+      "preconditions": "Zeroed/preserved chunk context and a bounded buffer whose pos/last are maintained by the real HTTP body path.",
+      "testcase_fields": ["request", "reply"],
+      "variants": ["hex sizes", "extensions", "last chunk", "trailers", "truncation"]
+    },
+    {
+      "id": "NGX-IF05",
+      "file": "src/http/ngx_http_parse.c",
+      "functions": ["ngx_http_parse_status_line"],
+      "callers": ["ngx_http_proxy_process_status_line"],
+      "contract": "Incremental upstream HTTP status parser; returns NGX_OK, NGX_AGAIN, or NGX_ERROR and fills ngx_http_status_t.",
+      "preconditions": "A live proxy upstream request and reply buffer supplied by the adapter.",
+      "testcase_fields": ["reply"],
+      "variants": ["HTTP versions", "status codes", "reason phrase", "line endings", "truncation"]
+    },
+    {
+      "id": "NGX-IF06",
+      "file": "src/core/ngx_proxy_protocol.c",
+      "functions": ["ngx_proxy_protocol_read"],
+      "callers": ["ngx_event_recvmsg", "ngx_http_wait_request_handler", "ngx_stream_proxy_protocol_handler"],
+      "contract": "Consumes one complete PROXY v1/v2 header and returns the first byte after it, or NULL on rejection; stores parsed metadata in c->proxy_protocol.",
+      "preconditions": "Connection log and pool are valid; buf..last is one contiguous candidate header (not a streaming contract).",
+      "testcase_fields": [],
+      "variants": ["v1 TCP4/TCP6/UNKNOWN", "v2 IPv4/IPv6", "ports", "lengths", "TLVs"],
+      "reachability": "The embedded upstream listener has no proxy_protocol parameter, so this function requires a measured follow-up target if coverage remains zero."
+    }
+  ],
+  "expected_results": ["normal completion for accepted and rejected HTTP messages", "ASan/UBSan diagnostic is a finding"],
+  "state": "The nginx cycle is initialized once; request connections and pools are created and finalized for every input.",
+  "known_limitations": [
+    "Input is delivered by the upstream recv adapters, not a real TCP stack.",
+    "The embedded listener does not enable PROXY protocol, TLS, HTTP/2 or HTTP/3.",
+    "The upstream send/event/syscall wrappers intentionally model only the behavior needed by this target."
+  ]
+}

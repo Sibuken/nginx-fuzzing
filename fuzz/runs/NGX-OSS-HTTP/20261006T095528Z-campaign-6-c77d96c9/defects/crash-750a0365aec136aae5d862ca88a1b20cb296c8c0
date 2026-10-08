@@ -1,0 +1,2 @@
+request: "OPTIONS http://absolute.uAl.com:80?a/80/b/../c?x=1 HTTP/1.1\r\nHost: aEmpty:\r\n\r\n"
+reply: "PTACH"

@@ -1,0 +1,34 @@
+{
+  "id": "NGX-IF13",
+  "origin": "custom",
+  "binary": "http2_rst_stream_fuzzer",
+  "input_format": "raw sequence of HTTP/2 wire frames",
+  "mutator": "libFuzzer byte mutator",
+  "configuration_profile": "real RST_STREAM handler with a fresh nginx pool, minimal HTTP/2 server configuration, two synthetic live streams and one indexed closed node",
+  "allocator_mode": "NGX_DEBUG_PALLOC=1 with a fresh nginx pool for each fragmentation replay",
+  "justification": "NGX-IF11 frame dispatch and NGX-IF12 connection control coverage do not exercise the active-stream reset and request-connection error state machine.",
+  "state": "Each input is parsed four times with identical bytes: contiguously, byte-by-byte, in three-byte fragments and with an input-selected fragment size.",
+  "known_limitations": [
+    "Only RST_STREAM and NGX-IF12 connection control frames are accepted by the shared isolated driver.",
+    "Stream IDs 1 and 5 have synthetic request connections, while ID 3 is indexed as closed; the complete request and stream lifecycle is not entered.",
+    "The event callback records ready state and performs no request processing.",
+    "The synthetic connection driver is applied only to the isolated instrumented build copy."
+  ],
+  "limits": {
+    "max_len": 4096,
+    "per_input_timeout_seconds": 10,
+    "rss_limit_mb": 2048
+  },
+  "scopes": [
+    {
+      "id": "NGX-IF13-rst-stream",
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": ["ngx_http_v2_state_rst_stream"],
+      "callers": ["ngx_http_v2_state_head"],
+      "contract": "Validate RST_STREAM length and nonzero stream identifier, ignore unknown/closed streams and mark a live stream and its request connection closed/error before notifying its read event.",
+      "preconditions": "Fresh HTTP/2 connection, live streams at IDs 1 and 5, indexed closed node ID 3, valid request connections and no-op read event callbacks.",
+      "testcase_fields": ["length", "stream ID", "32-bit error code", "frame sequence"],
+      "variants": ["live stream reset", "unknown stream ID 7", "closed indexed stream ID 3", "stream ID zero", "wrong length", "fragmented body", "RST_STREAM after connection control frames"]
+    }
+  ]
+}

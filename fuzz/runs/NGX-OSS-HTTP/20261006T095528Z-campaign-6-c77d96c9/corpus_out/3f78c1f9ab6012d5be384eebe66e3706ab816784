@@ -1,0 +1,2 @@
+request: "GET /a+../b/%9eM\000e/c//d?q=%00 HTTP/1sm\rTP/1.1 2ery_string"
+reply: "!"

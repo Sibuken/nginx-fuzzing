@@ -1,0 +1,2 @@
+request: "GET /a/..2e%2e/c//d?q=%X-Content-Security-Policyrl.com\r\nX_Test: value\r\n\r\n"
+reply: "HTTP/1.1 103 Mulremerge_slashesa/../b/%.(;((((((urldge.uti-Status\r\nC\nContent-Lntrl.ctm\\r-Length|nt-Lntrl.ctm\\r-Length|nX_Test: value\\r\\n\\r\\n\236\nrldge.uti-Status\r\nConteMulti-atus\r\nConteti-Status\r\nConteMulti-atus\r\nContent-Lntrl.ctm\\r-Length|nt-Lntrl.ctm\\r-Length|nX_Test: value\\r\\n\\r\\n\236\nreply: \"\"\n: 0\r\n\r\n"

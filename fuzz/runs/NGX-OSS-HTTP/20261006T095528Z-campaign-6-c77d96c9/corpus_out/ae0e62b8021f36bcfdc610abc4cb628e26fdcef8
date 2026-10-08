@@ -1,0 +1,2 @@
+request: "GET /a/./.\r\n"
+reply: "HTTP/110 404 NoCKearly_hints\n\r\n"

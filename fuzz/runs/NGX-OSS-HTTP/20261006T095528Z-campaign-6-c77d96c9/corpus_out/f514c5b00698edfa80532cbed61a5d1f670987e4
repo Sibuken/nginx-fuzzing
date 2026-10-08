@@ -1,0 +1,2 @@
+request: "GET /\n"
+reply: "HTTP/1.1 200 EP/1.1 20X-ATT-Deviced\r\nETag\r\n1;ze"

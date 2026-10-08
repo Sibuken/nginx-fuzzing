@@ -1,0 +1,40 @@
+{
+  "oss_fuzz": {
+    "repository": "https://github.com/google/oss-fuzz.git",
+    "revision": "2cc3fa481cbf724c0091fd3c75fdd4142e698409",
+    "archive_url": "https://github.com/google/oss-fuzz/archive/2cc3fa481cbf724c0091fd3c75fdd4142e698409.tar.gz",
+    "archive_sha256": "07dc5e75c112d4a0855122f1fee3bd15f15a97c8220f39857f328640940c15db",
+    "project_path": "projects/nginx",
+    "files": {
+      "Dockerfile": "be2203b67cae6995866695f090bd717b8e69bc1755a0f29ccf0c955f7fb9d111",
+      "add_fuzzers.diff": "2c5b5b6450aefe525babc51e0989b0748b91a09a69095e8f3d4c94872106582a",
+      "build.sh": "373fd963367f994c2febde8e6093eb78e7b37d460cc2a385dc5daa6870c29167",
+      "fuzz/http_request_fuzzer.cc": "b61888048a3db1d38c56b5d1ba1aa1523ba9f2d02151f38b07a82b509cdcdd99",
+      "fuzz/http_request_fuzzer.dict": "543d68c43d13decb3749d9fff0a09a0f495cf993c4d8d4b1fcc5f0e742dd83e1",
+      "fuzz/http_request_proto.proto": "7066b8670dff7f90e7a0367b561876eb3d37bb8eb0ebff9a80901f5d007532be",
+      "fuzz/wrappers.c": "e46d489120acef1a90bdf9364ebbd53a23cfc64494158e4fd6ddfddb1dcb914c",
+      "make_fuzzers": "139d9238f1dd127b3d972bb92b2a3abe9918c3624f40787cd49af6efe9f521f9",
+      "project.yaml": "391e5aacd69ed5b8382b68cda1f985f77a0c707b6d131ecca06b32e08da09553"
+    }
+  },
+  "libprotobuf_mutator": {
+    "repository": "https://github.com/google/libprotobuf-mutator.git",
+    "revision": "c1c950eae0440c3808f2b8bd7c57d0c6a42c1a90",
+    "archive_url": "https://github.com/google/libprotobuf-mutator/archive/c1c950eae0440c3808f2b8bd7c57d0c6a42c1a90.tar.gz",
+    "archive_sha256": "260408230cbb08009da01fb2445ac75e08576d85b57da47ad0a794b91429803f"
+  },
+  "protobuf": {
+    "version": "29.3",
+    "revision": "b407e8416e3893036aee5af9a12bd9b6a0e2b2e6",
+    "source": "libprotobuf-mutator/cmake/external/protobuf.cmake"
+  },
+  "toolchain": {
+    "base_image": "debian:bookworm-slim@sha256:3783cc01769c7b2b1b83a5c5ad96c815348e28ed7da68e2e3687004faa906251",
+    "platform": "linux/amd64",
+    "clang": "14",
+    "llvm_cov": "14",
+    "sanitizers": ["address", "undefined"],
+    "fuzzing_engine": "libFuzzer"
+  }
+}
+

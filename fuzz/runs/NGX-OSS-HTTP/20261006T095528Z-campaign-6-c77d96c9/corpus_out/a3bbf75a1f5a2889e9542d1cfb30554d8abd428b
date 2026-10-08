@@ -1,0 +1,2 @@
+request: "GET /a/c//d?q=%00 HTTP/1.1\r\nHost: [edge.url.co$$$~$$$$$S~trict-T\377\377\377\377\377\377\377\273g)t\n"
+reply: ""

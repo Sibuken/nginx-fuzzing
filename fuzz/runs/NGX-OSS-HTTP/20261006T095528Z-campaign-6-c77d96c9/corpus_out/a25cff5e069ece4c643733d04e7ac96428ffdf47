@@ -1,0 +1,2 @@
+request: "GET /a/..............+.\r\n"
+reply: "HTTP/1.1 200 #-TraX-\nTransfer-Encoding: chunked\r\n\r\n0ed\r\n\r\n0;0z=q\r\nX\r\nupsent_httsent_http_p_co;0z=q\r\nX\r\nupsent_httsent_http_p_content_typesTTP/1\n\n\r\n"

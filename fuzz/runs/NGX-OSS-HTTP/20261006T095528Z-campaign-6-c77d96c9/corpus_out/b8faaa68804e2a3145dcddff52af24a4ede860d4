@@ -1,0 +1,2 @@
+request: "GET /a/]./b/%ee%22/c//d?q=%00Proxy-Connection HTTP/1.1\r\nHost: edge.ur1.1\r\nHost: edge.url.co\r\n"
+reply: ""

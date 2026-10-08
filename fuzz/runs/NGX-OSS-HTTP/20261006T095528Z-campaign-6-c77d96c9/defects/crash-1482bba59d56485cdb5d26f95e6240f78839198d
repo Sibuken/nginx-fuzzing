@@ -1,0 +1,2 @@
+request: "OPTIONS http://c?x=1 HTTP/1.1\r\nHost: absolute.url.com\r\nX-Empty:\r\n\r\n"
+reply: ""

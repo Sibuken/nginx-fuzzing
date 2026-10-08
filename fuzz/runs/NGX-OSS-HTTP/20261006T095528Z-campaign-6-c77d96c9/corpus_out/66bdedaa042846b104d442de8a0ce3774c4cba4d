@@ -1,0 +1,2 @@
+request: "GET /a/./.\r\n"
+reply: "HTTP/1.1 2lti-Status\r\nContetn 0\r\n\r\n"

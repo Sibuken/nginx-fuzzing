@@ -1,0 +1,2 @@
+request: "HEAD /headers HTTP/1.1\r\nHost: headers.url.com\r\nX_Underscore: yes\r\nFolded: fir\n\r\n"
+reply: "HTTP/1.1 304 Not Modified\r\nETag: Save-Dataied\r\nETag: \"abc\"\r\nX-Upab\r\n\r\n"

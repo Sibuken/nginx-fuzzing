@@ -1,0 +1,26 @@
+{
+  "id": "NGX-IF19",
+  "origin": "custom",
+  "binary": "http2_headers_state_fuzzer",
+  "input_format": "bounded HTTP/2 HEADERS sequence: initial request followed by trailer-shaped HEADERS on the same stream",
+  "mutator": "libFuzzer byte mutator",
+  "configuration_profile": "real HTTP/2 frame dispatch and HEADERS metadata validation with a live initial request stream",
+  "allocator_mode": "fresh HTTP/2, stream and request pools per input",
+  "justification": "The live request target covered only a new stream. This target supplies a second HEADERS frame using an already-open stream ID and tests nginx's repeated-HEADERS rejection boundary.",
+  "state": "The first HEADERS frame creates a request stream and completes its HPACK block. The following trailer-shaped HEADERS frame re-enters ngx_http_v2_state_headers with sid <= last_sid, which must cause a connection PROTOCOL_ERROR before stream creation or HPACK decoding.",
+  "known_limitations": [
+    "Current nginx rejects repeated HEADERS on an existing stream before decoding the second block; trailer field semantics are therefore not exercised.",
+    "The target uses one contiguous writable buffer and stops before routing, request-body processing and application phases."
+  ],
+  "limits": {"max_len": 8192, "per_input_timeout_seconds": 10, "rss_limit_mb": 2048},
+  "scopes": [{
+    "id": "NGX-IF19-existing-stream-trailer-headers",
+    "file": "src/http/v2/ngx_http_v2.c",
+    "functions": ["ngx_http_v2_state_head", "ngx_http_v2_state_headers", "ngx_http_v2_create_stream", "ngx_http_v2_state_header_block", "ngx_http_v2_state_header_complete"],
+    "callers": ["ngx_http_v2_read_handler", "ngx_http_v2_state_complete"],
+    "contract": "Complete one request header block, then reject a second HEADERS frame with the same stream ID before decoding its trailer-shaped HPACK block.",
+    "preconditions": "First frame creates stream 1; second HEADERS frame also uses stream 1; bounded contiguous input and fresh pools.",
+    "testcase_fields": ["initial request HEADERS", "repeated stream ID", "END_STREAM/END_HEADERS", "trailer-shaped HPACK bytes"],
+    "variants": ["valid trailer-shaped literal", "indexed header representation", "empty trailer block", "frame flags"]
+  }]
+}

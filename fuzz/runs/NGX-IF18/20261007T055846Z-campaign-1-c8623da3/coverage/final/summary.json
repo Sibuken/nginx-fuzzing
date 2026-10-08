@@ -1,0 +1,75 @@
+{
+  "duration_seconds": 24.147,
+  "inputs": 645,
+  "label": "final",
+  "nginx_source": {
+    "branches": {
+      "covered": 859,
+      "percent": 2.53,
+      "total": 34018
+    },
+    "lines": {
+      "covered": 2316,
+      "percent": 2.99,
+      "total": 77555
+    }
+  },
+  "scopes": [
+    {
+      "branches": {
+        "covered": 262,
+        "percent": 71.58,
+        "total": 366
+      },
+      "file": "src/http/v2/ngx_http_v2.c",
+      "functions": [
+        "ngx_http_v2_state_head",
+        "ngx_http_v2_state_headers",
+        "ngx_http_v2_create_stream",
+        "ngx_http_v2_state_header_block",
+        "ngx_http_v2_state_process_header",
+        "ngx_http_v2_validate_header",
+        "ngx_http_v2_pseudo_header",
+        "ngx_http_v2_parse_method",
+        "ngx_http_v2_parse_scheme",
+        "ngx_http_v2_parse_path",
+        "ngx_http_v2_parse_authority"
+      ],
+      "id": "NGX-IF18-live-headers-request",
+      "lines": {
+        "covered": 579,
+        "percent": 80.87,
+        "total": 716
+      }
+    }
+  ],
+  "whole_instrumented_build": {
+    "branches": {
+      "count": 33812,
+      "covered": 858,
+      "notcovered": 32954,
+      "percent": 2.5375606293623565
+    },
+    "functions": {
+      "count": 1697,
+      "covered": 78,
+      "percent": 4.596346493812611
+    },
+    "instantiations": {
+      "count": 3807,
+      "covered": 79,
+      "percent": 2.0751247701602313
+    },
+    "lines": {
+      "count": 76658,
+      "covered": 2196,
+      "percent": 2.8646716585353125
+    },
+    "regions": {
+      "count": 60378,
+      "covered": 1528,
+      "notcovered": 58850,
+      "percent": 2.530723111066945
+    }
+  }
+}

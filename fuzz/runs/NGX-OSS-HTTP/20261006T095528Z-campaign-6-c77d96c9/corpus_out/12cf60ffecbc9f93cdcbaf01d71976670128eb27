@@ -1,0 +1,2 @@
+request: "GET /a/.\n"
+reply: "HTTP/2.1 207 Multi-Status\r\nCo%e/c//"

@@ -1,0 +1,2 @@
+request: "CONNECT upstream.url.com:443 HTTP/1.1\r\nHost: upstream.url.com\r\n\r\n"
+reply: "HTTP/1.1 200 Connection Established\r\n\r\n"

@@ -1,0 +1,2 @@
+request: "GET /a/../b2/e%%2e/cX-Content-Securiq=%00 HTTP/1. /a/../b2/e%%2e/cX-Content-TeLOCKst: value\r\n\r\n"
+reply: ""

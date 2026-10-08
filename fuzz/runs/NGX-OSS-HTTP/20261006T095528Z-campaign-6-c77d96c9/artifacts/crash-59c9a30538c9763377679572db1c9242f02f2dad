@@ -1,0 +1,2 @@
+request: "OPNOTIS http://alsobtue.url.comAccept-Language?x=1 HTTP/1.1\r\nHost: absolute.url.com\r\nX-Empty:\r\n\r\n"
+reply: "OPNOTIS http://absolute.url.com:/08/a08/b/../c?x=1 HTTP/1.1\r\nHost: qbsolute.url.com\r\nX-Empty:\r\n\r\n"

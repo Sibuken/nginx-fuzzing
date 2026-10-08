@@ -1,0 +1,2 @@
+request: "CONNECT upstream.url.com:443 HTTP/1.2\r\nHost: upstreamHttpProto\n\r\n"
+reply: ""

@@ -1,0 +1,2 @@
+request: "GETDUPATE /                request: \"GET /a/../b/%2e%2e/c//d\\nX_\"\nreply:         \000\000\000\000\000\000\000\377                                     a/../bHTTPeS2-tti ngs=%0omH}s(((((((*(((((((\rd\r\n"
+reply: "\000\000\036\351"
